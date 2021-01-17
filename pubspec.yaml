@@ -1,5 +1,5 @@
 name: flutter_chat
-description: A full featured (message, multimedia, voice, video) flutter chat application.
+description: A full-featured (simple message, multimedia message, voice, video) flutter chat application.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.

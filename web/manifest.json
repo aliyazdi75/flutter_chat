@@ -5,7 +5,7 @@
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A full featured (message, multimedia, voice, video) flutter chat application.",
+    "description": "A full-featured (simple message, multimedia message, voice, video) flutter chat application.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
