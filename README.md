@@ -1,7 +1,7 @@
 # flutter_chat
 
 A full-featured (simple message, multimedia message, voice, video)
-flutter chat application.
+flutter chat application by SignalR and WebRTC.
 
 ## Getting Started
 
