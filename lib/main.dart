@@ -32,6 +32,7 @@ class FlutterChat extends StatelessWidget {
               accountRepository: accountRepository,
             ),
             child: const MaterialApp(
+              title: 'Flutter Chat',
               debugShowCheckedModeBanner: false,
               home: SplashPage(),
             ),

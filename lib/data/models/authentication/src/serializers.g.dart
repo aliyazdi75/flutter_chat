@@ -7,7 +7,7 @@ part of serializers;
 // **************************************************************************
 
 Serializers _$serializers = (new Serializers().toBuilder()
-      ..add(Login.serializer)
+      ..add(Authentication.serializer)
       ..add(LoginBody.serializer)
       ..add(Register.serializer))
     .build();

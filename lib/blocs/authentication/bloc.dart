@@ -7,6 +7,7 @@ import 'package:flutter_chat/data/models/account/index.dart';
 import 'package:flutter_chat/data/repositories/account/index.dart';
 import 'package:flutter_chat/data/repositories/authentication/index.dart';
 import 'package:flutter_chat/services/http/index.dart';
+import 'package:flutter_chat/services/shared_preferences/index.dart';
 
 part 'event.dart';
 part 'state.dart';
@@ -14,11 +15,9 @@ part 'state.dart';
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   AuthenticationBloc({
-    @required this.authenticationRepository,
-    @required this.accountRepository,
-  })  : assert(authenticationRepository != null),
-        assert(accountRepository != null),
-        super(const AuthenticationState.unknown());
+    this.authenticationRepository,
+    this.accountRepository,
+  }) : super(const AuthenticationState.unknown());
 
   final AuthenticationRepository authenticationRepository;
   final AccountRepository accountRepository;
@@ -30,11 +29,15 @@ class AuthenticationBloc
       yield* _mapAuthenticationStatusCheckRequestedToState();
     } else if (event is AuthenticationUnLoggedOutRequested) {
       await authenticationRepository.logout();
+    } else if (event is UnAuthorizedRequested) {
+      yield const AuthenticationState.unauthenticated();
     }
   }
 
   Stream<AuthenticationState>
       _mapAuthenticationStatusCheckRequestedToState() async* {
+    assert(authenticationRepository != null && accountRepository != null);
+
     yield const AuthenticationState.loading();
 
     try {

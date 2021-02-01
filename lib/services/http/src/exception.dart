@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
 class HttpException implements Exception {
   final Object type;
@@ -85,11 +85,4 @@ class BadRequestException implements Exception {
 
   @override
   String toString() => 'BadRequestException in $url';
-}
-
-class NoTokenException implements Exception {
-  NoTokenException();
-
-  @override
-  String toString() => 'NoTokenException: No Token is Provided';
 }

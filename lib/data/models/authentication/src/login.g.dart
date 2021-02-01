@@ -6,49 +6,7 @@ part of 'login.dart';
 // BuiltValueGenerator
 // **************************************************************************
 
-Serializer<Login> _$loginSerializer = new _$LoginSerializer();
 Serializer<LoginBody> _$loginBodySerializer = new _$LoginBodySerializer();
-
-class _$LoginSerializer implements StructuredSerializer<Login> {
-  @override
-  final Iterable<Type> types = const [Login, _$Login];
-  @override
-  final String wireName = 'Login';
-
-  @override
-  Iterable<Object> serialize(Serializers serializers, Login object,
-      {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[];
-    if (object.token != null) {
-      result
-        ..add('token')
-        ..add(serializers.serialize(object.token,
-            specifiedType: const FullType(String)));
-    }
-    return result;
-  }
-
-  @override
-  Login deserialize(Serializers serializers, Iterable<Object> serialized,
-      {FullType specifiedType = FullType.unspecified}) {
-    final result = new LoginBuilder();
-
-    final iterator = serialized.iterator;
-    while (iterator.moveNext()) {
-      final key = iterator.current as String;
-      iterator.moveNext();
-      final dynamic value = iterator.current;
-      switch (key) {
-        case 'token':
-          result.token = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
-          break;
-      }
-    }
-
-    return result.build();
-  }
-}
 
 class _$LoginBodySerializer implements StructuredSerializer<LoginBody> {
   @override
@@ -94,78 +52,6 @@ class _$LoginBodySerializer implements StructuredSerializer<LoginBody> {
     }
 
     return result.build();
-  }
-}
-
-class _$Login extends Login {
-  @override
-  final String token;
-
-  factory _$Login([void Function(LoginBuilder) updates]) =>
-      (new LoginBuilder()..update(updates)).build();
-
-  _$Login._({this.token}) : super._();
-
-  @override
-  Login rebuild(void Function(LoginBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
-
-  @override
-  LoginBuilder toBuilder() => new LoginBuilder()..replace(this);
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(other, this)) return true;
-    return other is Login && token == other.token;
-  }
-
-  @override
-  int get hashCode {
-    return $jf($jc(0, token.hashCode));
-  }
-
-  @override
-  String toString() {
-    return (newBuiltValueToStringHelper('Login')..add('token', token))
-        .toString();
-  }
-}
-
-class LoginBuilder implements Builder<Login, LoginBuilder> {
-  _$Login _$v;
-
-  String _token;
-  String get token => _$this._token;
-  set token(String token) => _$this._token = token;
-
-  LoginBuilder();
-
-  LoginBuilder get _$this {
-    if (_$v != null) {
-      _token = _$v.token;
-      _$v = null;
-    }
-    return this;
-  }
-
-  @override
-  void replace(Login other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
-    _$v = other as _$Login;
-  }
-
-  @override
-  void update(void Function(LoginBuilder) updates) {
-    if (updates != null) updates(this);
-  }
-
-  @override
-  _$Login build() {
-    final _$result = _$v ?? new _$Login._(token: token);
-    replace(_$result);
-    return _$result;
   }
 }
 

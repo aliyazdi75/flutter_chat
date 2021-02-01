@@ -21,7 +21,7 @@ dependencies:
   animations: ^1.1.2
   shared_preferences: '>=0.5.10 <2.0.0'
   url_launcher: ^5.7.10
-  signalr_client: ^0.1.6
+  signalr_core: ^1.0.8
 
 dev_dependencies:
   integration_test:

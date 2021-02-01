@@ -3,6 +3,7 @@ library serializers;
 import 'package:built_value/serializer.dart';
 import 'package:built_value/standard_json_plugin.dart';
 
+import 'authentication.dart';
 import 'login.dart';
 import 'register.dart';
 
@@ -20,7 +21,7 @@ part 'serializers.g.dart';
 ///
 /// You usually only need to do this once per project.
 @SerializersFor([
-  Login,
+  Authentication,
   LoginBody,
   Register,
 ])

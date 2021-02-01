@@ -4,13 +4,17 @@ import 'package:flutter_chat/services/shared_preferences/index.dart';
 const key = 'token';
 
 class AuthenticationStorage {
-  static Future<Login> getCredit() async {
+  static Future<Authentication> getCredit() async {
     final response = await SharedPreferencesHelper().getObject(key: key);
-    return response == null ? null : Login.fromJson(response);
+    if (response != null) {
+      return Authentication.fromJson(response);
+    } else {
+      throw NoTokenException();
+    }
   }
 
-  static Future<void> saveCredit(Login login) async {
-    final value = login.toJson();
+  static Future<void> saveCredit(Authentication authentication) async {
+    final value = authentication.toJson();
     await SharedPreferencesHelper().saveObject(key: key, value: value);
   }
 }

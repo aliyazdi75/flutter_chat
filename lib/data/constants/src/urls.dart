@@ -1,2 +1,2 @@
-const serverUrl = '185.231.59.157';
-const signalRUrl = '185.231.59.157/chathub';
+const serverUrl = '207.81.214.163:44302';
+const signalRAuthQuery = 'X-MATEAPI-AUTH';

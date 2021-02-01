@@ -12,16 +12,15 @@ class AuthenticationApi {
     return Register.fromJson(response);
   }
 
-  static Future<Login> login(LoginBody loginBody) async {
+  static Future<Authentication> login(LoginBody loginBody) async {
     final body = loginBody.toJson();
     final response = await HttpHelper('auth/login').httpPost(
       badRequestModel: LoginBadRequest,
       body: body,
     );
-    return Login.fromJson(response);
+    return Authentication.fromJson(response);
   }
 
-  // todo: add this
   static Future logout() async {
     throw UnimplementedError('Log out has not been implemented!');
   }

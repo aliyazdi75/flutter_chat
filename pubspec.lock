@@ -528,13 +528,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.3"
-  signalr_client:
+  signalr_core:
     dependency: "direct main"
     description:
-      name: signalr_client
+      name: signalr_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.6"
+    version: "1.0.8"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -554,6 +554,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.8.0-nullsafety.4"
+  sse_client:
+    dependency: transitive
+    description:
+      name: sse_client
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.3"
   stack_trace:
     dependency: transitive
     description:
@@ -610,6 +617,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.1+3"
+  tuple:
+    dependency: transitive
+    description:
+      name: tuple
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.3"
   typed_data:
     dependency: transitive
     description:
@@ -673,13 +687,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.5.0"
-  w3c_event_source:
-    dependency: transitive
-    description:
-      name: w3c_event_source
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.3.2"
   watcher:
     dependency: transitive
     description:

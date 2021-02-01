@@ -28,7 +28,7 @@ class AuthenticationRepository {
     return authenticated;
   }
 
-  Future<Login> getCredit() async {
+  Future<Authentication> getCredit() async {
     return await AuthenticationStorage.getCredit();
   }
 
