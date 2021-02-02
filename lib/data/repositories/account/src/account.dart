@@ -11,8 +11,4 @@ class AccountRepository {
     }
     return _account;
   }
-
-  set account(Account account) {
-    _account = account;
-  }
 }
