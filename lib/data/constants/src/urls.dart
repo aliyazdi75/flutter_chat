@@ -1,0 +1,2 @@
+const serverUrl = '';
+const signalRAuthQuery = '';
