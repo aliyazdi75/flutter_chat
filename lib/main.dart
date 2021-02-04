@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,7 +12,19 @@ void main() {
   FlutterError.onError = (details) {
     FlutterError.dumpErrorToConsole(details);
   };
+  //todo: remove this when we have certification
+  HttpOverrides.global = MyHttpOverrides();
   runApp(FlutterChat());
+}
+
+//todo: remove this when we have certification
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext context) {
+    final client = super.createHttpClient(context);
+    client.badCertificateCallback = (cert, host, port) => true;
+    return client;
+  }
 }
 
 class FlutterChat extends StatelessWidget {

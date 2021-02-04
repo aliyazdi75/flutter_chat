@@ -9,7 +9,6 @@ part of 'message.dart';
 const MessageType _$text = const MessageType._('text');
 const MessageType _$image = const MessageType._('image');
 const MessageType _$video = const MessageType._('video');
-const MessageType _$constantName = const MessageType._('constantName');
 
 MessageType _$messageTypeValueOf(String name) {
   switch (name) {
@@ -19,8 +18,6 @@ MessageType _$messageTypeValueOf(String name) {
       return _$image;
     case 'video':
       return _$video;
-    case 'constantName':
-      return _$constantName;
     default:
       throw new ArgumentError(name);
   }
@@ -31,7 +28,6 @@ final BuiltSet<MessageType> _$messageTypeValues =
   _$text,
   _$image,
   _$video,
-  _$constantName,
 ]);
 
 Serializer<Message> _$messageSerializer = new _$MessageSerializer();
@@ -63,11 +59,12 @@ class _$MessageSerializer implements StructuredSerializer<Message> {
       'text',
       serializers.serialize(object.text, specifiedType: const FullType(String)),
     ];
-    if (object.id != null) {
+    Object value;
+    value = object.id;
+    if (value != null) {
       result
         ..add('id')
-        ..add(serializers.serialize(object.id,
-            specifiedType: const FullType(int)));
+        ..add(serializers.serialize(value, specifiedType: const FullType(int)));
     }
     return result;
   }
@@ -81,7 +78,7 @@ class _$MessageSerializer implements StructuredSerializer<Message> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'id':
           result.id = serializers.deserialize(value,
@@ -163,24 +160,12 @@ class _$Message extends Message {
       this.type,
       this.text})
       : super._() {
-    if (seen == null) {
-      throw new BuiltValueNullFieldError('Message', 'seen');
-    }
-    if (sentByMe == null) {
-      throw new BuiltValueNullFieldError('Message', 'sentByMe');
-    }
-    if (isSent == null) {
-      throw new BuiltValueNullFieldError('Message', 'isSent');
-    }
-    if (sentAt == null) {
-      throw new BuiltValueNullFieldError('Message', 'sentAt');
-    }
-    if (type == null) {
-      throw new BuiltValueNullFieldError('Message', 'type');
-    }
-    if (text == null) {
-      throw new BuiltValueNullFieldError('Message', 'text');
-    }
+    BuiltValueNullFieldError.checkNotNull(seen, 'Message', 'seen');
+    BuiltValueNullFieldError.checkNotNull(sentByMe, 'Message', 'sentByMe');
+    BuiltValueNullFieldError.checkNotNull(isSent, 'Message', 'isSent');
+    BuiltValueNullFieldError.checkNotNull(sentAt, 'Message', 'sentAt');
+    BuiltValueNullFieldError.checkNotNull(type, 'Message', 'type');
+    BuiltValueNullFieldError.checkNotNull(text, 'Message', 'text');
   }
 
   @override
@@ -267,14 +252,15 @@ class MessageBuilder implements Builder<Message, MessageBuilder> {
   }
 
   MessageBuilder get _$this {
-    if (_$v != null) {
-      _id = _$v.id;
-      _seen = _$v.seen;
-      _sentByMe = _$v.sentByMe;
-      _isSent = _$v.isSent;
-      _sentAt = _$v.sentAt;
-      _type = _$v.type;
-      _text = _$v.text;
+    final $v = _$v;
+    if ($v != null) {
+      _id = $v.id;
+      _seen = $v.seen;
+      _sentByMe = $v.sentByMe;
+      _isSent = $v.isSent;
+      _sentAt = $v.sentAt;
+      _type = $v.type;
+      _text = $v.text;
       _$v = null;
     }
     return this;
@@ -282,9 +268,7 @@ class MessageBuilder implements Builder<Message, MessageBuilder> {
 
   @override
   void replace(Message other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$Message;
   }
 
@@ -298,12 +282,18 @@ class MessageBuilder implements Builder<Message, MessageBuilder> {
     final _$result = _$v ??
         new _$Message._(
             id: id,
-            seen: seen,
-            sentByMe: sentByMe,
-            isSent: isSent,
-            sentAt: sentAt,
-            type: type,
-            text: text);
+            seen:
+                BuiltValueNullFieldError.checkNotNull(seen, 'Message', 'seen'),
+            sentByMe: BuiltValueNullFieldError.checkNotNull(
+                sentByMe, 'Message', 'sentByMe'),
+            isSent: BuiltValueNullFieldError.checkNotNull(
+                isSent, 'Message', 'isSent'),
+            sentAt: BuiltValueNullFieldError.checkNotNull(
+                sentAt, 'Message', 'sentAt'),
+            type:
+                BuiltValueNullFieldError.checkNotNull(type, 'Message', 'type'),
+            text:
+                BuiltValueNullFieldError.checkNotNull(text, 'Message', 'text'));
     replace(_$result);
     return _$result;
   }

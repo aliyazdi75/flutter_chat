@@ -5,19 +5,30 @@ import 'serializers.dart';
 
 part 'login.g.dart';
 
-abstract class LoginBody implements Built<LoginBody, LoginBodyBuilder> {
-  String get username;
+abstract class LoginRequest
+    implements Built<LoginRequest, LoginRequestBuilder> {
+  String get email;
 
   String get password;
 
-  LoginBody._();
+  String get deviceId;
 
-  factory LoginBody([void Function(LoginBodyBuilder) updates]) = _$LoginBody;
+  String get deviceName;
+
+  String get deviceFriendlyName;
+
+  String get deviceVersion;
+
+  String get deviceOS;
+
+  LoginRequest._();
+  factory LoginRequest([void Function(LoginRequestBuilder) updates]) =
+      _$LoginRequest;
 
   Map<String, dynamic> toJson() {
-    return serializers.serializeWith(LoginBody.serializer, this)
+    return serializers.serializeWith(LoginRequest.serializer, this)
         as Map<String, dynamic>;
   }
 
-  static Serializer<LoginBody> get serializer => _$loginBodySerializer;
+  static Serializer<LoginRequest> get serializer => _$loginRequestSerializer;
 }

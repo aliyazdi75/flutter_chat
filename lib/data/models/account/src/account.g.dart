@@ -18,17 +18,8 @@ class _$AccountSerializer implements StructuredSerializer<Account> {
   Iterable<Object> serialize(Serializers serializers, Account object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
-      'id',
-      serializers.serialize(object.id, specifiedType: const FullType(String)),
-      'userName',
-      serializers.serialize(object.username,
-          specifiedType: const FullType(String)),
-      'email',
-      serializers.serialize(object.email,
-          specifiedType: const FullType(String)),
-      'emailConfirmed',
-      serializers.serialize(object.emailConfirmed,
-          specifiedType: const FullType(bool)),
+      'user',
+      serializers.serialize(object.user, specifiedType: const FullType(User)),
     ];
 
     return result;
@@ -43,23 +34,11 @@ class _$AccountSerializer implements StructuredSerializer<Account> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
-        case 'id':
-          result.id = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
-          break;
-        case 'userName':
-          result.username = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
-          break;
-        case 'email':
-          result.email = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
-          break;
-        case 'emailConfirmed':
-          result.emailConfirmed = serializers.deserialize(value,
-              specifiedType: const FullType(bool)) as bool;
+        case 'user':
+          result.user.replace(serializers.deserialize(value,
+              specifiedType: const FullType(User)) as User);
           break;
       }
     }
@@ -70,31 +49,13 @@ class _$AccountSerializer implements StructuredSerializer<Account> {
 
 class _$Account extends Account {
   @override
-  final String id;
-  @override
-  final String username;
-  @override
-  final String email;
-  @override
-  final bool emailConfirmed;
+  final User user;
 
   factory _$Account([void Function(AccountBuilder) updates]) =>
       (new AccountBuilder()..update(updates)).build();
 
-  _$Account._({this.id, this.username, this.email, this.emailConfirmed})
-      : super._() {
-    if (id == null) {
-      throw new BuiltValueNullFieldError('Account', 'id');
-    }
-    if (username == null) {
-      throw new BuiltValueNullFieldError('Account', 'username');
-    }
-    if (email == null) {
-      throw new BuiltValueNullFieldError('Account', 'email');
-    }
-    if (emailConfirmed == null) {
-      throw new BuiltValueNullFieldError('Account', 'emailConfirmed');
-    }
+  _$Account._({this.user}) : super._() {
+    BuiltValueNullFieldError.checkNotNull(user, 'Account', 'user');
   }
 
   @override
@@ -107,27 +68,17 @@ class _$Account extends Account {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is Account &&
-        id == other.id &&
-        username == other.username &&
-        email == other.email &&
-        emailConfirmed == other.emailConfirmed;
+    return other is Account && user == other.user;
   }
 
   @override
   int get hashCode {
-    return $jf($jc(
-        $jc($jc($jc(0, id.hashCode), username.hashCode), email.hashCode),
-        emailConfirmed.hashCode));
+    return $jf($jc(0, user.hashCode));
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('Account')
-          ..add('id', id)
-          ..add('username', username)
-          ..add('email', email)
-          ..add('emailConfirmed', emailConfirmed))
+    return (newBuiltValueToStringHelper('Account')..add('user', user))
         .toString();
   }
 }
@@ -135,31 +86,16 @@ class _$Account extends Account {
 class AccountBuilder implements Builder<Account, AccountBuilder> {
   _$Account _$v;
 
-  String _id;
-  String get id => _$this._id;
-  set id(String id) => _$this._id = id;
-
-  String _username;
-  String get username => _$this._username;
-  set username(String username) => _$this._username = username;
-
-  String _email;
-  String get email => _$this._email;
-  set email(String email) => _$this._email = email;
-
-  bool _emailConfirmed;
-  bool get emailConfirmed => _$this._emailConfirmed;
-  set emailConfirmed(bool emailConfirmed) =>
-      _$this._emailConfirmed = emailConfirmed;
+  UserBuilder _user;
+  UserBuilder get user => _$this._user ??= new UserBuilder();
+  set user(UserBuilder user) => _$this._user = user;
 
   AccountBuilder();
 
   AccountBuilder get _$this {
-    if (_$v != null) {
-      _id = _$v.id;
-      _username = _$v.username;
-      _email = _$v.email;
-      _emailConfirmed = _$v.emailConfirmed;
+    final $v = _$v;
+    if ($v != null) {
+      _user = $v.user.toBuilder();
       _$v = null;
     }
     return this;
@@ -167,9 +103,7 @@ class AccountBuilder implements Builder<Account, AccountBuilder> {
 
   @override
   void replace(Account other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$Account;
   }
 
@@ -180,12 +114,20 @@ class AccountBuilder implements Builder<Account, AccountBuilder> {
 
   @override
   _$Account build() {
-    final _$result = _$v ??
-        new _$Account._(
-            id: id,
-            username: username,
-            email: email,
-            emailConfirmed: emailConfirmed);
+    _$Account _$result;
+    try {
+      _$result = _$v ?? new _$Account._(user: user.build());
+    } catch (_) {
+      String _$failedField;
+      try {
+        _$failedField = 'user';
+        user.build();
+      } catch (e) {
+        throw new BuiltValueNestedFieldError(
+            'Account', _$failedField, e.toString());
+      }
+      rethrow;
+    }
     replace(_$result);
     return _$result;
   }

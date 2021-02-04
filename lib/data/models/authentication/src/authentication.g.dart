@@ -19,13 +19,14 @@ class _$AuthenticationSerializer
   @override
   Iterable<Object> serialize(Serializers serializers, Authentication object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[];
-    if (object.token != null) {
-      result
-        ..add('token')
-        ..add(serializers.serialize(object.token,
-            specifiedType: const FullType(String)));
-    }
+    final result = <Object>[
+      'token',
+      serializers.serialize(object.token,
+          specifiedType: const FullType(String)),
+      'user',
+      serializers.serialize(object.user, specifiedType: const FullType(User)),
+    ];
+
     return result;
   }
 
@@ -39,11 +40,15 @@ class _$AuthenticationSerializer
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'token':
           result.token = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
+          break;
+        case 'user':
+          result.user.replace(serializers.deserialize(value,
+              specifiedType: const FullType(User)) as User);
           break;
       }
     }
@@ -55,11 +60,16 @@ class _$AuthenticationSerializer
 class _$Authentication extends Authentication {
   @override
   final String token;
+  @override
+  final User user;
 
   factory _$Authentication([void Function(AuthenticationBuilder) updates]) =>
       (new AuthenticationBuilder()..update(updates)).build();
 
-  _$Authentication._({this.token}) : super._();
+  _$Authentication._({this.token, this.user}) : super._() {
+    BuiltValueNullFieldError.checkNotNull(token, 'Authentication', 'token');
+    BuiltValueNullFieldError.checkNotNull(user, 'Authentication', 'user');
+  }
 
   @override
   Authentication rebuild(void Function(AuthenticationBuilder) updates) =>
@@ -72,17 +82,21 @@ class _$Authentication extends Authentication {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is Authentication && token == other.token;
+    return other is Authentication &&
+        token == other.token &&
+        user == other.user;
   }
 
   @override
   int get hashCode {
-    return $jf($jc(0, token.hashCode));
+    return $jf($jc($jc(0, token.hashCode), user.hashCode));
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('Authentication')..add('token', token))
+    return (newBuiltValueToStringHelper('Authentication')
+          ..add('token', token)
+          ..add('user', user))
         .toString();
   }
 }
@@ -95,11 +109,17 @@ class AuthenticationBuilder
   String get token => _$this._token;
   set token(String token) => _$this._token = token;
 
+  UserBuilder _user;
+  UserBuilder get user => _$this._user ??= new UserBuilder();
+  set user(UserBuilder user) => _$this._user = user;
+
   AuthenticationBuilder();
 
   AuthenticationBuilder get _$this {
-    if (_$v != null) {
-      _token = _$v.token;
+    final $v = _$v;
+    if ($v != null) {
+      _token = $v.token;
+      _user = $v.user.toBuilder();
       _$v = null;
     }
     return this;
@@ -107,9 +127,7 @@ class AuthenticationBuilder
 
   @override
   void replace(Authentication other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$Authentication;
   }
 
@@ -120,7 +138,24 @@ class AuthenticationBuilder
 
   @override
   _$Authentication build() {
-    final _$result = _$v ?? new _$Authentication._(token: token);
+    _$Authentication _$result;
+    try {
+      _$result = _$v ??
+          new _$Authentication._(
+              token: BuiltValueNullFieldError.checkNotNull(
+                  token, 'Authentication', 'token'),
+              user: user.build());
+    } catch (_) {
+      String _$failedField;
+      try {
+        _$failedField = 'user';
+        user.build();
+      } catch (e) {
+        throw new BuiltValueNestedFieldError(
+            'Authentication', _$failedField, e.toString());
+      }
+      rethrow;
+    }
     replace(_$result);
     return _$result;
   }

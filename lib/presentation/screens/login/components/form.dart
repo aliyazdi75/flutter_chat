@@ -9,7 +9,6 @@ class LoginForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener<LoginBloc, LoginState>(
-      listenWhen: (previous, current) => previous.status != current.status,
       listener: (context, state) {
         if (state.status == LoginStatus.success) {
           BlocProvider.of<AuthenticationBloc>(context)
@@ -29,8 +28,6 @@ class LoginForm extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              _UsernameInput(),
-              const Padding(padding: EdgeInsets.all(12)),
               _PasswordInput(),
               const Padding(padding: EdgeInsets.all(12)),
               _LoginButton(formKey),
@@ -42,37 +39,18 @@ class LoginForm extends StatelessWidget {
   }
 }
 
-class _UsernameInput extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<LoginBloc, LoginState>(
-      buildWhen: (previous, current) => previous.username != current.username,
-      builder: (context, state) {
-        return TextFormField(
-          onChanged: (username) => BlocProvider.of<LoginBloc>(context)
-              .add(LoginUsernameChanged(username)),
-          validator: (username) =>
-              username.isEmpty ? 'username must not empty' : null,
-          decoration: const InputDecoration(labelText: 'username'),
-        );
-      },
-    );
-  }
-}
-
 class _PasswordInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginBloc, LoginState>(
-      buildWhen: (previous, current) => previous.password != current.password,
       builder: (context, state) {
         return TextFormField(
           onChanged: (password) => BlocProvider.of<LoginBloc>(context)
               .add(LoginPasswordChanged(password)),
           obscureText: true,
           validator: (password) =>
-              password.isEmpty ? 'password must not empty' : null,
-          decoration: const InputDecoration(labelText: 'password'),
+              password.isEmpty ? 'Password must not empty' : null,
+          decoration: const InputDecoration(labelText: 'Password'),
         );
       },
     );
@@ -87,7 +65,6 @@ class _LoginButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginBloc, LoginState>(
-      buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
         return state.status == LoginStatus.loading
             ? const CircularProgressIndicator()

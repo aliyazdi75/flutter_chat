@@ -6,23 +6,39 @@ part of 'login.dart';
 // BuiltValueGenerator
 // **************************************************************************
 
-Serializer<LoginBody> _$loginBodySerializer = new _$LoginBodySerializer();
+Serializer<LoginRequest> _$loginRequestSerializer =
+    new _$LoginRequestSerializer();
 
-class _$LoginBodySerializer implements StructuredSerializer<LoginBody> {
+class _$LoginRequestSerializer implements StructuredSerializer<LoginRequest> {
   @override
-  final Iterable<Type> types = const [LoginBody, _$LoginBody];
+  final Iterable<Type> types = const [LoginRequest, _$LoginRequest];
   @override
-  final String wireName = 'LoginBody';
+  final String wireName = 'LoginRequest';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, LoginBody object,
+  Iterable<Object> serialize(Serializers serializers, LoginRequest object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
-      'username',
-      serializers.serialize(object.username,
+      'email',
+      serializers.serialize(object.email,
           specifiedType: const FullType(String)),
       'password',
       serializers.serialize(object.password,
+          specifiedType: const FullType(String)),
+      'deviceId',
+      serializers.serialize(object.deviceId,
+          specifiedType: const FullType(String)),
+      'deviceName',
+      serializers.serialize(object.deviceName,
+          specifiedType: const FullType(String)),
+      'deviceFriendlyName',
+      serializers.serialize(object.deviceFriendlyName,
+          specifiedType: const FullType(String)),
+      'deviceVersion',
+      serializers.serialize(object.deviceVersion,
+          specifiedType: const FullType(String)),
+      'deviceOS',
+      serializers.serialize(object.deviceOS,
           specifiedType: const FullType(String)),
     ];
 
@@ -30,22 +46,42 @@ class _$LoginBodySerializer implements StructuredSerializer<LoginBody> {
   }
 
   @override
-  LoginBody deserialize(Serializers serializers, Iterable<Object> serialized,
+  LoginRequest deserialize(Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = new LoginBodyBuilder();
+    final result = new LoginRequestBuilder();
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
-        case 'username':
-          result.username = serializers.deserialize(value,
+        case 'email':
+          result.email = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
         case 'password':
           result.password = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'deviceId':
+          result.deviceId = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'deviceName':
+          result.deviceName = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'deviceFriendlyName':
+          result.deviceFriendlyName = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'deviceVersion':
+          result.deviceVersion = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'deviceOS':
+          result.deviceOS = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
       }
@@ -55,92 +91,174 @@ class _$LoginBodySerializer implements StructuredSerializer<LoginBody> {
   }
 }
 
-class _$LoginBody extends LoginBody {
+class _$LoginRequest extends LoginRequest {
   @override
-  final String username;
+  final String email;
   @override
   final String password;
+  @override
+  final String deviceId;
+  @override
+  final String deviceName;
+  @override
+  final String deviceFriendlyName;
+  @override
+  final String deviceVersion;
+  @override
+  final String deviceOS;
 
-  factory _$LoginBody([void Function(LoginBodyBuilder) updates]) =>
-      (new LoginBodyBuilder()..update(updates)).build();
+  factory _$LoginRequest([void Function(LoginRequestBuilder) updates]) =>
+      (new LoginRequestBuilder()..update(updates)).build();
 
-  _$LoginBody._({this.username, this.password}) : super._() {
-    if (username == null) {
-      throw new BuiltValueNullFieldError('LoginBody', 'username');
-    }
-    if (password == null) {
-      throw new BuiltValueNullFieldError('LoginBody', 'password');
-    }
+  _$LoginRequest._(
+      {this.email,
+      this.password,
+      this.deviceId,
+      this.deviceName,
+      this.deviceFriendlyName,
+      this.deviceVersion,
+      this.deviceOS})
+      : super._() {
+    BuiltValueNullFieldError.checkNotNull(email, 'LoginRequest', 'email');
+    BuiltValueNullFieldError.checkNotNull(password, 'LoginRequest', 'password');
+    BuiltValueNullFieldError.checkNotNull(deviceId, 'LoginRequest', 'deviceId');
+    BuiltValueNullFieldError.checkNotNull(
+        deviceName, 'LoginRequest', 'deviceName');
+    BuiltValueNullFieldError.checkNotNull(
+        deviceFriendlyName, 'LoginRequest', 'deviceFriendlyName');
+    BuiltValueNullFieldError.checkNotNull(
+        deviceVersion, 'LoginRequest', 'deviceVersion');
+    BuiltValueNullFieldError.checkNotNull(deviceOS, 'LoginRequest', 'deviceOS');
   }
 
   @override
-  LoginBody rebuild(void Function(LoginBodyBuilder) updates) =>
+  LoginRequest rebuild(void Function(LoginRequestBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
-  LoginBodyBuilder toBuilder() => new LoginBodyBuilder()..replace(this);
+  LoginRequestBuilder toBuilder() => new LoginRequestBuilder()..replace(this);
 
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is LoginBody &&
-        username == other.username &&
-        password == other.password;
+    return other is LoginRequest &&
+        email == other.email &&
+        password == other.password &&
+        deviceId == other.deviceId &&
+        deviceName == other.deviceName &&
+        deviceFriendlyName == other.deviceFriendlyName &&
+        deviceVersion == other.deviceVersion &&
+        deviceOS == other.deviceOS;
   }
 
   @override
   int get hashCode {
-    return $jf($jc($jc(0, username.hashCode), password.hashCode));
+    return $jf($jc(
+        $jc(
+            $jc(
+                $jc(
+                    $jc($jc($jc(0, email.hashCode), password.hashCode),
+                        deviceId.hashCode),
+                    deviceName.hashCode),
+                deviceFriendlyName.hashCode),
+            deviceVersion.hashCode),
+        deviceOS.hashCode));
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('LoginBody')
-          ..add('username', username)
-          ..add('password', password))
+    return (newBuiltValueToStringHelper('LoginRequest')
+          ..add('email', email)
+          ..add('password', password)
+          ..add('deviceId', deviceId)
+          ..add('deviceName', deviceName)
+          ..add('deviceFriendlyName', deviceFriendlyName)
+          ..add('deviceVersion', deviceVersion)
+          ..add('deviceOS', deviceOS))
         .toString();
   }
 }
 
-class LoginBodyBuilder implements Builder<LoginBody, LoginBodyBuilder> {
-  _$LoginBody _$v;
+class LoginRequestBuilder
+    implements Builder<LoginRequest, LoginRequestBuilder> {
+  _$LoginRequest _$v;
 
-  String _username;
-  String get username => _$this._username;
-  set username(String username) => _$this._username = username;
+  String _email;
+  String get email => _$this._email;
+  set email(String email) => _$this._email = email;
 
   String _password;
   String get password => _$this._password;
   set password(String password) => _$this._password = password;
 
-  LoginBodyBuilder();
+  String _deviceId;
+  String get deviceId => _$this._deviceId;
+  set deviceId(String deviceId) => _$this._deviceId = deviceId;
 
-  LoginBodyBuilder get _$this {
-    if (_$v != null) {
-      _username = _$v.username;
-      _password = _$v.password;
+  String _deviceName;
+  String get deviceName => _$this._deviceName;
+  set deviceName(String deviceName) => _$this._deviceName = deviceName;
+
+  String _deviceFriendlyName;
+  String get deviceFriendlyName => _$this._deviceFriendlyName;
+  set deviceFriendlyName(String deviceFriendlyName) =>
+      _$this._deviceFriendlyName = deviceFriendlyName;
+
+  String _deviceVersion;
+  String get deviceVersion => _$this._deviceVersion;
+  set deviceVersion(String deviceVersion) =>
+      _$this._deviceVersion = deviceVersion;
+
+  String _deviceOS;
+  String get deviceOS => _$this._deviceOS;
+  set deviceOS(String deviceOS) => _$this._deviceOS = deviceOS;
+
+  LoginRequestBuilder();
+
+  LoginRequestBuilder get _$this {
+    final $v = _$v;
+    if ($v != null) {
+      _email = $v.email;
+      _password = $v.password;
+      _deviceId = $v.deviceId;
+      _deviceName = $v.deviceName;
+      _deviceFriendlyName = $v.deviceFriendlyName;
+      _deviceVersion = $v.deviceVersion;
+      _deviceOS = $v.deviceOS;
       _$v = null;
     }
     return this;
   }
 
   @override
-  void replace(LoginBody other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
-    _$v = other as _$LoginBody;
+  void replace(LoginRequest other) {
+    ArgumentError.checkNotNull(other, 'other');
+    _$v = other as _$LoginRequest;
   }
 
   @override
-  void update(void Function(LoginBodyBuilder) updates) {
+  void update(void Function(LoginRequestBuilder) updates) {
     if (updates != null) updates(this);
   }
 
   @override
-  _$LoginBody build() {
-    final _$result =
-        _$v ?? new _$LoginBody._(username: username, password: password);
+  _$LoginRequest build() {
+    final _$result = _$v ??
+        new _$LoginRequest._(
+            email: BuiltValueNullFieldError.checkNotNull(
+                email, 'LoginRequest', 'email'),
+            password: BuiltValueNullFieldError.checkNotNull(
+                password, 'LoginRequest', 'password'),
+            deviceId: BuiltValueNullFieldError.checkNotNull(
+                deviceId, 'LoginRequest', 'deviceId'),
+            deviceName: BuiltValueNullFieldError.checkNotNull(
+                deviceName, 'LoginRequest', 'deviceName'),
+            deviceFriendlyName: BuiltValueNullFieldError.checkNotNull(
+                deviceFriendlyName, 'LoginRequest', 'deviceFriendlyName'),
+            deviceVersion: BuiltValueNullFieldError.checkNotNull(
+                deviceVersion, 'LoginRequest', 'deviceVersion'),
+            deviceOS: BuiltValueNullFieldError.checkNotNull(
+                deviceOS, 'LoginRequest', 'deviceOS'));
     replace(_$result);
     return _$result;
   }

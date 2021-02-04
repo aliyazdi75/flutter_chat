@@ -41,12 +41,8 @@ class AuthenticationBloc
     yield const AuthenticationState.loading();
 
     try {
-      final account = await accountRepository.getMyUserAccount();
-      if (account == null) {
-        yield const AuthenticationState.unauthenticated();
-      } else {
-        yield AuthenticationState.authenticated(account);
-      }
+      final account = await accountRepository.getMyAccount();
+      yield AuthenticationState.authenticated(account);
     } on SocketException catch (_) {
       print('kir to netet');
       yield const AuthenticationState.unauthenticated();

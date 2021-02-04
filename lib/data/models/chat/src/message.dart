@@ -41,8 +41,6 @@ class MessageType extends EnumClass {
   static const MessageType image = _$image;
   static const MessageType video = _$video;
 
-  static const MessageType constantName = _$constantName;
-
   const MessageType._(String name) : super(name);
 
   static BuiltSet<MessageType> get values => _$messageTypeValues;

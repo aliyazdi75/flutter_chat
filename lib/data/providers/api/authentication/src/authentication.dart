@@ -1,27 +1,39 @@
 import 'package:flutter_chat/data/models/authentication/index.dart';
-import 'package:flutter_chat/data/models/response/index.dart';
 import 'package:flutter_chat/services/http/index.dart';
 
 class AuthenticationApi {
-  static Future<Register> register(Register register) async {
-    final body = register.toJson();
-    final response = await HttpHelper('accounts').httpPost(
-      badRequestModel: RegisterBadRequest,
+  static Future<RegisterResponse> register(
+      RegisterRequest registerRequest) async {
+    final body = registerRequest.toJson();
+    final response = await HttpHelper('auth/signup').httpPost(
+      // badRequestModel: RegisterBadRequest,
       body: body,
     );
-    return Register.fromJson(response);
+    return RegisterResponse.fromJson(response);
   }
 
-  static Future<Authentication> login(LoginBody loginBody) async {
-    final body = loginBody.toJson();
-    final response = await HttpHelper('auth/login').httpPost(
-      badRequestModel: LoginBadRequest,
+  static Future<AuthInitResponse> init(AuthInitRequest authInitRequest) async {
+    final body = authInitRequest.toJson();
+    final response = await HttpHelper('auth/init').httpPost(
+      // badRequestModel: LoginBadRequest,
+      body: body,
+    );
+    return AuthInitResponse.fromJson(response);
+  }
+
+  static Future<Authentication> login(LoginRequest loginRequest) async {
+    final body = loginRequest.toJson();
+    final response = await HttpHelper('auth/signin').httpPost(
+      // badRequestModel: LoginBadRequest,
       body: body,
     );
     return Authentication.fromJson(response);
   }
 
-  static Future logout() async {
-    throw UnimplementedError('Log out has not been implemented!');
+  static Future<void> logout() async {
+    final response = await HttpHelper('auth/signout').httpGet(
+      headerType: HttpHeaderType.authenticated,
+    );
+    return Authentication.fromJson(response);
   }
 }

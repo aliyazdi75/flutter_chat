@@ -58,7 +58,7 @@ class _$ChatSerializer implements StructuredSerializer<Chat> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'messages':
           result.messages.replace(serializers.deserialize(value,
@@ -92,17 +92,19 @@ class _$OpenChatInputBodySerializer
   Iterable<Object> serialize(Serializers serializers, OpenChatInputBody object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[];
-    if (object.userId != null) {
+    Object value;
+    value = object.userId;
+    if (value != null) {
       result
         ..add('userId')
-        ..add(serializers.serialize(object.userId,
+        ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
-    if (object.containerId != null) {
+    value = object.containerId;
+    if (value != null) {
       result
         ..add('containerId')
-        ..add(serializers.serialize(object.containerId,
-            specifiedType: const FullType(int)));
+        ..add(serializers.serialize(value, specifiedType: const FullType(int)));
     }
     return result;
   }
@@ -117,7 +119,7 @@ class _$OpenChatInputBodySerializer
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'userId':
           result.userId = serializers.deserialize(value,
@@ -149,23 +151,24 @@ class _$GetMessagesInputQuerySerializer
       Serializers serializers, GetMessagesInputQuery object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[];
-    if (object.minId != null) {
+    Object value;
+    value = object.minId;
+    if (value != null) {
       result
         ..add('minId')
-        ..add(serializers.serialize(object.minId,
-            specifiedType: const FullType(int)));
+        ..add(serializers.serialize(value, specifiedType: const FullType(int)));
     }
-    if (object.maxId != null) {
+    value = object.maxId;
+    if (value != null) {
       result
         ..add('maxId')
-        ..add(serializers.serialize(object.maxId,
-            specifiedType: const FullType(int)));
+        ..add(serializers.serialize(value, specifiedType: const FullType(int)));
     }
-    if (object.count != null) {
+    value = object.count;
+    if (value != null) {
       result
         ..add('count')
-        ..add(serializers.serialize(object.count,
-            specifiedType: const FullType(int)));
+        ..add(serializers.serialize(value, specifiedType: const FullType(int)));
     }
     return result;
   }
@@ -180,7 +183,7 @@ class _$GetMessagesInputQuerySerializer
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'minId':
           result.minId = serializers.deserialize(value,
@@ -232,7 +235,7 @@ class _$ChatReadInputBodySerializer
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'containerId':
           result.containerId = serializers.deserialize(value,
@@ -260,17 +263,19 @@ class _$CloseChatInputBodySerializer
   Iterable<Object> serialize(Serializers serializers, CloseChatInputBody object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[];
-    if (object.userId != null) {
+    Object value;
+    value = object.userId;
+    if (value != null) {
       result
         ..add('userId')
-        ..add(serializers.serialize(object.userId,
+        ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
-    if (object.containerId != null) {
+    value = object.containerId;
+    if (value != null) {
       result
         ..add('containerId')
-        ..add(serializers.serialize(object.containerId,
-            specifiedType: const FullType(int)));
+        ..add(serializers.serialize(value, specifiedType: const FullType(int)));
     }
     return result;
   }
@@ -285,7 +290,7 @@ class _$CloseChatInputBodySerializer
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'userId':
           result.userId = serializers.deserialize(value,
@@ -332,7 +337,7 @@ class _$GetMessageResponseSerializer
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'messages':
           result.messages.replace(serializers.deserialize(value,
@@ -381,7 +386,7 @@ class _$ChatStatusChangeSerializer
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'userId':
           result.userId = serializers.deserialize(value,
@@ -440,7 +445,7 @@ class _$ChatMessageReceiveSerializer
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'id':
           result.id = serializers.deserialize(value,
@@ -499,7 +504,7 @@ class _$ChatSeenSerializer implements StructuredSerializer<ChatSeen> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'userId':
           result.userId = serializers.deserialize(value,
@@ -546,7 +551,7 @@ class _$ChatTypingSerializer implements StructuredSerializer<ChatTyping> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'userId':
           result.userId = serializers.deserialize(value,
@@ -575,15 +580,9 @@ class _$Chat extends Chat {
       (new ChatBuilder()..update(updates)).build();
 
   _$Chat._({this.messages, this.lastSeen, this.isOnline}) : super._() {
-    if (messages == null) {
-      throw new BuiltValueNullFieldError('Chat', 'messages');
-    }
-    if (lastSeen == null) {
-      throw new BuiltValueNullFieldError('Chat', 'lastSeen');
-    }
-    if (isOnline == null) {
-      throw new BuiltValueNullFieldError('Chat', 'isOnline');
-    }
+    BuiltValueNullFieldError.checkNotNull(messages, 'Chat', 'messages');
+    BuiltValueNullFieldError.checkNotNull(lastSeen, 'Chat', 'lastSeen');
+    BuiltValueNullFieldError.checkNotNull(isOnline, 'Chat', 'isOnline');
   }
 
   @override
@@ -637,10 +636,11 @@ class ChatBuilder implements Builder<Chat, ChatBuilder> {
   ChatBuilder();
 
   ChatBuilder get _$this {
-    if (_$v != null) {
-      _messages = _$v.messages?.toBuilder();
-      _lastSeen = _$v.lastSeen;
-      _isOnline = _$v.isOnline;
+    final $v = _$v;
+    if ($v != null) {
+      _messages = $v.messages.toBuilder();
+      _lastSeen = $v.lastSeen;
+      _isOnline = $v.isOnline;
       _$v = null;
     }
     return this;
@@ -648,9 +648,7 @@ class ChatBuilder implements Builder<Chat, ChatBuilder> {
 
   @override
   void replace(Chat other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$Chat;
   }
 
@@ -666,8 +664,10 @@ class ChatBuilder implements Builder<Chat, ChatBuilder> {
       _$result = _$v ??
           new _$Chat._(
               messages: messages.build(),
-              lastSeen: lastSeen,
-              isOnline: isOnline);
+              lastSeen: BuiltValueNullFieldError.checkNotNull(
+                  lastSeen, 'Chat', 'lastSeen'),
+              isOnline: BuiltValueNullFieldError.checkNotNull(
+                  isOnline, 'Chat', 'isOnline'));
     } catch (_) {
       String _$failedField;
       try {
@@ -741,9 +741,10 @@ class OpenChatInputBodyBuilder
   OpenChatInputBodyBuilder();
 
   OpenChatInputBodyBuilder get _$this {
-    if (_$v != null) {
-      _userId = _$v.userId;
-      _containerId = _$v.containerId;
+    final $v = _$v;
+    if ($v != null) {
+      _userId = $v.userId;
+      _containerId = $v.containerId;
       _$v = null;
     }
     return this;
@@ -751,9 +752,7 @@ class OpenChatInputBodyBuilder
 
   @override
   void replace(OpenChatInputBody other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$OpenChatInputBody;
   }
 
@@ -838,10 +837,11 @@ class GetMessagesInputQueryBuilder
   GetMessagesInputQueryBuilder();
 
   GetMessagesInputQueryBuilder get _$this {
-    if (_$v != null) {
-      _minId = _$v.minId;
-      _maxId = _$v.maxId;
-      _count = _$v.count;
+    final $v = _$v;
+    if ($v != null) {
+      _minId = $v.minId;
+      _maxId = $v.maxId;
+      _count = $v.count;
       _$v = null;
     }
     return this;
@@ -849,9 +849,7 @@ class GetMessagesInputQueryBuilder
 
   @override
   void replace(GetMessagesInputQuery other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$GetMessagesInputQuery;
   }
 
@@ -880,12 +878,9 @@ class _$ChatReadInputBody extends ChatReadInputBody {
       (new ChatReadInputBodyBuilder()..update(updates)).build();
 
   _$ChatReadInputBody._({this.containerId, this.read}) : super._() {
-    if (containerId == null) {
-      throw new BuiltValueNullFieldError('ChatReadInputBody', 'containerId');
-    }
-    if (read == null) {
-      throw new BuiltValueNullFieldError('ChatReadInputBody', 'read');
-    }
+    BuiltValueNullFieldError.checkNotNull(
+        containerId, 'ChatReadInputBody', 'containerId');
+    BuiltValueNullFieldError.checkNotNull(read, 'ChatReadInputBody', 'read');
   }
 
   @override
@@ -933,9 +928,10 @@ class ChatReadInputBodyBuilder
   ChatReadInputBodyBuilder();
 
   ChatReadInputBodyBuilder get _$this {
-    if (_$v != null) {
-      _containerId = _$v.containerId;
-      _read = _$v.read;
+    final $v = _$v;
+    if ($v != null) {
+      _containerId = $v.containerId;
+      _read = $v.read;
       _$v = null;
     }
     return this;
@@ -943,9 +939,7 @@ class ChatReadInputBodyBuilder
 
   @override
   void replace(ChatReadInputBody other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$ChatReadInputBody;
   }
 
@@ -956,8 +950,12 @@ class ChatReadInputBodyBuilder
 
   @override
   _$ChatReadInputBody build() {
-    final _$result =
-        _$v ?? new _$ChatReadInputBody._(containerId: containerId, read: read);
+    final _$result = _$v ??
+        new _$ChatReadInputBody._(
+            containerId: BuiltValueNullFieldError.checkNotNull(
+                containerId, 'ChatReadInputBody', 'containerId'),
+            read: BuiltValueNullFieldError.checkNotNull(
+                read, 'ChatReadInputBody', 'read'));
     replace(_$result);
     return _$result;
   }
@@ -1021,9 +1019,10 @@ class CloseChatInputBodyBuilder
   CloseChatInputBodyBuilder();
 
   CloseChatInputBodyBuilder get _$this {
-    if (_$v != null) {
-      _userId = _$v.userId;
-      _containerId = _$v.containerId;
+    final $v = _$v;
+    if ($v != null) {
+      _userId = $v.userId;
+      _containerId = $v.containerId;
       _$v = null;
     }
     return this;
@@ -1031,9 +1030,7 @@ class CloseChatInputBodyBuilder
 
   @override
   void replace(CloseChatInputBody other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$CloseChatInputBody;
   }
 
@@ -1060,9 +1057,8 @@ class _$GetMessageResponse extends GetMessageResponse {
       (new GetMessageResponseBuilder()..update(updates)).build();
 
   _$GetMessageResponse._({this.messages}) : super._() {
-    if (messages == null) {
-      throw new BuiltValueNullFieldError('GetMessageResponse', 'messages');
-    }
+    BuiltValueNullFieldError.checkNotNull(
+        messages, 'GetMessageResponse', 'messages');
   }
 
   @override
@@ -1105,8 +1101,9 @@ class GetMessageResponseBuilder
   GetMessageResponseBuilder();
 
   GetMessageResponseBuilder get _$this {
-    if (_$v != null) {
-      _messages = _$v.messages?.toBuilder();
+    final $v = _$v;
+    if ($v != null) {
+      _messages = $v.messages.toBuilder();
       _$v = null;
     }
     return this;
@@ -1114,9 +1111,7 @@ class GetMessageResponseBuilder
 
   @override
   void replace(GetMessageResponse other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$GetMessageResponse;
   }
 
@@ -1159,15 +1154,10 @@ class _$ChatStatusChange extends ChatStatusChange {
       (new ChatStatusChangeBuilder()..update(updates)).build();
 
   _$ChatStatusChange._({this.userId, this.online, this.lastSeen}) : super._() {
-    if (userId == null) {
-      throw new BuiltValueNullFieldError('ChatStatusChange', 'userId');
-    }
-    if (online == null) {
-      throw new BuiltValueNullFieldError('ChatStatusChange', 'online');
-    }
-    if (lastSeen == null) {
-      throw new BuiltValueNullFieldError('ChatStatusChange', 'lastSeen');
-    }
+    BuiltValueNullFieldError.checkNotNull(userId, 'ChatStatusChange', 'userId');
+    BuiltValueNullFieldError.checkNotNull(online, 'ChatStatusChange', 'online');
+    BuiltValueNullFieldError.checkNotNull(
+        lastSeen, 'ChatStatusChange', 'lastSeen');
   }
 
   @override
@@ -1222,10 +1212,11 @@ class ChatStatusChangeBuilder
   ChatStatusChangeBuilder();
 
   ChatStatusChangeBuilder get _$this {
-    if (_$v != null) {
-      _userId = _$v.userId;
-      _online = _$v.online;
-      _lastSeen = _$v.lastSeen;
+    final $v = _$v;
+    if ($v != null) {
+      _userId = $v.userId;
+      _online = $v.online;
+      _lastSeen = $v.lastSeen;
       _$v = null;
     }
     return this;
@@ -1233,9 +1224,7 @@ class ChatStatusChangeBuilder
 
   @override
   void replace(ChatStatusChange other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$ChatStatusChange;
   }
 
@@ -1248,7 +1237,12 @@ class ChatStatusChangeBuilder
   _$ChatStatusChange build() {
     final _$result = _$v ??
         new _$ChatStatusChange._(
-            userId: userId, online: online, lastSeen: lastSeen);
+            userId: BuiltValueNullFieldError.checkNotNull(
+                userId, 'ChatStatusChange', 'userId'),
+            online: BuiltValueNullFieldError.checkNotNull(
+                online, 'ChatStatusChange', 'online'),
+            lastSeen: BuiltValueNullFieldError.checkNotNull(
+                lastSeen, 'ChatStatusChange', 'lastSeen'));
     replace(_$result);
     return _$result;
   }
@@ -1273,21 +1267,12 @@ class _$ChatMessageReceive extends ChatMessageReceive {
   _$ChatMessageReceive._(
       {this.id, this.senderId, this.type, this.text, this.date})
       : super._() {
-    if (id == null) {
-      throw new BuiltValueNullFieldError('ChatMessageReceive', 'id');
-    }
-    if (senderId == null) {
-      throw new BuiltValueNullFieldError('ChatMessageReceive', 'senderId');
-    }
-    if (type == null) {
-      throw new BuiltValueNullFieldError('ChatMessageReceive', 'type');
-    }
-    if (text == null) {
-      throw new BuiltValueNullFieldError('ChatMessageReceive', 'text');
-    }
-    if (date == null) {
-      throw new BuiltValueNullFieldError('ChatMessageReceive', 'date');
-    }
+    BuiltValueNullFieldError.checkNotNull(id, 'ChatMessageReceive', 'id');
+    BuiltValueNullFieldError.checkNotNull(
+        senderId, 'ChatMessageReceive', 'senderId');
+    BuiltValueNullFieldError.checkNotNull(type, 'ChatMessageReceive', 'type');
+    BuiltValueNullFieldError.checkNotNull(text, 'ChatMessageReceive', 'text');
+    BuiltValueNullFieldError.checkNotNull(date, 'ChatMessageReceive', 'date');
   }
 
   @override
@@ -1357,12 +1342,13 @@ class ChatMessageReceiveBuilder
   ChatMessageReceiveBuilder();
 
   ChatMessageReceiveBuilder get _$this {
-    if (_$v != null) {
-      _id = _$v.id;
-      _senderId = _$v.senderId;
-      _type = _$v.type;
-      _text = _$v.text;
-      _date = _$v.date;
+    final $v = _$v;
+    if ($v != null) {
+      _id = $v.id;
+      _senderId = $v.senderId;
+      _type = $v.type;
+      _text = $v.text;
+      _date = $v.date;
       _$v = null;
     }
     return this;
@@ -1370,9 +1356,7 @@ class ChatMessageReceiveBuilder
 
   @override
   void replace(ChatMessageReceive other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$ChatMessageReceive;
   }
 
@@ -1385,7 +1369,16 @@ class ChatMessageReceiveBuilder
   _$ChatMessageReceive build() {
     final _$result = _$v ??
         new _$ChatMessageReceive._(
-            id: id, senderId: senderId, type: type, text: text, date: date);
+            id: BuiltValueNullFieldError.checkNotNull(
+                id, 'ChatMessageReceive', 'id'),
+            senderId: BuiltValueNullFieldError.checkNotNull(
+                senderId, 'ChatMessageReceive', 'senderId'),
+            type: BuiltValueNullFieldError.checkNotNull(
+                type, 'ChatMessageReceive', 'type'),
+            text: BuiltValueNullFieldError.checkNotNull(
+                text, 'ChatMessageReceive', 'text'),
+            date: BuiltValueNullFieldError.checkNotNull(
+                date, 'ChatMessageReceive', 'date'));
     replace(_$result);
     return _$result;
   }
@@ -1401,12 +1394,8 @@ class _$ChatSeen extends ChatSeen {
       (new ChatSeenBuilder()..update(updates)).build();
 
   _$ChatSeen._({this.userId, this.lastId}) : super._() {
-    if (userId == null) {
-      throw new BuiltValueNullFieldError('ChatSeen', 'userId');
-    }
-    if (lastId == null) {
-      throw new BuiltValueNullFieldError('ChatSeen', 'lastId');
-    }
+    BuiltValueNullFieldError.checkNotNull(userId, 'ChatSeen', 'userId');
+    BuiltValueNullFieldError.checkNotNull(lastId, 'ChatSeen', 'lastId');
   }
 
   @override
@@ -1452,9 +1441,10 @@ class ChatSeenBuilder implements Builder<ChatSeen, ChatSeenBuilder> {
   ChatSeenBuilder();
 
   ChatSeenBuilder get _$this {
-    if (_$v != null) {
-      _userId = _$v.userId;
-      _lastId = _$v.lastId;
+    final $v = _$v;
+    if ($v != null) {
+      _userId = $v.userId;
+      _lastId = $v.lastId;
       _$v = null;
     }
     return this;
@@ -1462,9 +1452,7 @@ class ChatSeenBuilder implements Builder<ChatSeen, ChatSeenBuilder> {
 
   @override
   void replace(ChatSeen other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$ChatSeen;
   }
 
@@ -1475,7 +1463,12 @@ class ChatSeenBuilder implements Builder<ChatSeen, ChatSeenBuilder> {
 
   @override
   _$ChatSeen build() {
-    final _$result = _$v ?? new _$ChatSeen._(userId: userId, lastId: lastId);
+    final _$result = _$v ??
+        new _$ChatSeen._(
+            userId: BuiltValueNullFieldError.checkNotNull(
+                userId, 'ChatSeen', 'userId'),
+            lastId: BuiltValueNullFieldError.checkNotNull(
+                lastId, 'ChatSeen', 'lastId'));
     replace(_$result);
     return _$result;
   }
@@ -1491,12 +1484,8 @@ class _$ChatTyping extends ChatTyping {
       (new ChatTypingBuilder()..update(updates)).build();
 
   _$ChatTyping._({this.userId, this.isTyping}) : super._() {
-    if (userId == null) {
-      throw new BuiltValueNullFieldError('ChatTyping', 'userId');
-    }
-    if (isTyping == null) {
-      throw new BuiltValueNullFieldError('ChatTyping', 'isTyping');
-    }
+    BuiltValueNullFieldError.checkNotNull(userId, 'ChatTyping', 'userId');
+    BuiltValueNullFieldError.checkNotNull(isTyping, 'ChatTyping', 'isTyping');
   }
 
   @override
@@ -1542,9 +1531,10 @@ class ChatTypingBuilder implements Builder<ChatTyping, ChatTypingBuilder> {
   ChatTypingBuilder();
 
   ChatTypingBuilder get _$this {
-    if (_$v != null) {
-      _userId = _$v.userId;
-      _isTyping = _$v.isTyping;
+    final $v = _$v;
+    if ($v != null) {
+      _userId = $v.userId;
+      _isTyping = $v.isTyping;
       _$v = null;
     }
     return this;
@@ -1552,9 +1542,7 @@ class ChatTypingBuilder implements Builder<ChatTyping, ChatTypingBuilder> {
 
   @override
   void replace(ChatTyping other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$ChatTyping;
   }
 
@@ -1565,8 +1553,12 @@ class ChatTypingBuilder implements Builder<ChatTyping, ChatTypingBuilder> {
 
   @override
   _$ChatTyping build() {
-    final _$result =
-        _$v ?? new _$ChatTyping._(userId: userId, isTyping: isTyping);
+    final _$result = _$v ??
+        new _$ChatTyping._(
+            userId: BuiltValueNullFieldError.checkNotNull(
+                userId, 'ChatTyping', 'userId'),
+            isTyping: BuiltValueNullFieldError.checkNotNull(
+                isTyping, 'ChatTyping', 'isTyping'));
     replace(_$result);
     return _$result;
   }

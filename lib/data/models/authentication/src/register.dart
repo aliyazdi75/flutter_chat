@@ -5,29 +5,39 @@ import 'serializers.dart';
 
 part 'register.g.dart';
 
-abstract class Register implements Built<Register, RegisterBuilder> {
-  String get token;
-
-  int get id;
-
-  String get username;
+abstract class RegisterRequest
+    implements Built<RegisterRequest, RegisterRequestBuilder> {
+  String get email;
 
   String get password;
 
-  String get email;
+  RegisterRequest._();
 
-  Register._();
-
-  factory Register([void Function(RegisterBuilder) updates]) = _$Register;
+  factory RegisterRequest([void Function(RegisterRequestBuilder) updates]) =
+      _$RegisterRequest;
 
   Map<String, dynamic> toJson() {
-    return serializers.serializeWith(Register.serializer, this)
+    return serializers.serializeWith(RegisterRequest.serializer, this)
         as Map<String, dynamic>;
   }
 
-  static Register fromJson(Map<String, dynamic> json) {
-    return serializers.deserializeWith(Register.serializer, json);
+  static Serializer<RegisterRequest> get serializer =>
+      _$registerRequestSerializer;
+}
+
+abstract class RegisterResponse
+    implements Built<RegisterResponse, RegisterResponseBuilder> {
+  bool get success;
+
+  RegisterResponse._();
+
+  factory RegisterResponse([void Function(RegisterResponseBuilder) updates]) =
+      _$RegisterResponse;
+
+  static RegisterResponse fromJson(Map<String, dynamic> json) {
+    return serializers.deserializeWith(RegisterResponse.serializer, json);
   }
 
-  static Serializer<Register> get serializer => _$registerSerializer;
+  static Serializer<RegisterResponse> get serializer =>
+      _$registerResponseSerializer;
 }

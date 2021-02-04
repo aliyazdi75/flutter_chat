@@ -8,9 +8,8 @@ part 'exception.g.dart';
 
 abstract class HttpExceptionModel
     implements Built<HttpExceptionModel, HttpExceptionModelBuilder> {
-  String get key;
-
-  String get value;
+  @nullable
+  List<ExceptionDescription> get exceptions;
 
   HttpExceptionModel._();
 
@@ -26,56 +25,46 @@ abstract class HttpExceptionModel
       _$httpExceptionModelSerializer;
 }
 
-abstract class RegisterBadRequest
-    implements Built<RegisterBadRequest, RegisterBadRequestBuilder> {
-  @nullable
-  BuiltList<String> get username;
+abstract class ExceptionDescription
+    implements Built<ExceptionDescription, ExceptionDescriptionBuilder> {
+  @BuiltValueField(wireName: 'class')
+  String get method;
 
-  @nullable
-  BuiltList<String> get password;
+  String get message;
 
-  @nullable
-  BuiltList<String> get email;
+  ExceptionDescription._();
 
-  @nullable
-  @BuiltValueField(wireName: 'non_field_errors')
-  BuiltList<String> get nonFieldErrors;
+  factory ExceptionDescription(
+          [void Function(ExceptionDescriptionBuilder) updates]) =
+      _$ExceptionDescription;
 
-  RegisterBadRequest._();
-
-  factory RegisterBadRequest(
-          [void Function(RegisterBadRequestBuilder) updates]) =
-      _$RegisterBadRequest;
-
-  static RegisterBadRequest fromJson(Map<String, dynamic> json) {
-    return serializers.deserializeWith(RegisterBadRequest.serializer, json);
+  static ExceptionDescription fromJson(Map<String, dynamic> json) {
+    return serializers.deserializeWith(ExceptionDescription.serializer, json);
   }
 
-  static Serializer<RegisterBadRequest> get serializer =>
-      _$registerBadRequestSerializer;
+  static Serializer<ExceptionDescription> get serializer =>
+      _$exceptionDescriptionSerializer;
 }
 
-abstract class LoginBadRequest
-    implements Built<LoginBadRequest, LoginBadRequestBuilder> {
-  @nullable
-  BuiltList<String> get username;
+abstract class ValidationException
+    implements Built<ValidationException, ValidationExceptionBuilder> {
+  @BuiltValueField(wireName: 'class')
+  String get method;
 
-  @nullable
-  BuiltList<String> get password;
+  String get message;
 
-  @nullable
-  @BuiltValueField(wireName: 'non_field_errors')
-  BuiltList<String> get nonFieldErrors;
+  List<String> get fields;
 
-  LoginBadRequest._();
+  ValidationException._();
 
-  factory LoginBadRequest([void Function(LoginBadRequestBuilder) updates]) =
-      _$LoginBadRequest;
+  factory ValidationException(
+          [void Function(ValidationExceptionBuilder) updates]) =
+      _$ValidationException;
 
-  static LoginBadRequest fromJson(Map<String, dynamic> json) {
-    return serializers.deserializeWith(LoginBadRequest.serializer, json);
+  static ValidationException fromJson(Map<String, dynamic> json) {
+    return serializers.deserializeWith(ValidationException.serializer, json);
   }
 
-  static Serializer<LoginBadRequest> get serializer =>
-      _$loginBadRequestSerializer;
+  static Serializer<ValidationException> get serializer =>
+      _$validationExceptionSerializer;
 }

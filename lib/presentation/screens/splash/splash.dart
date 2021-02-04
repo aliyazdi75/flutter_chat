@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chat/blocs/authentication/bloc.dart';
+import 'package:flutter_chat/presentation/screens/auth_init/auth_init.dart';
 import 'package:flutter_chat/presentation/screens/home/home.dart';
-import 'package:flutter_chat/presentation/screens/login/login.dart';
 
 class SplashPage extends StatelessWidget {
   const SplashPage();
@@ -37,11 +37,11 @@ class SplashPage extends StatelessWidget {
               return state.status == AuthenticationStatus.loading
                   ? const CircularProgressIndicator()
                   : ElevatedButton(
-                      child: const Text('Login'),
+                      child: const Text('Authentication Init'),
                       onPressed: () {
                         Navigator.of(context).push<void>(
                           MaterialPageRoute(
-                            builder: (context) => const LoginPage(),
+                            builder: (context) => const AuthInitPage(),
                           ),
                         );
                       },

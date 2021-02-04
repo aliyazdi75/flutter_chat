@@ -6,31 +6,27 @@ part of 'register.dart';
 // BuiltValueGenerator
 // **************************************************************************
 
-Serializer<Register> _$registerSerializer = new _$RegisterSerializer();
+Serializer<RegisterRequest> _$registerRequestSerializer =
+    new _$RegisterRequestSerializer();
+Serializer<RegisterResponse> _$registerResponseSerializer =
+    new _$RegisterResponseSerializer();
 
-class _$RegisterSerializer implements StructuredSerializer<Register> {
+class _$RegisterRequestSerializer
+    implements StructuredSerializer<RegisterRequest> {
   @override
-  final Iterable<Type> types = const [Register, _$Register];
+  final Iterable<Type> types = const [RegisterRequest, _$RegisterRequest];
   @override
-  final String wireName = 'Register';
+  final String wireName = 'RegisterRequest';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, Register object,
+  Iterable<Object> serialize(Serializers serializers, RegisterRequest object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
-      'token',
-      serializers.serialize(object.token,
-          specifiedType: const FullType(String)),
-      'id',
-      serializers.serialize(object.id, specifiedType: const FullType(int)),
-      'username',
-      serializers.serialize(object.username,
+      'email',
+      serializers.serialize(object.email,
           specifiedType: const FullType(String)),
       'password',
       serializers.serialize(object.password,
-          specifiedType: const FullType(String)),
-      'email',
-      serializers.serialize(object.email,
           specifiedType: const FullType(String)),
     ];
 
@@ -38,34 +34,23 @@ class _$RegisterSerializer implements StructuredSerializer<Register> {
   }
 
   @override
-  Register deserialize(Serializers serializers, Iterable<Object> serialized,
+  RegisterRequest deserialize(
+      Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = new RegisterBuilder();
+    final result = new RegisterRequestBuilder();
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
-        case 'token':
-          result.token = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
-          break;
-        case 'id':
-          result.id = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
-          break;
-        case 'username':
-          result.username = serializers.deserialize(value,
+        case 'email':
+          result.email = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
         case 'password':
           result.password = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
-          break;
-        case 'email':
-          result.email = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
       }
@@ -75,137 +60,217 @@ class _$RegisterSerializer implements StructuredSerializer<Register> {
   }
 }
 
-class _$Register extends Register {
+class _$RegisterResponseSerializer
+    implements StructuredSerializer<RegisterResponse> {
   @override
-  final String token;
+  final Iterable<Type> types = const [RegisterResponse, _$RegisterResponse];
   @override
-  final int id;
-  @override
-  final String username;
-  @override
-  final String password;
-  @override
-  final String email;
+  final String wireName = 'RegisterResponse';
 
-  factory _$Register([void Function(RegisterBuilder) updates]) =>
-      (new RegisterBuilder()..update(updates)).build();
+  @override
+  Iterable<Object> serialize(Serializers serializers, RegisterResponse object,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = <Object>[
+      'success',
+      serializers.serialize(object.success,
+          specifiedType: const FullType(bool)),
+    ];
 
-  _$Register._({this.token, this.id, this.username, this.password, this.email})
-      : super._() {
-    if (token == null) {
-      throw new BuiltValueNullFieldError('Register', 'token');
-    }
-    if (id == null) {
-      throw new BuiltValueNullFieldError('Register', 'id');
-    }
-    if (username == null) {
-      throw new BuiltValueNullFieldError('Register', 'username');
-    }
-    if (password == null) {
-      throw new BuiltValueNullFieldError('Register', 'password');
-    }
-    if (email == null) {
-      throw new BuiltValueNullFieldError('Register', 'email');
-    }
+    return result;
   }
 
   @override
-  Register rebuild(void Function(RegisterBuilder) updates) =>
+  RegisterResponse deserialize(
+      Serializers serializers, Iterable<Object> serialized,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = new RegisterResponseBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final Object value = iterator.current;
+      switch (key) {
+        case 'success':
+          result.success = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+      }
+    }
+
+    return result.build();
+  }
+}
+
+class _$RegisterRequest extends RegisterRequest {
+  @override
+  final String email;
+  @override
+  final String password;
+
+  factory _$RegisterRequest([void Function(RegisterRequestBuilder) updates]) =>
+      (new RegisterRequestBuilder()..update(updates)).build();
+
+  _$RegisterRequest._({this.email, this.password}) : super._() {
+    BuiltValueNullFieldError.checkNotNull(email, 'RegisterRequest', 'email');
+    BuiltValueNullFieldError.checkNotNull(
+        password, 'RegisterRequest', 'password');
+  }
+
+  @override
+  RegisterRequest rebuild(void Function(RegisterRequestBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
-  RegisterBuilder toBuilder() => new RegisterBuilder()..replace(this);
+  RegisterRequestBuilder toBuilder() =>
+      new RegisterRequestBuilder()..replace(this);
 
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is Register &&
-        token == other.token &&
-        id == other.id &&
-        username == other.username &&
-        password == other.password &&
-        email == other.email;
+    return other is RegisterRequest &&
+        email == other.email &&
+        password == other.password;
   }
 
   @override
   int get hashCode {
-    return $jf($jc(
-        $jc($jc($jc($jc(0, token.hashCode), id.hashCode), username.hashCode),
-            password.hashCode),
-        email.hashCode));
+    return $jf($jc($jc(0, email.hashCode), password.hashCode));
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('Register')
-          ..add('token', token)
-          ..add('id', id)
-          ..add('username', username)
-          ..add('password', password)
-          ..add('email', email))
+    return (newBuiltValueToStringHelper('RegisterRequest')
+          ..add('email', email)
+          ..add('password', password))
         .toString();
   }
 }
 
-class RegisterBuilder implements Builder<Register, RegisterBuilder> {
-  _$Register _$v;
-
-  String _token;
-  String get token => _$this._token;
-  set token(String token) => _$this._token = token;
-
-  int _id;
-  int get id => _$this._id;
-  set id(int id) => _$this._id = id;
-
-  String _username;
-  String get username => _$this._username;
-  set username(String username) => _$this._username = username;
-
-  String _password;
-  String get password => _$this._password;
-  set password(String password) => _$this._password = password;
+class RegisterRequestBuilder
+    implements Builder<RegisterRequest, RegisterRequestBuilder> {
+  _$RegisterRequest _$v;
 
   String _email;
   String get email => _$this._email;
   set email(String email) => _$this._email = email;
 
-  RegisterBuilder();
+  String _password;
+  String get password => _$this._password;
+  set password(String password) => _$this._password = password;
 
-  RegisterBuilder get _$this {
-    if (_$v != null) {
-      _token = _$v.token;
-      _id = _$v.id;
-      _username = _$v.username;
-      _password = _$v.password;
-      _email = _$v.email;
+  RegisterRequestBuilder();
+
+  RegisterRequestBuilder get _$this {
+    final $v = _$v;
+    if ($v != null) {
+      _email = $v.email;
+      _password = $v.password;
       _$v = null;
     }
     return this;
   }
 
   @override
-  void replace(Register other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
-    _$v = other as _$Register;
+  void replace(RegisterRequest other) {
+    ArgumentError.checkNotNull(other, 'other');
+    _$v = other as _$RegisterRequest;
   }
 
   @override
-  void update(void Function(RegisterBuilder) updates) {
+  void update(void Function(RegisterRequestBuilder) updates) {
     if (updates != null) updates(this);
   }
 
   @override
-  _$Register build() {
+  _$RegisterRequest build() {
     final _$result = _$v ??
-        new _$Register._(
-            token: token,
-            id: id,
-            username: username,
-            password: password,
-            email: email);
+        new _$RegisterRequest._(
+            email: BuiltValueNullFieldError.checkNotNull(
+                email, 'RegisterRequest', 'email'),
+            password: BuiltValueNullFieldError.checkNotNull(
+                password, 'RegisterRequest', 'password'));
+    replace(_$result);
+    return _$result;
+  }
+}
+
+class _$RegisterResponse extends RegisterResponse {
+  @override
+  final bool success;
+
+  factory _$RegisterResponse(
+          [void Function(RegisterResponseBuilder) updates]) =>
+      (new RegisterResponseBuilder()..update(updates)).build();
+
+  _$RegisterResponse._({this.success}) : super._() {
+    BuiltValueNullFieldError.checkNotNull(
+        success, 'RegisterResponse', 'success');
+  }
+
+  @override
+  RegisterResponse rebuild(void Function(RegisterResponseBuilder) updates) =>
+      (toBuilder()..update(updates)).build();
+
+  @override
+  RegisterResponseBuilder toBuilder() =>
+      new RegisterResponseBuilder()..replace(this);
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(other, this)) return true;
+    return other is RegisterResponse && success == other.success;
+  }
+
+  @override
+  int get hashCode {
+    return $jf($jc(0, success.hashCode));
+  }
+
+  @override
+  String toString() {
+    return (newBuiltValueToStringHelper('RegisterResponse')
+          ..add('success', success))
+        .toString();
+  }
+}
+
+class RegisterResponseBuilder
+    implements Builder<RegisterResponse, RegisterResponseBuilder> {
+  _$RegisterResponse _$v;
+
+  bool _success;
+  bool get success => _$this._success;
+  set success(bool success) => _$this._success = success;
+
+  RegisterResponseBuilder();
+
+  RegisterResponseBuilder get _$this {
+    final $v = _$v;
+    if ($v != null) {
+      _success = $v.success;
+      _$v = null;
+    }
+    return this;
+  }
+
+  @override
+  void replace(RegisterResponse other) {
+    ArgumentError.checkNotNull(other, 'other');
+    _$v = other as _$RegisterResponse;
+  }
+
+  @override
+  void update(void Function(RegisterResponseBuilder) updates) {
+    if (updates != null) updates(this);
+  }
+
+  @override
+  _$RegisterResponse build() {
+    final _$result = _$v ??
+        new _$RegisterResponse._(
+            success: BuiltValueNullFieldError.checkNotNull(
+                success, 'RegisterResponse', 'success'));
     replace(_$result);
     return _$result;
   }

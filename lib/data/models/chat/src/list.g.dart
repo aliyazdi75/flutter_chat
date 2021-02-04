@@ -37,7 +37,7 @@ class _$ChatListSerializer implements StructuredSerializer<ChatList> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'directs':
           result.chats.replace(serializers.deserialize(value,
@@ -87,10 +87,12 @@ class _$ChatInfoSerializer implements StructuredSerializer<ChatInfo> {
       serializers.serialize(object.lastSeen,
           specifiedType: const FullType(DateTime)),
     ];
-    if (object.lastMessage != null) {
+    Object value;
+    value = object.lastMessage;
+    if (value != null) {
       result
         ..add('lastMessage')
-        ..add(serializers.serialize(object.lastMessage,
+        ..add(serializers.serialize(value,
             specifiedType: const FullType(Message)));
     }
     return result;
@@ -105,7 +107,7 @@ class _$ChatInfoSerializer implements StructuredSerializer<ChatInfo> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'containerId':
           result.containerId = serializers.deserialize(value,
@@ -158,9 +160,7 @@ class _$ChatList extends ChatList {
       (new ChatListBuilder()..update(updates)).build();
 
   _$ChatList._({this.chats}) : super._() {
-    if (chats == null) {
-      throw new BuiltValueNullFieldError('ChatList', 'chats');
-    }
+    BuiltValueNullFieldError.checkNotNull(chats, 'ChatList', 'chats');
   }
 
   @override
@@ -199,8 +199,9 @@ class ChatListBuilder implements Builder<ChatList, ChatListBuilder> {
   ChatListBuilder();
 
   ChatListBuilder get _$this {
-    if (_$v != null) {
-      _chats = _$v.chats?.toBuilder();
+    final $v = _$v;
+    if ($v != null) {
+      _chats = $v.chats.toBuilder();
       _$v = null;
     }
     return this;
@@ -208,9 +209,7 @@ class ChatListBuilder implements Builder<ChatList, ChatListBuilder> {
 
   @override
   void replace(ChatList other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$ChatList;
   }
 
@@ -274,30 +273,16 @@ class _$ChatInfo extends ChatInfo {
       this.lastSeen,
       this.lastMessage})
       : super._() {
-    if (containerId == null) {
-      throw new BuiltValueNullFieldError('ChatInfo', 'containerId');
-    }
-    if (firstName == null) {
-      throw new BuiltValueNullFieldError('ChatInfo', 'firstName');
-    }
-    if (userId == null) {
-      throw new BuiltValueNullFieldError('ChatInfo', 'userId');
-    }
-    if (newMessagesCount == null) {
-      throw new BuiltValueNullFieldError('ChatInfo', 'newMessagesCount');
-    }
-    if (isUnread == null) {
-      throw new BuiltValueNullFieldError('ChatInfo', 'isUnread');
-    }
-    if (isOnline == null) {
-      throw new BuiltValueNullFieldError('ChatInfo', 'isOnline');
-    }
-    if (isTyping == null) {
-      throw new BuiltValueNullFieldError('ChatInfo', 'isTyping');
-    }
-    if (lastSeen == null) {
-      throw new BuiltValueNullFieldError('ChatInfo', 'lastSeen');
-    }
+    BuiltValueNullFieldError.checkNotNull(
+        containerId, 'ChatInfo', 'containerId');
+    BuiltValueNullFieldError.checkNotNull(firstName, 'ChatInfo', 'firstName');
+    BuiltValueNullFieldError.checkNotNull(userId, 'ChatInfo', 'userId');
+    BuiltValueNullFieldError.checkNotNull(
+        newMessagesCount, 'ChatInfo', 'newMessagesCount');
+    BuiltValueNullFieldError.checkNotNull(isUnread, 'ChatInfo', 'isUnread');
+    BuiltValueNullFieldError.checkNotNull(isOnline, 'ChatInfo', 'isOnline');
+    BuiltValueNullFieldError.checkNotNull(isTyping, 'ChatInfo', 'isTyping');
+    BuiltValueNullFieldError.checkNotNull(lastSeen, 'ChatInfo', 'lastSeen');
   }
 
   @override
@@ -405,16 +390,17 @@ class ChatInfoBuilder implements Builder<ChatInfo, ChatInfoBuilder> {
   }
 
   ChatInfoBuilder get _$this {
-    if (_$v != null) {
-      _containerId = _$v.containerId;
-      _firstName = _$v.firstName;
-      _userId = _$v.userId;
-      _newMessagesCount = _$v.newMessagesCount;
-      _isUnread = _$v.isUnread;
-      _isOnline = _$v.isOnline;
-      _isTyping = _$v.isTyping;
-      _lastSeen = _$v.lastSeen;
-      _lastMessage = _$v.lastMessage?.toBuilder();
+    final $v = _$v;
+    if ($v != null) {
+      _containerId = $v.containerId;
+      _firstName = $v.firstName;
+      _userId = $v.userId;
+      _newMessagesCount = $v.newMessagesCount;
+      _isUnread = $v.isUnread;
+      _isOnline = $v.isOnline;
+      _isTyping = $v.isTyping;
+      _lastSeen = $v.lastSeen;
+      _lastMessage = $v.lastMessage?.toBuilder();
       _$v = null;
     }
     return this;
@@ -422,9 +408,7 @@ class ChatInfoBuilder implements Builder<ChatInfo, ChatInfoBuilder> {
 
   @override
   void replace(ChatInfo other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$ChatInfo;
   }
 
@@ -439,14 +423,22 @@ class ChatInfoBuilder implements Builder<ChatInfo, ChatInfoBuilder> {
     try {
       _$result = _$v ??
           new _$ChatInfo._(
-              containerId: containerId,
-              firstName: firstName,
-              userId: userId,
-              newMessagesCount: newMessagesCount,
-              isUnread: isUnread,
-              isOnline: isOnline,
-              isTyping: isTyping,
-              lastSeen: lastSeen,
+              containerId: BuiltValueNullFieldError.checkNotNull(
+                  containerId, 'ChatInfo', 'containerId'),
+              firstName: BuiltValueNullFieldError.checkNotNull(
+                  firstName, 'ChatInfo', 'firstName'),
+              userId: BuiltValueNullFieldError.checkNotNull(
+                  userId, 'ChatInfo', 'userId'),
+              newMessagesCount: BuiltValueNullFieldError.checkNotNull(
+                  newMessagesCount, 'ChatInfo', 'newMessagesCount'),
+              isUnread: BuiltValueNullFieldError.checkNotNull(
+                  isUnread, 'ChatInfo', 'isUnread'),
+              isOnline: BuiltValueNullFieldError.checkNotNull(
+                  isOnline, 'ChatInfo', 'isOnline'),
+              isTyping: BuiltValueNullFieldError.checkNotNull(
+                  isTyping, 'ChatInfo', 'isTyping'),
+              lastSeen: BuiltValueNullFieldError.checkNotNull(
+                  lastSeen, 'ChatInfo', 'lastSeen'),
               lastMessage: _lastMessage?.build());
     } catch (_) {
       String _$failedField;

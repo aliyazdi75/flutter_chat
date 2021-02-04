@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_chat/data/constants/index.dart';
-import 'package:flutter_chat/data/models/response/index.dart';
 import 'package:http/http.dart' as http;
 
 import 'exception.dart';
@@ -47,21 +46,21 @@ class HttpHelper implements HttpClientBase {
         case HttpStatus.noContent:
         // 400
         case HttpStatus.badRequest:
-          if (badRequestModel == RegisterBadRequest) {
-            throw BadRequestException(
-              response.request.url.path,
-              RegisterBadRequest.fromJson(
-                  json.decode(utf8.decode(response.bodyBytes))
-                      as Map<String, dynamic>),
-            );
-          } else if (badRequestModel == LoginBadRequest) {
-            throw BadRequestException(
-              response.request.url.path,
-              LoginBadRequest.fromJson(
-                  json.decode(utf8.decode(response.bodyBytes))
-                      as Map<String, dynamic>),
-            );
-          }
+          // if (badRequestModel == RegisterBadRequest) {
+          //   throw BadRequestException(
+          //     response.request.url.path,
+          //     RegisterBadRequest.fromJson(
+          //         json.decode(utf8.decode(response.bodyBytes))
+          //             as Map<String, dynamic>),
+          //   );
+          // } else if (badRequestModel == LoginBadRequest) {
+          //   throw BadRequestException(
+          //     response.request.url.path,
+          //     LoginBadRequest.fromJson(
+          //         json.decode(utf8.decode(response.bodyBytes))
+          //             as Map<String, dynamic>),
+          //   );
+          // }
           throw NotHandleException(
             response.request.url.path,
             'BadRequest Model not implemented',
@@ -119,12 +118,12 @@ class HttpHelper implements HttpClientBase {
           usingSSL
               ? Uri.https(
                   serverUrl,
-                  '/api/$path/',
+                  '/$apiKeyword/$path/',
                   queryParams,
                 )
               : Uri.http(
                   serverUrl,
-                  '/api/$path/',
+                  '/$apiKeyword/$path/',
                   queryParams,
                 ),
           headers: await HttpHeader.setHeader(headerType),
@@ -150,12 +149,12 @@ class HttpHelper implements HttpClientBase {
           usingSSL
               ? Uri.https(
                   serverUrl,
-                  '/api/$path/',
+                  '/$apiKeyword/$path/',
                   queryParams,
                 )
               : Uri.http(
                   serverUrl,
-                  '/api/$path/',
+                  '/$apiKeyword/$path/',
                   queryParams,
                 ),
           headers: await HttpHeader.setHeader(headerType),

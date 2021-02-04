@@ -1,6 +1,6 @@
-import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
+import 'package:flutter_chat/data/models/account/index.dart';
 
 import 'serializers.dart';
 
@@ -8,8 +8,9 @@ part 'authentication.g.dart';
 
 abstract class Authentication
     implements Built<Authentication, AuthenticationBuilder> {
-  @nullable
   String get token;
+
+  User get user;
 
   Authentication._();
 

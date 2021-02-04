@@ -1,3 +1,4 @@
+import 'package:flutter_chat/data/constants/index.dart';
 import 'package:flutter_chat/data/repositories/authentication/index.dart';
 
 enum HttpHeaderType {
@@ -14,10 +15,14 @@ abstract class HttpHeader {
         final credit = await AuthenticationRepository().getCredit();
         return {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ${credit.token}'
+          '$apiVersionHeader': '$apiVersion',
+          '$authHeader': '${credit.token}'
         };
       case HttpHeaderType.anonymous:
-        return {'Content-Type': 'application/json'};
+        return {
+          'Content-Type': 'application/json',
+          '$apiVersionHeader': '$apiVersion'
+        };
       default:
         throw Exception('$headerType is not supported HttpHeaderType');
     }

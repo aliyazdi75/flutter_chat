@@ -26,28 +26,32 @@ class _$PaginationSerializer
         isUnderspecified ? FullType.object : specifiedType.parameters[0];
 
     final result = <Object>[];
-    if (object.count != null) {
+    Object value;
+    value = object.count;
+    if (value != null) {
       result
         ..add('count')
-        ..add(serializers.serialize(object.count,
-            specifiedType: const FullType(int)));
+        ..add(serializers.serialize(value, specifiedType: const FullType(int)));
     }
-    if (object.next != null) {
+    value = object.next;
+    if (value != null) {
       result
         ..add('next')
-        ..add(serializers.serialize(object.next,
+        ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
-    if (object.previous != null) {
+    value = object.previous;
+    if (value != null) {
       result
         ..add('previous')
-        ..add(serializers.serialize(object.previous,
+        ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
-    if (object.results != null) {
+    value = object.results;
+    if (value != null) {
       result
         ..add('results')
-        ..add(serializers.serialize(object.results,
+        ..add(serializers.serialize(value,
             specifiedType: new FullType(BuiltList, [parameterT])));
     }
     return result;
@@ -65,13 +69,13 @@ class _$PaginationSerializer
 
     final result = isUnderspecified
         ? new PaginationBuilder<Object>()
-        : serializers.newBuilder(specifiedType) as PaginationBuilder;
+        : serializers.newBuilder(specifiedType) as PaginationBuilder<Object>;
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final dynamic value = iterator.current;
+      final Object value = iterator.current;
       switch (key) {
         case 'count':
           result.count = serializers.deserialize(value,
@@ -175,11 +179,12 @@ class PaginationBuilder<T>
   PaginationBuilder();
 
   PaginationBuilder<T> get _$this {
-    if (_$v != null) {
-      _count = _$v.count;
-      _next = _$v.next;
-      _previous = _$v.previous;
-      _results = _$v.results?.toBuilder();
+    final $v = _$v;
+    if ($v != null) {
+      _count = $v.count;
+      _next = $v.next;
+      _previous = $v.previous;
+      _results = $v.results?.toBuilder();
       _$v = null;
     }
     return this;
@@ -187,9 +192,7 @@ class PaginationBuilder<T>
 
   @override
   void replace(Pagination<T> other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
+    ArgumentError.checkNotNull(other, 'other');
     _$v = other as _$Pagination<T>;
   }
 

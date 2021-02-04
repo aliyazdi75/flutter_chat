@@ -2,8 +2,10 @@ library serializers;
 
 import 'package:built_value/serializer.dart';
 import 'package:built_value/standard_json_plugin.dart';
+import 'package:flutter_chat/data/models/account/index.dart';
 
 import 'authentication.dart';
+import 'init.dart';
 import 'login.dart';
 import 'register.dart';
 
@@ -22,8 +24,12 @@ part 'serializers.g.dart';
 /// You usually only need to do this once per project.
 @SerializersFor([
   Authentication,
-  LoginBody,
-  Register,
+  User,
+  LoginRequest,
+  RegisterRequest,
+  RegisterResponse,
+  AuthInitRequest,
+  AuthInitResponse,
 ])
 final Serializers serializers =
     (_$serializers.toBuilder()..addPlugin(StandardJsonPlugin())).build();

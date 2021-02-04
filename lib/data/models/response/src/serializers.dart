@@ -23,8 +23,8 @@ part 'serializers.g.dart';
 @SerializersFor([
   Pagination,
   HttpExceptionModel,
-  RegisterBadRequest,
-  LoginBadRequest,
+  ExceptionDescription,
+  ValidationException,
 ])
 final Serializers serializers =
     (_$serializers.toBuilder()..addPlugin(StandardJsonPlugin())).build();

@@ -4,9 +4,9 @@ import 'package:flutter_chat/data/providers/api/account/index.dart';
 class AccountRepository {
   Account _account;
 
-  Future<Account> getMyUserAccount() async {
+  Future<Account> getMyAccount() async {
     if (_account == null) {
-      final myUserAccount = await AccountApi.getMyUserAccount();
+      final myUserAccount = await AccountApi.getMyAccount();
       _account = myUserAccount;
     }
     return _account;

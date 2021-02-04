@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chat/blocs/login/bloc.dart';
-import 'package:flutter_chat/data/repositories/account/index.dart';
 import 'package:flutter_chat/data/repositories/authentication/index.dart';
 
 import 'components/form.dart';
 
 class LoginPage extends StatelessWidget {
-  const LoginPage();
+  const LoginPage({@required this.email}) : assert(email != null);
+
+  final String email;
 
   @override
   Widget build(BuildContext context) {
@@ -18,10 +19,9 @@ class LoginPage extends StatelessWidget {
         child: BlocProvider(
           create: (context) {
             return LoginBloc(
+              email: email,
               authenticationRepository:
                   RepositoryProvider.of<AuthenticationRepository>(context),
-              accountRepository:
-                  RepositoryProvider.of<AccountRepository>(context),
             );
           },
           child: LoginForm(),

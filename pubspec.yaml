@@ -13,26 +13,25 @@ dependencies:
     sdk: flutter
   cupertino_icons: any
   http: any
-  built_collection: ^4.3.2
-  built_value: ^7.1.0
-  equatable: ^1.2.5
-  bloc: ^6.1.1
-  flutter_bloc: ^6.1.1
-  animations: ^1.1.2
+  built_collection: ^5.0.0-nullsafety.0
+  built_value: ^8.0.0-nullsafety.0
+  equatable: ^2.0.0-nullsafety.1
+  bloc: ^7.0.0-nullsafety.1
+  flutter_bloc: ^7.0.0-nullsafety.1
   shared_preferences: '>=0.5.10 <2.0.0'
-  url_launcher: ^5.7.10
+  url_launcher: ^6.0.0-nullsafety.6
   signalr_core: ^1.0.8
+  device_info: ^2.0.0-nullsafety.2
 
 dev_dependencies:
-  integration_test:
+  flutter_test:
     sdk: flutter
   build_runner: any
   built_value_generator: any
-  pedantic: ^1.9.2
+  pedantic: ^1.10.0-nullsafety.3
 
 dependency_overrides:
-  analyzer: 0.41.1
-  _fe_analyzer_shared: 14.0.0
+  equatable: ^2.0.0-nullsafety.1
 
 flutter:
   uses-material-design: true
