@@ -2,17 +2,12 @@ import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:flutter_chat/data/models/account/src/serializers.dart';
 
+import 'user.dart';
+
 part 'account.g.dart';
 
 abstract class Account implements Built<Account, AccountBuilder> {
-  String get id;
-
-  @BuiltValueField(wireName: 'userName')
-  String get username;
-
-  String get email;
-
-  bool get emailConfirmed;
+  User get user;
 
   Account._();
 
