@@ -8,6 +8,11 @@ class LoginForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final onSubmit = () {
+      if (formKey.currentState.validate()) {
+        BlocProvider.of<LoginBloc>(context).add(const LoginSubmitted());
+      }
+    };
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
         if (state.status == LoginStatus.success) {
@@ -28,9 +33,9 @@ class LoginForm extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              _PasswordInput(),
+              _PasswordInput(onSubmit),
               const Padding(padding: EdgeInsets.all(12)),
-              _LoginButton(formKey),
+              _LoginButton(onSubmit),
             ],
           ),
         ),
@@ -40,11 +45,17 @@ class LoginForm extends StatelessWidget {
 }
 
 class _PasswordInput extends StatelessWidget {
+  _PasswordInput(this.onSubmit);
+
+  final Function onSubmit;
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginBloc, LoginState>(
       builder: (context, state) {
         return TextFormField(
+          autofocus: true,
+          onFieldSubmitted: (_) => onSubmit(),
           onChanged: (password) => BlocProvider.of<LoginBloc>(context)
               .add(LoginPasswordChanged(password)),
           obscureText: true,
@@ -58,9 +69,9 @@ class _PasswordInput extends StatelessWidget {
 }
 
 class _LoginButton extends StatelessWidget {
-  _LoginButton(this.formKey);
+  _LoginButton(this.onSubmit);
 
-  final GlobalKey<FormState> formKey;
+  final Function onSubmit;
 
   @override
   Widget build(BuildContext context) {
@@ -70,12 +81,7 @@ class _LoginButton extends StatelessWidget {
             ? const CircularProgressIndicator()
             : ElevatedButton(
                 child: const Text('Login'),
-                onPressed: () {
-                  if (formKey.currentState.validate()) {
-                    BlocProvider.of<LoginBloc>(context)
-                        .add(const LoginSubmitted());
-                  }
-                },
+                onPressed: () => onSubmit(),
               );
       },
     );

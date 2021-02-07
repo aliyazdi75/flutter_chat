@@ -8,6 +8,11 @@ class RegisterForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final onSubmit = () {
+      if (formKey.currentState.validate()) {
+        BlocProvider.of<LoginBloc>(context).add(const LoginSubmitted());
+      }
+    };
     return BlocListener<RegisterBloc, RegisterState>(
       listener: (context, state) {
         if (state.status == RegisterStatus.success) {
@@ -29,9 +34,9 @@ class RegisterForm extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              _PasswordInput(),
+              _PasswordInput(onSubmit),
               const Padding(padding: EdgeInsets.all(12)),
-              _RegisterButton(formKey),
+              _RegisterButton(onSubmit),
             ],
           ),
         ),
@@ -41,11 +46,17 @@ class RegisterForm extends StatelessWidget {
 }
 
 class _PasswordInput extends StatelessWidget {
+  _PasswordInput(this.onSubmit);
+
+  final Function onSubmit;
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<RegisterBloc, RegisterState>(
       builder: (context, state) {
         return TextFormField(
+          autofocus: true,
+          onFieldSubmitted: (_) => onSubmit(),
           onChanged: (password) => BlocProvider.of<LoginBloc>(context)
               .add(LoginPasswordChanged(password)),
           obscureText: true,
@@ -59,9 +70,9 @@ class _PasswordInput extends StatelessWidget {
 }
 
 class _RegisterButton extends StatelessWidget {
-  _RegisterButton(this.formKey);
+  _RegisterButton(this.onSubmit);
 
-  final GlobalKey<FormState> formKey;
+  final Function onSubmit;
 
   @override
   Widget build(BuildContext context) {
@@ -70,13 +81,9 @@ class _RegisterButton extends StatelessWidget {
         return state.status == RegisterStatus.loading
             ? const CircularProgressIndicator()
             : ElevatedButton(
+                autofocus: true,
                 child: const Text('Register'),
-                onPressed: () {
-                  if (formKey.currentState.validate()) {
-                    BlocProvider.of<LoginBloc>(context)
-                        .add(const LoginSubmitted());
-                  }
-                },
+                onPressed: () => onSubmit(),
               );
       },
     );

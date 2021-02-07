@@ -6,6 +6,7 @@ import 'package:flutter_chat/data/repositories/account/index.dart';
 import 'package:flutter_chat/data/repositories/authentication/index.dart';
 import 'package:flutter_chat/data/repositories/home/index.dart';
 import 'package:flutter_chat/data/repositories/socket/index.dart';
+import 'package:flutter_chat/presentation/screens/chat/chat.dart';
 
 import 'components/index.dart';
 
@@ -122,7 +123,17 @@ class HomePage extends StatelessWidget {
                                 'You don\'t have any chats or friends here :('))
                         : Column(
                             children: state.chats
-                                .map((chat) => ChatInfoWidget(chatInfo: chat))
+                                .map(
+                                  (chatInfo) => ChatInfoWidget(
+                                      chatInfo: chatInfo,
+                                      onTap: () => Navigator.of(context)
+                                          .push(MaterialPageRoute<void>(
+                                              builder: (context) => ChatPage(
+                                                    socketRepository:
+                                                        socketRepository,
+                                                    chatInfo: chatInfo,
+                                                  )))),
+                                )
                                 .toList(),
                           );
                   },

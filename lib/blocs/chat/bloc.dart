@@ -22,6 +22,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         super(
           ChatState(
             messages: [chatInfo.lastMessage] ?? <Message>[],
+            chatInfo: chatInfo,
             isTyping: chatInfo.isTyping,
             isOnline: chatInfo.isOnline,
             lastSeen: chatInfo.lastSeen,

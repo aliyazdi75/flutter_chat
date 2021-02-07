@@ -9,6 +9,11 @@ class AuthInitForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final onSubmit = () {
+      if (formKey.currentState.validate()) {
+        BlocProvider.of<AuthInitBloc>(context).add(const AuthInitSubmitted());
+      }
+    };
     return BlocListener<AuthInitBloc, AuthInitState>(
       listener: (context, state) {
         if (state.status == AuthInitStatus.existence) {
@@ -38,9 +43,9 @@ class AuthInitForm extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              _EmailInput(),
+              _EmailInput(onSubmit),
               const Padding(padding: EdgeInsets.all(12)),
-              _LoginButton(formKey),
+              _LoginButton(onSubmit),
             ],
           ),
         ),
@@ -50,11 +55,17 @@ class AuthInitForm extends StatelessWidget {
 }
 
 class _EmailInput extends StatelessWidget {
+  _EmailInput(this.onSubmit);
+
+  final Function onSubmit;
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthInitBloc, AuthInitState>(
       builder: (context, state) {
         return TextFormField(
+          autofocus: true,
+          onFieldSubmitted: (_) => onSubmit(),
           onChanged: (email) => BlocProvider.of<AuthInitBloc>(context)
               .add(AuthInitEmailChanged(email)),
           validator: (email) => email.isEmpty ? 'Email must not empty' : null,
@@ -66,9 +77,9 @@ class _EmailInput extends StatelessWidget {
 }
 
 class _LoginButton extends StatelessWidget {
-  _LoginButton(this.formKey);
+  _LoginButton(this.onSubmit);
 
-  final GlobalKey<FormState> formKey;
+  final Function onSubmit;
 
   @override
   Widget build(BuildContext context) {
@@ -79,12 +90,7 @@ class _LoginButton extends StatelessWidget {
             ? const CircularProgressIndicator()
             : ElevatedButton(
                 child: const Text('Submit'),
-                onPressed: () {
-                  if (formKey.currentState.validate()) {
-                    BlocProvider.of<AuthInitBloc>(context)
-                        .add(const AuthInitSubmitted());
-                  }
-                },
+                onPressed: () => onSubmit(),
               );
       },
     );

@@ -11,6 +11,7 @@ enum ChatStatus {
 class ChatState extends Equatable {
   const ChatState({
     this.status = ChatStatus.initial,
+    this.chatInfo,
     this.lastSeen,
     this.isOnline,
     this.isTyping,
@@ -18,6 +19,7 @@ class ChatState extends Equatable {
   });
 
   final ChatStatus status;
+  final ChatInfo chatInfo;
   final DateTime lastSeen;
   final bool isOnline;
   final bool isTyping;
@@ -26,12 +28,14 @@ class ChatState extends Equatable {
   ChatState copyWith({
     ChatStatus status,
     List<Message> messages,
+    ChatInfo chatInfo,
     DateTime lastSeen,
     bool isOnline,
     bool isTyping,
   }) {
     return ChatState(
       status: status ?? this.status,
+      chatInfo: chatInfo ?? this.chatInfo,
       messages: messages ?? this.messages,
       lastSeen: lastSeen ?? this.lastSeen,
       isOnline: isOnline ?? this.isOnline,
