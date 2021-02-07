@@ -45,10 +45,13 @@ class FlutterChat extends StatelessWidget {
               authenticationRepository: authenticationRepository,
               accountRepository: accountRepository,
             ),
-            child: const MaterialApp(
+            child: MaterialApp(
               title: 'Flutter Chat',
               debugShowCheckedModeBanner: false,
-              home: SplashPage(),
+              home: SplashPage(
+                authenticationRepository: authenticationRepository,
+                accountRepository: accountRepository,
+              ),
             ),
           ),
         );

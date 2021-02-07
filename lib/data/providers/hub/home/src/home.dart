@@ -20,7 +20,7 @@ class HomeHub {
   }
 
   HomeHub._() {
-    _hubMethodListenOnList = const <HubMethod>[];
+    _hubMethodListenOnList = <HubMethod>[];
   }
 
   void listenOnStatusChange(

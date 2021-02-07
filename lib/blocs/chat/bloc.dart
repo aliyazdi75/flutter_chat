@@ -181,8 +181,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           ..type = MessageType.text
           ..text = event.messageText,
       );
+      state.copyWith(messages: List.of(state.messages)..add(message));
       //todo: check whether if this change for parent bloc
-      state.messages.add(message);
       chatInfo.lastMessage.rebuild((b) => b = message.toBuilder());
       final messageId = await chatRepository.sendChatMessage(
         hubConnection: socketRepository.hubConnection,

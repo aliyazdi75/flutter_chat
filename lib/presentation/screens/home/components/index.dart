@@ -1,1 +1,1 @@
-
+export 'src/chat.dart';
