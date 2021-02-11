@@ -65,6 +65,7 @@ class _EmailInput extends StatelessWidget {
       builder: (context, state) {
         return TextFormField(
           autofocus: true,
+          keyboardType: TextInputType.emailAddress,
           onFieldSubmitted: (_) => onSubmit(),
           onChanged: (email) => BlocProvider.of<AuthInitBloc>(context)
               .add(AuthInitEmailChanged(email)),

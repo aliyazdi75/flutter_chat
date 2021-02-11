@@ -55,10 +55,11 @@ class _PasswordInput extends StatelessWidget {
       builder: (context, state) {
         return TextFormField(
           autofocus: true,
+          obscureText: true,
+          keyboardType: TextInputType.visiblePassword,
           onFieldSubmitted: (_) => onSubmit(),
           onChanged: (password) => BlocProvider.of<LoginBloc>(context)
               .add(LoginPasswordChanged(password)),
-          obscureText: true,
           validator: (password) =>
               password.isEmpty ? 'Password must not empty' : null,
           decoration: const InputDecoration(labelText: 'Password'),

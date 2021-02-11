@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chat/blocs/chat/bloc.dart';
 import 'package:flutter_chat/blocs/home/bloc.dart';
@@ -151,6 +152,8 @@ class ChatPage extends StatelessWidget {
                               padding: const EdgeInsets.all(16.0),
                               child: TextFormField(
                                 autofocus: true,
+                                maxLines: null,
+                                keyboardType: TextInputType.multiline,
                                 onFieldSubmitted: (_) => sendSubmit(),
                                 decoration:
                                     const InputDecoration(hintText: 'Message'),
