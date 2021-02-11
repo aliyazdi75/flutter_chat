@@ -73,14 +73,10 @@ class HttpHelper implements HttpClientBase {
           );
         // 401
         case HttpStatus.unauthorized:
-          throw UnauthorisedException(
-            response.request.url.path,
-            'The Request is Unauthorized',
-            response.statusCode.toString(),
-          );
+          throw UnauthorisedException(response.request.url.path);
         // 403
         case HttpStatus.forbidden:
-          throw UnauthorisedException(
+          throw ForbiddenException(
             response.request.url.path,
             'Authorization Forbidden',
             response.statusCode.toString(),

@@ -37,7 +37,7 @@ class AuthInitBloc extends Bloc<AuthInitEvent, AuthInitState> {
     yield state.copyWith(status: AuthInitStatus.loading);
     try {
       final authInit = await authenticationRepository.init(
-          email: kDebugMode ? testEmail : state.email);
+          email: kDebugMode ? testEmail1 : state.email);
       yield state.copyWith(
         status: authInit.exists
             ? AuthInitStatus.existence

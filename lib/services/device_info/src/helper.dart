@@ -99,10 +99,10 @@ class DeviceInfoHelper implements DeviceInfoBase {
       if (Platform.isAndroid || Platform.isIOS) {
         return Platform.operatingSystem;
       } else {
-        return unknown;
+        return 'Web';
       }
     } on PlatformException {
-      return unknown;
+      return 'Web';
     }
   }
 }

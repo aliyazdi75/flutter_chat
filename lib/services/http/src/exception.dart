@@ -17,10 +17,10 @@ class HttpException implements Exception {
       : '$type: ($key, $value)';
 }
 
-class UnauthorisedException extends HttpException {
+class ForbiddenException extends HttpException {
   final String url;
 
-  UnauthorisedException(this.url, [String key, String value])
+  ForbiddenException(this.url, [String key, String value])
       : super(UnauthorisedException, key, value);
 
   @override
@@ -75,6 +75,15 @@ class NotHandleException extends HttpException {
 
   @override
   String toString() => 'NotHandleException in $url';
+}
+
+class UnauthorisedException implements Exception {
+  final String url;
+
+  UnauthorisedException(this.url);
+
+  @override
+  String toString() => 'UnauthorisedException in $url';
 }
 
 class BadRequestException implements Exception {

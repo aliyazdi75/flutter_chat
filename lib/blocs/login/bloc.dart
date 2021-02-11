@@ -40,8 +40,16 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     yield state.copyWith(status: LoginStatus.loading);
     try {
       await authenticationRepository.login(
-        email: kDebugMode ? testEmail : email,
-        password: kDebugMode ? testPassword : state.password,
+        email: kDebugMode
+            ? email == '2'
+                ? testEmail2
+                : testEmail1
+            : email,
+        password: kDebugMode
+            ? state.password == '2'
+                ? testPassword2
+                : testPassword1
+            : state.password,
       );
       yield state.copyWith(status: LoginStatus.success);
     } on BadRequestException catch (e) {

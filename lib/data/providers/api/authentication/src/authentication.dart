@@ -23,7 +23,6 @@ class AuthenticationApi {
 
   static Future<Authentication> login(LoginRequest loginRequest) async {
     final body = loginRequest.toJson();
-    //todo: server should accept unknown device information
     final response = await HttpHelper('auth/signin').httpPost(
       // badRequestModel: LoginBadRequest,
       body: body,
