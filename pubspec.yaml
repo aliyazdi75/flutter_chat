@@ -18,7 +18,7 @@ dependencies:
   equatable: ^2.0.0-nullsafety.1
   bloc: ^7.0.0-nullsafety.1
   flutter_bloc: ^7.0.0-nullsafety.1
-  shared_preferences: '>=0.5.10 <2.0.0'
+  shared_preferences: ^2.0.0-nullsafety
   url_launcher: ^6.0.0-nullsafety.6
   signalr_core: ^1.0.8
   device_info: ^2.0.0-nullsafety.2
@@ -32,6 +32,7 @@ dev_dependencies:
 
 dependency_overrides:
   equatable: ^2.0.0-nullsafety.1
+  meta: ^1.3.0-nullsafety.6
 
 flutter:
   uses-material-design: true

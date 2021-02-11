@@ -16,6 +16,7 @@ class ChatState extends Equatable {
     this.isOnline,
     this.isTyping,
     this.messages,
+    this.textMessage,
   });
 
   final ChatStatus status;
@@ -24,6 +25,7 @@ class ChatState extends Equatable {
   final bool isOnline;
   final bool isTyping;
   final List<Message> messages;
+  final String textMessage;
 
   ChatState copyWith({
     ChatStatus status,
@@ -32,6 +34,7 @@ class ChatState extends Equatable {
     DateTime lastSeen,
     bool isOnline,
     bool isTyping,
+    String textMessage,
   }) {
     return ChatState(
       status: status ?? this.status,
@@ -40,6 +43,7 @@ class ChatState extends Equatable {
       lastSeen: lastSeen ?? this.lastSeen,
       isOnline: isOnline ?? this.isOnline,
       isTyping: isTyping ?? this.isTyping,
+      textMessage: textMessage ?? this.textMessage,
     );
   }
 

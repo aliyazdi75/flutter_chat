@@ -12,7 +12,7 @@ class ChatInfoWidget extends StatelessWidget {
     return ListTile(
       title: Text(chatInfo.firstName),
       subtitle: Text(chatInfo.lastMessage?.text ?? 'Start your first chat!'),
-      leading: Text(chatInfo.newMessagesCount.toString()),
+      trailing: Text(chatInfo.newMessagesCount.toString()),
       onTap: () => onTap(),
     );
   }

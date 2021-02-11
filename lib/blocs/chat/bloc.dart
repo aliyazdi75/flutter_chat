@@ -21,7 +21,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         assert(socketRepository != null),
         super(
           ChatState(
-            messages: [chatInfo.lastMessage] ?? <Message>[],
+            messages: chatInfo.lastMessage == null
+                ? <Message>[]
+                : [chatInfo.lastMessage],
             chatInfo: chatInfo,
             isTyping: chatInfo.isTyping,
             isOnline: chatInfo.isOnline,
@@ -49,6 +51,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       yield* _mapSendUserIsTypingRequestedToState();
     } else if (event is SendUserChatSeenRequested) {
       yield* _mapSendUserChatSeenRequestedToState();
+    } else if (event is TextMessageChanged) {
+      yield state.copyWith(textMessage: event.textMessage);
     }
   }
 
@@ -180,7 +184,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           ..isSent = false
           ..sentAt = DateTime.now()
           ..type = MessageType.text
-          ..text = event.messageText,
+          ..text = state.textMessage,
       );
       state.copyWith(messages: List.of(state.messages)..add(message));
       //todo: check whether if this change for parent bloc
@@ -188,7 +192,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       final messageId = await chatRepository.sendChatMessage(
         hubConnection: socketRepository.hubConnection,
         userId: chatInfo.userId,
-        message: event.messageText,
+        message: state.textMessage,
       );
       //todo: check whether if this change for parent bloc
       message.rebuild(

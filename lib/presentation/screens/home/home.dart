@@ -30,13 +30,13 @@ class HomePage extends StatelessWidget {
       ],
       child: MultiBlocProvider(
         providers: [
-          BlocProvider.value(
+          BlocProvider<SocketBloc>.value(
             value: SocketBloc(
               authenticationRepository: authenticationRepository,
               socketRepository: socketRepository,
             ),
           ),
-          BlocProvider.value(
+          BlocProvider<HomeBloc>.value(
             value: HomeBloc(
               socketRepository: socketRepository,
               homeRepository: homeRepository,
@@ -125,14 +125,18 @@ class HomePage extends StatelessWidget {
                             children: state.chats
                                 .map(
                                   (chatInfo) => ChatInfoWidget(
-                                      chatInfo: chatInfo,
-                                      onTap: () => Navigator.of(context)
-                                          .push(MaterialPageRoute<void>(
-                                              builder: (context) => ChatPage(
-                                                    socketRepository:
-                                                        socketRepository,
-                                                    chatInfo: chatInfo,
-                                                  )))),
+                                    chatInfo: chatInfo,
+                                    onTap: () => Navigator.of(context).push(
+                                      MaterialPageRoute<void>(
+                                        builder: (context) => ChatPage(
+                                          authenticationRepository:
+                                              authenticationRepository,
+                                          socketRepository: socketRepository,
+                                          chatInfo: chatInfo,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 )
                                 .toList(),
                           );

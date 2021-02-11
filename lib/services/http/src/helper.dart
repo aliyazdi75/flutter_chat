@@ -38,6 +38,11 @@ class HttpHelper implements HttpClientBase {
       switch (response.statusCode) {
         // 200
         case HttpStatus.ok:
+          final headers = response.headers;
+          if (!headers.containsKey(contentTypeKeyHeader) &&
+              headers[contentTypeKeyHeader] != contentTypeValueHeader) {
+            return null;
+          }
           return json.decode(utf8.decode(response.bodyBytes))
               as Map<String, dynamic>;
         // 201
@@ -102,8 +107,18 @@ class HttpHelper implements HttpClientBase {
             response.statusCode.toString(),
           );
       }
-    } on JsonUnsupportedObjectError catch (e) {
-      throw JsonUnsupportedObjectError(e);
+    } on JsonUnsupportedObjectError catch (_) {
+      throw ServerException(
+        response.request.url.path,
+        'Server Unsupported Json Object',
+        utf8.decode(response.bodyBytes),
+      );
+    } on FormatException catch (_) {
+      throw ServerException(
+        response.request.url.path,
+        'Server Unsupported Json Format',
+        utf8.decode(response.bodyBytes),
+      );
     }
   }
 

@@ -83,11 +83,15 @@ class _$ChatInfoSerializer implements StructuredSerializer<ChatInfo> {
       'isTyping',
       serializers.serialize(object.isTyping,
           specifiedType: const FullType(bool)),
-      'lastSeen',
-      serializers.serialize(object.lastSeen,
-          specifiedType: const FullType(DateTime)),
     ];
     Object value;
+    value = object.lastSeen;
+    if (value != null) {
+      result
+        ..add('lastSeen')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(DateTime)));
+    }
     value = object.lastMessage;
     if (value != null) {
       result
@@ -282,7 +286,6 @@ class _$ChatInfo extends ChatInfo {
     BuiltValueNullFieldError.checkNotNull(isUnread, 'ChatInfo', 'isUnread');
     BuiltValueNullFieldError.checkNotNull(isOnline, 'ChatInfo', 'isOnline');
     BuiltValueNullFieldError.checkNotNull(isTyping, 'ChatInfo', 'isTyping');
-    BuiltValueNullFieldError.checkNotNull(lastSeen, 'ChatInfo', 'lastSeen');
   }
 
   @override
@@ -437,8 +440,7 @@ class ChatInfoBuilder implements Builder<ChatInfo, ChatInfoBuilder> {
                   isOnline, 'ChatInfo', 'isOnline'),
               isTyping: BuiltValueNullFieldError.checkNotNull(
                   isTyping, 'ChatInfo', 'isTyping'),
-              lastSeen: BuiltValueNullFieldError.checkNotNull(
-                  lastSeen, 'ChatInfo', 'lastSeen'),
+              lastSeen: lastSeen,
               lastMessage: _lastMessage?.build());
     } catch (_) {
       String _$failedField;

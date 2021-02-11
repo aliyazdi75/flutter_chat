@@ -37,6 +37,7 @@ abstract class ChatInfo implements Built<ChatInfo, ChatInfoBuilder> {
 
   bool get isTyping;
 
+  @nullable
   DateTime get lastSeen;
 
   @nullable
@@ -46,8 +47,9 @@ abstract class ChatInfo implements Built<ChatInfo, ChatInfoBuilder> {
 
   factory ChatInfo([void Function(ChatInfoBuilder) updates]) = _$ChatInfo;
 
-  static void _initializeBuilder(ChatInfoBuilder builder) =>
-      builder..isTyping = false;
+  static void _initializeBuilder(ChatInfoBuilder builder) => builder
+    ..isTyping = false
+    ..isOnline = false;
 
   static ChatInfo fromJson(Map<String, dynamic> json) {
     return serializers.deserializeWith(ChatInfo.serializer, json);

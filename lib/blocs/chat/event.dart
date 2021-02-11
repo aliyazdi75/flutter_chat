@@ -36,12 +36,7 @@ class CloseChatRequested extends ChatEvent {
 }
 
 class SendChatMessageRequested extends ChatEvent {
-  const SendChatMessageRequested(this.messageText);
-
-  final String messageText;
-
-  @override
-  List<Object> get props => [messageText];
+  const SendChatMessageRequested();
 }
 
 class SendUserIsTypingRequested extends ChatEvent {
@@ -50,4 +45,13 @@ class SendUserIsTypingRequested extends ChatEvent {
 
 class SendUserChatSeenRequested extends ChatEvent {
   const SendUserChatSeenRequested();
+}
+
+class TextMessageChanged extends ChatEvent {
+  const TextMessageChanged(this.textMessage);
+
+  final String textMessage;
+
+  @override
+  List<Object> get props => [textMessage];
 }

@@ -20,7 +20,7 @@ class ChatHub {
   }
 
   ChatHub._() {
-    _hubMethodListenOnList = const <HubMethod>[];
+    _hubMethodListenOnList = <HubMethod>[];
   }
 
   void listenOnStatusChange(
