@@ -56,6 +56,12 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     }
   }
 
+  @override
+  Future<void> close() async {
+    await chatRepository.closeChat(containerId: chatInfo.containerId);
+    await super.close();
+  }
+
   Stream<ChatState> _mapOpenChatRequestedToState(
       OpenChatRequested event) async* {
     yield state.copyWith(status: ChatStatus.openChatLoading);
@@ -63,7 +69,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     try {
       final chat =
           await chatRepository.openChat(containerId: chatInfo.containerId);
-      await chatRepository.readChat(containerId: chatInfo.containerId);
       _listenOnHub();
       yield state.copyWith(
         status: ChatStatus.success,
@@ -71,6 +76,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         isOnline: chat.isOnline,
         lastSeen: chat.lastSeen,
       );
+      await chatRepository.readChat(containerId: chatInfo.containerId);
     } on SocketException catch (_) {
       print('kir to netet');
       yield state.copyWith(status: ChatStatus.failure);

@@ -10,9 +10,22 @@ class ChatInfoWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      leading: Icon(
+        Icons.online_prediction_outlined,
+        color: chatInfo.isOnline ? Colors.green : null,
+      ),
       title: Text(chatInfo.firstName),
-      subtitle: Text(chatInfo.lastMessage?.text ?? 'Start your first chat!'),
-      trailing: Text(chatInfo.newMessagesCount.toString()),
+      subtitle: Text(
+        chatInfo.isTyping
+            ? 'Typing...'
+            : chatInfo.lastMessage?.text ?? 'Start your first chat!',
+      ),
+      trailing: Text(
+        chatInfo.newMessagesCount.toString(),
+        style: TextStyle(
+          color: chatInfo.newMessagesCount == 0 ? null : Colors.red,
+        ),
+      ),
       onTap: () => onTap(),
     );
   }
