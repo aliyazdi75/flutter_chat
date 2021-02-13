@@ -87,35 +87,37 @@ class ChatHub {
     _hubMethodListenOnList = const <HubMethod>[];
   }
 
-  static Future<int> sendChatMessage(
+  static Future<SocketChatMessageReceive> sendChatMessage(
     HubConnection hubConnection,
     String userId,
     String message,
   ) async {
-    return await SignalRHelper(hubConnection: hubConnection).invoke(
+    final chatMessageReceived =
+        await SignalRHelper(hubConnection: hubConnection).invoke(
       sendChatTextMethodName,
       args: <dynamic>[userId, message],
-    ) as int;
+    );
+    return SocketChatMessageReceive.fromJson(chatMessageReceived);
   }
 
-  static Future<int> sendUserIsTyping(
+  static Future<void> sendUserIsTyping(
     HubConnection hubConnection,
     String userId,
   ) async {
-    return await SignalRHelper(hubConnection: hubConnection).invoke(
+    await SignalRHelper(hubConnection: hubConnection).invoke(
       sendChatTypingMethodName,
       args: <dynamic>[userId],
-    ) as int;
+    );
   }
 
-  static Future<int> sendUserChatSeen(
+  static Future<void> sendUserChatSeen(
     HubConnection hubConnection,
     String userId,
     int lastMessageId,
   ) async {
-    return await SignalRHelper(hubConnection: hubConnection).invoke(
+    await SignalRHelper(hubConnection: hubConnection).invoke(
       sendChatSeenMethodName,
       args: <dynamic>[userId, lastMessageId],
-    ) as int;
+    );
   }
 }

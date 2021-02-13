@@ -11,3 +11,12 @@ abstract class HomeEvent extends Equatable {
 class GetChatListRequested extends HomeEvent {
   const GetChatListRequested();
 }
+
+class UpdateChatInfoRequested extends HomeEvent {
+  const UpdateChatInfoRequested(this.chatInfo);
+
+  final ChatInfo chatInfo;
+
+  @override
+  List<Object> get props => [chatInfo];
+}

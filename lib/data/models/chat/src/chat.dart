@@ -213,3 +213,25 @@ abstract class ChatTyping implements Built<ChatTyping, ChatTypingBuilder> {
 
   static Serializer<ChatTyping> get serializer => _$chatTypingSerializer;
 }
+
+abstract class SocketChatMessageReceive
+    implements
+        Built<SocketChatMessageReceive, SocketChatMessageReceiveBuilder> {
+  int get id;
+
+  String get text;
+
+  SocketChatMessageReceive._();
+
+  factory SocketChatMessageReceive(
+          [void Function(SocketChatMessageReceiveBuilder) updates]) =
+      _$SocketChatMessageReceive;
+
+  static SocketChatMessageReceive fromJson(Map<String, dynamic> json) {
+    return serializers.deserializeWith(
+        SocketChatMessageReceive.serializer, json);
+  }
+
+  static Serializer<SocketChatMessageReceive> get serializer =>
+      _$socketChatMessageReceiveSerializer;
+}

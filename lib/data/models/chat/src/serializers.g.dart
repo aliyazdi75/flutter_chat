@@ -20,6 +20,7 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(Message.serializer)
       ..add(MessageType.serializer)
       ..add(OpenChatInputBody.serializer)
+      ..add(SocketChatMessageReceive.serializer)
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(ChatInfo)]),
           () => new ListBuilder<ChatInfo>())

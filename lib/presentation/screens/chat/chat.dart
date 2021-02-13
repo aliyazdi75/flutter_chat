@@ -5,6 +5,7 @@ import 'package:flutter_chat/blocs/chat/bloc.dart';
 import 'package:flutter_chat/blocs/home/bloc.dart';
 import 'package:flutter_chat/blocs/socket/bloc.dart';
 import 'package:flutter_chat/data/models/chat/index.dart';
+import 'package:flutter_chat/data/repositories/account/index.dart';
 import 'package:flutter_chat/data/repositories/authentication/index.dart';
 import 'package:flutter_chat/data/repositories/chat/index.dart';
 import 'package:flutter_chat/data/repositories/socket/index.dart';
@@ -14,20 +15,21 @@ import 'components/index.dart';
 class ChatPage extends StatelessWidget {
   ChatPage({
     @required this.authenticationRepository,
+    @required this.accountRepository,
     @required this.socketRepository,
     @required this.chatInfo,
+    @required this.homeBloc,
   });
 
   final AuthenticationRepository authenticationRepository;
+  final AccountRepository accountRepository;
   final SocketRepository socketRepository;
   final ChatInfo chatInfo;
+  final HomeBloc homeBloc;
   final chatRepository = ChatRepository();
 
   @override
   Widget build(BuildContext context) {
-    final sendSubmit = () {
-      BlocProvider.of<ChatBloc>(context).add(const SendChatMessageRequested());
-    };
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider.value(value: socketRepository),
@@ -46,7 +48,8 @@ class ChatPage extends StatelessWidget {
               socketRepository: socketRepository,
               chatInfo: chatInfo,
               chatRepository: chatRepository,
-            ),
+              homeBloc: homeBloc,
+            )..add(const OpenChatRequested()),
           ),
         ],
         child: BlocProvider<ChatBloc>.value(
@@ -54,6 +57,7 @@ class ChatPage extends StatelessWidget {
             socketRepository: socketRepository,
             chatInfo: chatInfo,
             chatRepository: chatRepository,
+            homeBloc: homeBloc,
           ),
           child: MultiBlocListener(
             listeners: [
@@ -112,6 +116,10 @@ class ChatPage extends StatelessWidget {
                   BlocProvider.of<ChatBloc>(context)
                       .add(const OpenChatRequested());
                 }
+                final sendSubmit = () {
+                  BlocProvider.of<ChatBloc>(context)
+                      .add(const SendChatMessageRequested());
+                };
                 return Scaffold(
                   appBar: AppBar(
                     title: Column(
@@ -139,11 +147,19 @@ class ChatPage extends StatelessWidget {
                           ? const Center(
                               child: Text(
                                   'You don\'t have any messages with your friend here :('))
-                          : ListView(
-                              children: state.messages
-                                  .map((message) =>
-                                      MessageWidget(message: message))
-                                  .toList(),
+                          : Expanded(
+                              child: ListView(
+                                reverse: true,
+                                children: state.messages
+                                    .map(
+                                      (message) => MessageWidget(
+                                        message: message,
+                                        chatInfo: state.chatInfo,
+                                        account: accountRepository.account,
+                                      ),
+                                    )
+                                    .toList(),
+                              ),
                             ),
                       Row(
                         children: [

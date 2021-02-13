@@ -88,7 +88,7 @@ class ChatRepository {
     ChatHub().listenOff(hubConnection);
   }
 
-  Future<int> sendChatMessage({
+  Future<SocketChatMessageReceive> sendChatMessage({
     @required HubConnection hubConnection,
     @required String userId,
     @required String message,
@@ -97,20 +97,20 @@ class ChatRepository {
     return await ChatHub.sendChatMessage(hubConnection, userId, message);
   }
 
-  Future<int> sendUserIsTyping({
+  Future<void> sendUserIsTyping({
     @required HubConnection hubConnection,
     @required String userId,
   }) async {
     assert(hubConnection != null);
-    return await ChatHub.sendUserIsTyping(hubConnection, userId);
+    await ChatHub.sendUserIsTyping(hubConnection, userId);
   }
 
-  Future<int> sendUserChatSeen({
+  Future<void> sendUserChatSeen({
     @required HubConnection hubConnection,
     @required String userId,
     @required int lastMessageId,
   }) async {
     assert(hubConnection != null);
-    return await ChatHub.sendUserChatSeen(hubConnection, userId, lastMessageId);
+    await ChatHub.sendUserChatSeen(hubConnection, userId, lastMessageId);
   }
 }

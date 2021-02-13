@@ -3,7 +3,7 @@ part of 'bloc.dart';
 enum HomeStatus { initial, loading, success, failure }
 
 class HomeState extends Equatable {
-  const HomeState._({
+  const HomeState({
     this.status = HomeStatus.initial,
     this.chats = const <ChatInfo>[],
   });
@@ -11,14 +11,15 @@ class HomeState extends Equatable {
   final HomeStatus status;
   final List<ChatInfo> chats;
 
-  const HomeState.initial() : this._();
-
-  const HomeState.loading() : this._(status: HomeStatus.loading);
-
-  const HomeState.success(List<ChatInfo> chats)
-      : this._(status: HomeStatus.success, chats: chats);
-
-  const HomeState.failure() : this._(status: HomeStatus.failure);
+  HomeState copyWith({
+    HomeStatus status,
+    List<ChatInfo> chats,
+  }) {
+    return HomeState(
+      status: status ?? this.status,
+      chats: chats ?? this.chats,
+    );
+  }
 
   @override
   List<Object> get props => [status, chats];

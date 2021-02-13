@@ -116,6 +116,17 @@ class _$MessageSerializer implements StructuredSerializer<Message> {
 }
 
 class _$MessageTypeSerializer implements PrimitiveSerializer<MessageType> {
+  static const Map<String, Object> _toWire = const <String, Object>{
+    'text': 'Text',
+    'image': 'Image',
+    'video': 'Video',
+  };
+  static const Map<Object, String> _fromWire = const <Object, String>{
+    'Text': 'text',
+    'Image': 'image',
+    'Video': 'video',
+  };
+
   @override
   final Iterable<Type> types = const <Type>[MessageType];
   @override
@@ -124,12 +135,12 @@ class _$MessageTypeSerializer implements PrimitiveSerializer<MessageType> {
   @override
   Object serialize(Serializers serializers, MessageType object,
           {FullType specifiedType = FullType.unspecified}) =>
-      object.name;
+      _toWire[object.name] ?? object.name;
 
   @override
   MessageType deserialize(Serializers serializers, Object serialized,
           {FullType specifiedType = FullType.unspecified}) =>
-      MessageType.valueOf(serialized as String);
+      MessageType.valueOf(_fromWire[serialized] ?? serialized as String);
 }
 
 class _$Message extends Message {

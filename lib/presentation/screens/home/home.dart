@@ -128,11 +128,14 @@ class HomePage extends StatelessWidget {
                                     chatInfo: chatInfo,
                                     onTap: () => Navigator.of(context).push(
                                       MaterialPageRoute<void>(
-                                        builder: (context) => ChatPage(
+                                        builder: (ctx) => ChatPage(
                                           authenticationRepository:
                                               authenticationRepository,
+                                          accountRepository: accountRepository,
                                           socketRepository: socketRepository,
                                           chatInfo: chatInfo,
+                                          homeBloc: BlocProvider.of<HomeBloc>(
+                                              context),
                                         ),
                                       ),
                                     ),

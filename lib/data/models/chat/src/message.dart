@@ -37,8 +37,13 @@ abstract class Message implements Built<Message, MessageBuilder> {
 }
 
 class MessageType extends EnumClass {
+  @BuiltValueEnumConst(wireName: 'Text')
   static const MessageType text = _$text;
+
+  @BuiltValueEnumConst(wireName: 'Image')
   static const MessageType image = _$image;
+
+  @BuiltValueEnumConst(wireName: 'Video')
   static const MessageType video = _$video;
 
   const MessageType._(String name) : super(name);

@@ -60,8 +60,10 @@ class SignalRHelper {
     hubConnection.off(methodName, method: methodFunction);
   }
 
-  Future<dynamic> invoke(String methodName, {List<dynamic> args}) async {
+  Future<Map<String, dynamic>> invoke(String methodName,
+      {List<dynamic> args}) async {
     assert(hubConnection != null);
-    return await hubConnection.invoke(methodName, args: args);
+    return await hubConnection.invoke(methodName, args: args)
+        as Map<String, dynamic>;
   }
 }

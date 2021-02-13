@@ -31,16 +31,8 @@ class ReadChatRequested extends ChatEvent {
   List<Object> get props => [read];
 }
 
-class CloseChatRequested extends ChatEvent {
-  const CloseChatRequested();
-}
-
 class SendChatMessageRequested extends ChatEvent {
   const SendChatMessageRequested();
-}
-
-class SendUserIsTypingRequested extends ChatEvent {
-  const SendUserIsTypingRequested();
 }
 
 class SendUserChatSeenRequested extends ChatEvent {

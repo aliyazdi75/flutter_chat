@@ -36,6 +36,7 @@ part 'serializers.g.dart';
   ChatMessageReceive,
   ChatSeen,
   ChatTyping,
+  SocketChatMessageReceive,
 ])
 final Serializers serializers = (_$serializers.toBuilder()
       ..add(Iso8601DateTimeSerializer())

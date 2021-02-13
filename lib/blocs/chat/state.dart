@@ -16,7 +16,7 @@ class ChatState extends Equatable {
     this.isOnline,
     this.isTyping,
     this.messages,
-    this.textMessage,
+    this.textMessage = '',
   });
 
   final ChatStatus status;
@@ -48,5 +48,12 @@ class ChatState extends Equatable {
   }
 
   @override
-  List<Object> get props => [status, messages, lastSeen, isOnline, isTyping];
+  List<Object> get props => [
+        status,
+        messages,
+        lastSeen,
+        isOnline,
+        isTyping,
+        textMessage,
+      ];
 }

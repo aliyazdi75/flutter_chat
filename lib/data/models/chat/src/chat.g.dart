@@ -23,6 +23,8 @@ Serializer<ChatMessageReceive> _$chatMessageReceiveSerializer =
     new _$ChatMessageReceiveSerializer();
 Serializer<ChatSeen> _$chatSeenSerializer = new _$ChatSeenSerializer();
 Serializer<ChatTyping> _$chatTypingSerializer = new _$ChatTypingSerializer();
+Serializer<SocketChatMessageReceive> _$socketChatMessageReceiveSerializer =
+    new _$SocketChatMessageReceiveSerializer();
 
 class _$ChatSerializer implements StructuredSerializer<Chat> {
   @override
@@ -560,6 +562,57 @@ class _$ChatTypingSerializer implements StructuredSerializer<ChatTyping> {
         case 'isTyping':
           result.isTyping = serializers.deserialize(value,
               specifiedType: const FullType(bool)) as bool;
+          break;
+      }
+    }
+
+    return result.build();
+  }
+}
+
+class _$SocketChatMessageReceiveSerializer
+    implements StructuredSerializer<SocketChatMessageReceive> {
+  @override
+  final Iterable<Type> types = const [
+    SocketChatMessageReceive,
+    _$SocketChatMessageReceive
+  ];
+  @override
+  final String wireName = 'SocketChatMessageReceive';
+
+  @override
+  Iterable<Object> serialize(
+      Serializers serializers, SocketChatMessageReceive object,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = <Object>[
+      'id',
+      serializers.serialize(object.id, specifiedType: const FullType(int)),
+      'text',
+      serializers.serialize(object.text, specifiedType: const FullType(String)),
+    ];
+
+    return result;
+  }
+
+  @override
+  SocketChatMessageReceive deserialize(
+      Serializers serializers, Iterable<Object> serialized,
+      {FullType specifiedType = FullType.unspecified}) {
+    final result = new SocketChatMessageReceiveBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final Object value = iterator.current;
+      switch (key) {
+        case 'id':
+          result.id = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'text':
+          result.text = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
           break;
       }
     }
@@ -1559,6 +1612,102 @@ class ChatTypingBuilder implements Builder<ChatTyping, ChatTypingBuilder> {
                 userId, 'ChatTyping', 'userId'),
             isTyping: BuiltValueNullFieldError.checkNotNull(
                 isTyping, 'ChatTyping', 'isTyping'));
+    replace(_$result);
+    return _$result;
+  }
+}
+
+class _$SocketChatMessageReceive extends SocketChatMessageReceive {
+  @override
+  final int id;
+  @override
+  final String text;
+
+  factory _$SocketChatMessageReceive(
+          [void Function(SocketChatMessageReceiveBuilder) updates]) =>
+      (new SocketChatMessageReceiveBuilder()..update(updates)).build();
+
+  _$SocketChatMessageReceive._({this.id, this.text}) : super._() {
+    BuiltValueNullFieldError.checkNotNull(id, 'SocketChatMessageReceive', 'id');
+    BuiltValueNullFieldError.checkNotNull(
+        text, 'SocketChatMessageReceive', 'text');
+  }
+
+  @override
+  SocketChatMessageReceive rebuild(
+          void Function(SocketChatMessageReceiveBuilder) updates) =>
+      (toBuilder()..update(updates)).build();
+
+  @override
+  SocketChatMessageReceiveBuilder toBuilder() =>
+      new SocketChatMessageReceiveBuilder()..replace(this);
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(other, this)) return true;
+    return other is SocketChatMessageReceive &&
+        id == other.id &&
+        text == other.text;
+  }
+
+  @override
+  int get hashCode {
+    return $jf($jc($jc(0, id.hashCode), text.hashCode));
+  }
+
+  @override
+  String toString() {
+    return (newBuiltValueToStringHelper('SocketChatMessageReceive')
+          ..add('id', id)
+          ..add('text', text))
+        .toString();
+  }
+}
+
+class SocketChatMessageReceiveBuilder
+    implements
+        Builder<SocketChatMessageReceive, SocketChatMessageReceiveBuilder> {
+  _$SocketChatMessageReceive _$v;
+
+  int _id;
+  int get id => _$this._id;
+  set id(int id) => _$this._id = id;
+
+  String _text;
+  String get text => _$this._text;
+  set text(String text) => _$this._text = text;
+
+  SocketChatMessageReceiveBuilder();
+
+  SocketChatMessageReceiveBuilder get _$this {
+    final $v = _$v;
+    if ($v != null) {
+      _id = $v.id;
+      _text = $v.text;
+      _$v = null;
+    }
+    return this;
+  }
+
+  @override
+  void replace(SocketChatMessageReceive other) {
+    ArgumentError.checkNotNull(other, 'other');
+    _$v = other as _$SocketChatMessageReceive;
+  }
+
+  @override
+  void update(void Function(SocketChatMessageReceiveBuilder) updates) {
+    if (updates != null) updates(this);
+  }
+
+  @override
+  _$SocketChatMessageReceive build() {
+    final _$result = _$v ??
+        new _$SocketChatMessageReceive._(
+            id: BuiltValueNullFieldError.checkNotNull(
+                id, 'SocketChatMessageReceive', 'id'),
+            text: BuiltValueNullFieldError.checkNotNull(
+                text, 'SocketChatMessageReceive', 'text'));
     replace(_$result);
     return _$result;
   }
