@@ -185,7 +185,7 @@ abstract class ChatMessageReceive
 abstract class ChatSeen implements Built<ChatSeen, ChatSeenBuilder> {
   String get userId;
 
-  String get lastId;
+  int get lastId;
 
   ChatSeen._();
 
@@ -198,20 +198,22 @@ abstract class ChatSeen implements Built<ChatSeen, ChatSeenBuilder> {
   static Serializer<ChatSeen> get serializer => _$chatSeenSerializer;
 }
 
-abstract class ChatTyping implements Built<ChatTyping, ChatTypingBuilder> {
+abstract class ChatIsTyping
+    implements Built<ChatIsTyping, ChatIsTypingBuilder> {
   String get userId;
 
   bool get isTyping;
 
-  ChatTyping._();
+  ChatIsTyping._();
 
-  factory ChatTyping([void Function(ChatTypingBuilder) updates]) = _$ChatTyping;
+  factory ChatIsTyping([void Function(ChatIsTypingBuilder) updates]) =
+      _$ChatIsTyping;
 
-  static ChatTyping fromJson(Map<String, dynamic> json) {
-    return serializers.deserializeWith(ChatTyping.serializer, json);
+  static ChatIsTyping fromJson(Map<String, dynamic> json) {
+    return serializers.deserializeWith(ChatIsTyping.serializer, json);
   }
 
-  static Serializer<ChatTyping> get serializer => _$chatTypingSerializer;
+  static Serializer<ChatIsTyping> get serializer => _$chatIsTypingSerializer;
 }
 
 abstract class SocketChatMessageReceive

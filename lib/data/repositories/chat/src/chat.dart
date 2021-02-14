@@ -51,12 +51,12 @@ class ChatRepository {
     return await ChatApi.closeChat(body);
   }
 
-  void listenOnStatusChange({
+  void listenOnStatusChanged({
     @required HubConnection hubConnection,
-    @required Function(ChatStatusChange chatStatusChange) onStatusChange,
+    @required Function(ChatStatusChange chatStatusChange) onStatusChanged,
   }) {
     assert(hubConnection != null);
-    ChatHub().listenOnStatusChange(hubConnection, onStatusChange);
+    ChatHub().listenOnStatusChanged(hubConnection, onStatusChanged);
   }
 
   void listenOnMessageReceived({
@@ -75,12 +75,12 @@ class ChatRepository {
     ChatHub().listenOnMessageSeen(hubConnection, onMessageSeen);
   }
 
-  void listenOnChatTyping({
+  void listenOnChatIsTyping({
     @required HubConnection hubConnection,
-    @required Function(ChatTyping chatTyping) onChatTyping,
+    @required Function(ChatIsTyping chatIsTyping) onChatIsTyping,
   }) {
     assert(hubConnection != null);
-    ChatHub().listenOnChatTyping(hubConnection, onChatTyping);
+    ChatHub().listenOnChatIsTyping(hubConnection, onChatIsTyping);
   }
 
   void listenOff({@required HubConnection hubConnection}) {

@@ -35,7 +35,7 @@ part 'serializers.g.dart';
   ChatStatusChange,
   ChatMessageReceive,
   ChatSeen,
-  ChatTyping,
+  ChatIsTyping,
   SocketChatMessageReceive,
 ])
 final Serializers serializers = (_$serializers.toBuilder()

@@ -22,13 +22,15 @@ class MessageWidget extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(message.sentAt.toLocal().toString()),
-          Icon(
-            message.isSent
-                ? message.seen
-                    ? Icons.done_all
-                    : Icons.done
-                : Icons.query_builder,
-          )
+          message.sentByMe
+              ? Icon(
+                  message.isSent
+                      ? message.seen
+                          ? Icons.done_all
+                          : Icons.done
+                      : Icons.query_builder,
+                )
+              : Container(),
         ],
       ),
       title: Text(message.text),

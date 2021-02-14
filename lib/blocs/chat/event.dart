@@ -22,6 +22,42 @@ class GetMessagesRequested extends ChatEvent {
   List<Object> get props => [userId, maxId];
 }
 
+class StatusChanged extends ChatEvent {
+  const StatusChanged(this.onStatusChanged);
+
+  final ChatStatusChange onStatusChanged;
+
+  @override
+  List<Object> get props => [onStatusChanged];
+}
+
+class MessageReceived extends ChatEvent {
+  const MessageReceived(this.onChatMessageReceived);
+
+  final ChatMessageReceive onChatMessageReceived;
+
+  @override
+  List<Object> get props => [onChatMessageReceived];
+}
+
+class ChatSeenReceived extends ChatEvent {
+  const ChatSeenReceived(this.onMessageSeen);
+
+  final ChatSeen onMessageSeen;
+
+  @override
+  List<Object> get props => [onMessageSeen];
+}
+
+class IsTypingReceived extends ChatEvent {
+  const IsTypingReceived(this.onChatIsTyping);
+
+  final ChatIsTyping onChatIsTyping;
+
+  @override
+  List<Object> get props => [onChatIsTyping];
+}
+
 class ReadChatRequested extends ChatEvent {
   const ReadChatRequested({this.read = true});
 

@@ -22,7 +22,8 @@ Serializer<ChatStatusChange> _$chatStatusChangeSerializer =
 Serializer<ChatMessageReceive> _$chatMessageReceiveSerializer =
     new _$ChatMessageReceiveSerializer();
 Serializer<ChatSeen> _$chatSeenSerializer = new _$ChatSeenSerializer();
-Serializer<ChatTyping> _$chatTypingSerializer = new _$ChatTypingSerializer();
+Serializer<ChatIsTyping> _$chatIsTypingSerializer =
+    new _$ChatIsTypingSerializer();
 Serializer<SocketChatMessageReceive> _$socketChatMessageReceiveSerializer =
     new _$SocketChatMessageReceiveSerializer();
 
@@ -490,8 +491,7 @@ class _$ChatSeenSerializer implements StructuredSerializer<ChatSeen> {
       serializers.serialize(object.userId,
           specifiedType: const FullType(String)),
       'lastId',
-      serializers.serialize(object.lastId,
-          specifiedType: const FullType(String)),
+      serializers.serialize(object.lastId, specifiedType: const FullType(int)),
     ];
 
     return result;
@@ -514,7 +514,7 @@ class _$ChatSeenSerializer implements StructuredSerializer<ChatSeen> {
           break;
         case 'lastId':
           result.lastId = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(int)) as int;
           break;
       }
     }
@@ -523,14 +523,14 @@ class _$ChatSeenSerializer implements StructuredSerializer<ChatSeen> {
   }
 }
 
-class _$ChatTypingSerializer implements StructuredSerializer<ChatTyping> {
+class _$ChatIsTypingSerializer implements StructuredSerializer<ChatIsTyping> {
   @override
-  final Iterable<Type> types = const [ChatTyping, _$ChatTyping];
+  final Iterable<Type> types = const [ChatIsTyping, _$ChatIsTyping];
   @override
-  final String wireName = 'ChatTyping';
+  final String wireName = 'ChatIsTyping';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, ChatTyping object,
+  Iterable<Object> serialize(Serializers serializers, ChatIsTyping object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'userId',
@@ -545,9 +545,9 @@ class _$ChatTypingSerializer implements StructuredSerializer<ChatTyping> {
   }
 
   @override
-  ChatTyping deserialize(Serializers serializers, Iterable<Object> serialized,
+  ChatIsTyping deserialize(Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = new ChatTypingBuilder();
+    final result = new ChatIsTypingBuilder();
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
@@ -1441,7 +1441,7 @@ class _$ChatSeen extends ChatSeen {
   @override
   final String userId;
   @override
-  final String lastId;
+  final int lastId;
 
   factory _$ChatSeen([void Function(ChatSeenBuilder) updates]) =>
       (new ChatSeenBuilder()..update(updates)).build();
@@ -1487,9 +1487,9 @@ class ChatSeenBuilder implements Builder<ChatSeen, ChatSeenBuilder> {
   String get userId => _$this._userId;
   set userId(String userId) => _$this._userId = userId;
 
-  String _lastId;
-  String get lastId => _$this._lastId;
-  set lastId(String lastId) => _$this._lastId = lastId;
+  int _lastId;
+  int get lastId => _$this._lastId;
+  set lastId(int lastId) => _$this._lastId = lastId;
 
   ChatSeenBuilder();
 
@@ -1527,31 +1527,31 @@ class ChatSeenBuilder implements Builder<ChatSeen, ChatSeenBuilder> {
   }
 }
 
-class _$ChatTyping extends ChatTyping {
+class _$ChatIsTyping extends ChatIsTyping {
   @override
   final String userId;
   @override
   final bool isTyping;
 
-  factory _$ChatTyping([void Function(ChatTypingBuilder) updates]) =>
-      (new ChatTypingBuilder()..update(updates)).build();
+  factory _$ChatIsTyping([void Function(ChatIsTypingBuilder) updates]) =>
+      (new ChatIsTypingBuilder()..update(updates)).build();
 
-  _$ChatTyping._({this.userId, this.isTyping}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(userId, 'ChatTyping', 'userId');
-    BuiltValueNullFieldError.checkNotNull(isTyping, 'ChatTyping', 'isTyping');
+  _$ChatIsTyping._({this.userId, this.isTyping}) : super._() {
+    BuiltValueNullFieldError.checkNotNull(userId, 'ChatIsTyping', 'userId');
+    BuiltValueNullFieldError.checkNotNull(isTyping, 'ChatIsTyping', 'isTyping');
   }
 
   @override
-  ChatTyping rebuild(void Function(ChatTypingBuilder) updates) =>
+  ChatIsTyping rebuild(void Function(ChatIsTypingBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
-  ChatTypingBuilder toBuilder() => new ChatTypingBuilder()..replace(this);
+  ChatIsTypingBuilder toBuilder() => new ChatIsTypingBuilder()..replace(this);
 
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is ChatTyping &&
+    return other is ChatIsTyping &&
         userId == other.userId &&
         isTyping == other.isTyping;
   }
@@ -1563,15 +1563,16 @@ class _$ChatTyping extends ChatTyping {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('ChatTyping')
+    return (newBuiltValueToStringHelper('ChatIsTyping')
           ..add('userId', userId)
           ..add('isTyping', isTyping))
         .toString();
   }
 }
 
-class ChatTypingBuilder implements Builder<ChatTyping, ChatTypingBuilder> {
-  _$ChatTyping _$v;
+class ChatIsTypingBuilder
+    implements Builder<ChatIsTyping, ChatIsTypingBuilder> {
+  _$ChatIsTyping _$v;
 
   String _userId;
   String get userId => _$this._userId;
@@ -1581,9 +1582,9 @@ class ChatTypingBuilder implements Builder<ChatTyping, ChatTypingBuilder> {
   bool get isTyping => _$this._isTyping;
   set isTyping(bool isTyping) => _$this._isTyping = isTyping;
 
-  ChatTypingBuilder();
+  ChatIsTypingBuilder();
 
-  ChatTypingBuilder get _$this {
+  ChatIsTypingBuilder get _$this {
     final $v = _$v;
     if ($v != null) {
       _userId = $v.userId;
@@ -1594,24 +1595,24 @@ class ChatTypingBuilder implements Builder<ChatTyping, ChatTypingBuilder> {
   }
 
   @override
-  void replace(ChatTyping other) {
+  void replace(ChatIsTyping other) {
     ArgumentError.checkNotNull(other, 'other');
-    _$v = other as _$ChatTyping;
+    _$v = other as _$ChatIsTyping;
   }
 
   @override
-  void update(void Function(ChatTypingBuilder) updates) {
+  void update(void Function(ChatIsTypingBuilder) updates) {
     if (updates != null) updates(this);
   }
 
   @override
-  _$ChatTyping build() {
+  _$ChatIsTyping build() {
     final _$result = _$v ??
-        new _$ChatTyping._(
+        new _$ChatIsTyping._(
             userId: BuiltValueNullFieldError.checkNotNull(
-                userId, 'ChatTyping', 'userId'),
+                userId, 'ChatIsTyping', 'userId'),
             isTyping: BuiltValueNullFieldError.checkNotNull(
-                isTyping, 'ChatTyping', 'isTyping'));
+                isTyping, 'ChatIsTyping', 'isTyping'));
     replace(_$result);
     return _$result;
   }

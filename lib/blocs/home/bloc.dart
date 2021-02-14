@@ -24,9 +24,23 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   Stream<HomeState> mapEventToState(HomeEvent event) async* {
     if (event is GetChatListRequested) {
       yield* _mapGetChatListRequestedToState();
+    } else if (event is StatusChanged) {
+      yield* _mapStatusChangedToState(event);
+    } else if (event is MessageReceived) {
+      yield* _mapMessageReceivedToState(event);
+    } else if (event is ChatSeenReceived) {
+      yield* _mapChatSeenReceivedToState(event);
+    } else if (event is IsTypingReceived) {
+      yield* _mapIsTypingReceivedToState(event);
     } else if (event is UpdateChatInfoRequested) {
       yield* _mapUpdateChatInfoRequestedToState(event);
     }
+  }
+
+  @override
+  Future<void> close() async {
+    homeRepository.listenOff(hubConnection: socketRepository.hubConnection);
+    await super.close();
   }
 
   Stream<HomeState> _mapGetChatListRequestedToState() async* {
@@ -49,78 +63,110 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   void _listenOnHub() {
     assert(homeRepository != null && socketRepository != null);
     final hubConnection = socketRepository.hubConnection;
-    homeRepository.listenOnStatusChange(
+    homeRepository.listenOnStatusChanged(
       hubConnection: hubConnection,
-      onStatusChange: (onStatusChange) async* {
-        final chat = state.chats.firstWhere(
-          (chat) => onStatusChange.userId == chat.userId,
-          orElse: () => null,
-        );
-        if (chat != null) {
-          chat.rebuild(
-            (b) => b
-              ..isOnline = onStatusChange.online
-              ..lastSeen =
-                  DateTime.fromMillisecondsSinceEpoch(onStatusChange.lastSeen),
-          );
-          yield state.copyWith(chats: List.of(state.chats));
-        }
-      },
-    );
-    homeRepository.listenOnChatTyping(
-      hubConnection: hubConnection,
-      onChatTyping: (onChatTyping) async* {
-        final chat = state.chats.firstWhere(
-          (chat) => onChatTyping.userId == chat.userId,
-          orElse: () => null,
-        );
-        if (chat != null) {
-          chat.rebuild((b) => b..isTyping = true);
-          yield state.copyWith(chats: List.of(state.chats));
-        }
-      },
-    );
-    homeRepository.listenOnMessageSeen(
-      hubConnection: hubConnection,
-      onMessageSeen: (onMessageSeen) async* {
-        final chat = state.chats.firstWhere(
-          (chat) => onMessageSeen.userId == chat.userId,
-          orElse: () => null,
-        );
-        if (chat != null) {
-          chat.rebuild((b) => b..lastMessage.seen = true);
-          yield state.copyWith(chats: List.of(state.chats));
-        }
-      },
+      onStatusChanged: (onStatusChanged) => add(StatusChanged(onStatusChanged)),
     );
     homeRepository.listenOnMessageReceived(
       hubConnection: hubConnection,
-      onMessageReceived: (chatMessageReceive) async* {
-        final chat = state.chats.firstWhere(
-          (chat) => chatMessageReceive.senderId == chat.userId,
-          orElse: () => null,
-        );
-        if (chat != null) {
-          final message = Message(
+      onMessageReceived: (chatMessageReceive) =>
+          add(MessageReceived(chatMessageReceive)),
+    );
+    homeRepository.listenOnMessageSeen(
+      hubConnection: hubConnection,
+      onMessageSeen: (onMessageSeen) => add(ChatSeenReceived(onMessageSeen)),
+    );
+    homeRepository.listenOnChatIsTyping(
+      hubConnection: hubConnection,
+      onChatIsTyping: (onChatIsTyping) => add(IsTypingReceived(onChatIsTyping)),
+    );
+  }
+
+  Stream<HomeState> _mapStatusChangedToState(StatusChanged event) async* {
+    final chat = state.chats.singleWhere(
+      (chat) => event.onStatusChanged.userId == chat.userId,
+      orElse: () => null,
+    );
+    if (chat != null) {
+      yield state.copyWith(
+        chats: List.of(state.chats)
+          ..[state.chats.indexWhere(
+                  (chat) => event.onStatusChanged.userId == chat.userId)] =
+              chat.rebuild(
             (b) => b
-              ..id = chatMessageReceive.id
-              ..seen = false
-              ..sentByMe = false
-              ..isSent = true
-              ..sentAt =
-                  DateTime.fromMillisecondsSinceEpoch(chatMessageReceive.date)
-              ..type = MessageType.text
-              ..text = chatMessageReceive.text,
-          );
-          chat.rebuild(
+              ..isOnline = event.onStatusChanged.online
+              ..lastSeen = DateTime.fromMillisecondsSinceEpoch(
+                  event.onStatusChanged.lastSeen),
+          ),
+      );
+    }
+  }
+
+  Stream<HomeState> _mapMessageReceivedToState(MessageReceived event) async* {
+    final chat = state.chats.singleWhere(
+      (chat) => event.onChatMessageReceived.senderId == chat.userId,
+      orElse: () => null,
+    );
+    if (chat != null) {
+      final message = Message(
+        (b) => b
+          ..id = event.onChatMessageReceived.id
+          ..seen = false
+          ..sentByMe = false
+          ..isSent = true
+          ..sentAt = DateTime.fromMillisecondsSinceEpoch(
+              event.onChatMessageReceived.date)
+          ..type = MessageType.text
+          ..text = event.onChatMessageReceived.text,
+      );
+      yield state.copyWith(
+        chats: List.of(state.chats)
+          ..[state.chats.indexWhere((chat) =>
+                  event.onChatMessageReceived.senderId == chat.userId)] =
+              chat.rebuild(
             (b) => b
               ..newMessagesCount += 1
               ..lastMessage = message.toBuilder(),
-          );
-          yield state.copyWith(chats: List.of(state.chats));
-        }
-      },
+          ),
+      );
+    }
+  }
+
+  Stream<HomeState> _mapChatSeenReceivedToState(ChatSeenReceived event) async* {
+    final chat = state.chats.firstWhere(
+      (chat) => event.onMessageSeen.userId == chat.userId,
+      orElse: () => null,
     );
+    if (chat != null) {
+      chat.rebuild((b) => b..lastMessage.seen = true);
+      yield state.copyWith(
+        chats: List.of(state.chats)
+          ..[state.chats.indexWhere(
+                  (chat) => event.onMessageSeen.userId == chat.userId)] =
+              chat.rebuild(
+            (b) => b..lastMessage.seen = true,
+          ),
+      );
+    }
+  }
+
+  Stream<HomeState> _mapIsTypingReceivedToState(IsTypingReceived event) async* {
+    final chat = state.chats.firstWhere(
+      (chat) => event.onChatIsTyping.userId == chat.userId,
+      orElse: () => null,
+    );
+    if (chat != null) {
+      chat.rebuild((b) => b..isTyping = true);
+      yield state.copyWith(chats: List.of(state.chats));
+      yield state.copyWith(
+        chats: List.of(state.chats)
+          ..[state.chats.indexWhere(
+                  (chat) => event.onChatIsTyping.userId == chat.userId)] =
+              chat.rebuild(
+            (b) => b..isTyping = event.onChatIsTyping.isTyping,
+          ),
+      );
+    }
   }
 
   Stream<HomeState> _mapUpdateChatInfoRequestedToState(

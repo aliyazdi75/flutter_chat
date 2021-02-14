@@ -23,18 +23,18 @@ class ChatHub {
     _hubMethodListenOnList = <HubMethod>[];
   }
 
-  void listenOnStatusChange(
+  void listenOnStatusChanged(
     HubConnection hubConnection,
-    Function(ChatStatusChange chatStatusChange) onStatusChange,
+    Function(ChatStatusChange chatStatusChange) onStatusChanged,
   ) {
-    final chatStatusChange = (List<dynamic> arguments) => onStatusChange(
+    final chatStatusChange = (List<dynamic> arguments) => onStatusChanged(
         ChatStatusChange.fromJson(arguments.first as Map<String, dynamic>));
     SignalRHelper(hubConnection: hubConnection).on(
-      chatMessageMethodName,
+      chatUserStatusChangeMethodName,
       chatStatusChange,
     );
     _hubMethodListenOnList
-        .add(HubMethod(chatMessageMethodName, chatStatusChange));
+        .add(HubMethod(chatUserStatusChangeMethodName, chatStatusChange));
   }
 
   void listenOnMessageReceived(
@@ -44,11 +44,11 @@ class ChatHub {
     final chatMessageReceived = (List<dynamic> arguments) => onMessageReceived(
         ChatMessageReceive.fromJson(arguments.first as Map<String, dynamic>));
     SignalRHelper(hubConnection: hubConnection).on(
-      chatUserStatusChangeMethodName,
+      chatMessageMethodName,
       chatMessageReceived,
     );
     _hubMethodListenOnList
-        .add(HubMethod(chatUserStatusChangeMethodName, chatMessageReceived));
+        .add(HubMethod(chatMessageMethodName, chatMessageReceived));
   }
 
   void listenOnMessageSeen(
@@ -64,12 +64,12 @@ class ChatHub {
     _hubMethodListenOnList.add(HubMethod(chatSeenMethodName, chatMessageSeen));
   }
 
-  void listenOnChatTyping(
+  void listenOnChatIsTyping(
     HubConnection hubConnection,
-    Function(ChatTyping chatTyping) onChatTyping,
+    Function(ChatIsTyping chatIsTyping) onChatIsTyping,
   ) {
-    final chatTyping = (List<dynamic> arguments) => onChatTyping(
-        ChatTyping.fromJson(arguments.first as Map<String, dynamic>));
+    final chatTyping = (List<dynamic> arguments) => onChatIsTyping(
+        ChatIsTyping.fromJson(arguments.first as Map<String, dynamic>));
     SignalRHelper(hubConnection: hubConnection).on(
       chatTypingMethodName,
       chatTyping,

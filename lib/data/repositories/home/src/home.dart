@@ -15,12 +15,12 @@ class HomeRepository {
     return _chatsList;
   }
 
-  void listenOnStatusChange({
+  void listenOnStatusChanged({
     @required HubConnection hubConnection,
-    @required Function(ChatStatusChange chatStatusChange) onStatusChange,
+    @required Function(ChatStatusChange chatStatusChange) onStatusChanged,
   }) {
     assert(hubConnection != null);
-    HomeHub().listenOnStatusChange(hubConnection, onStatusChange);
+    HomeHub().listenOnStatusChanged(hubConnection, onStatusChanged);
   }
 
   void listenOnMessageReceived({
@@ -39,12 +39,12 @@ class HomeRepository {
     HomeHub().listenOnMessageSeen(hubConnection, onMessageSeen);
   }
 
-  void listenOnChatTyping({
+  void listenOnChatIsTyping({
     @required HubConnection hubConnection,
-    @required Function(ChatTyping chatTyping) onChatTyping,
+    @required Function(ChatIsTyping chatIsTyping) onChatIsTyping,
   }) {
     assert(hubConnection != null);
-    HomeHub().listenOnChatTyping(hubConnection, onChatTyping);
+    HomeHub().listenOnChatIsTyping(hubConnection, onChatIsTyping);
   }
 
   void listenOff({@required HubConnection hubConnection}) {

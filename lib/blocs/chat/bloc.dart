@@ -47,6 +47,14 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       yield* _mapGetMessagesRequestedToState(event);
     } else if (event is ReadChatRequested) {
       yield* _mapReadChatRequestedToState(event);
+    } else if (event is StatusChanged) {
+      yield* _mapStatusChangedToState(event);
+    } else if (event is MessageReceived) {
+      yield* _mapMessageReceivedToState(event);
+    } else if (event is ChatSeenReceived) {
+      yield* _mapChatSeenReceivedToState(event);
+    } else if (event is IsTypingReceived) {
+      yield* _mapIsTypingReceivedToState(event);
     } else if (event is SendChatMessageRequested) {
       yield* _mapSendChatMessageRequestedToState(event);
     } else if (event is SendUserChatSeenRequested) {
@@ -90,56 +98,69 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   void _listenOnHub() {
     final hubConnection = socketRepository.hubConnection;
-    chatRepository.listenOnStatusChange(
+    chatRepository.listenOnStatusChanged(
       hubConnection: hubConnection,
-      onStatusChange: (onStatusChange) async* {
-        if (onStatusChange.userId == chatInfo.userId) {
-          yield state.copyWith(
-            isOnline: onStatusChange.online,
-            lastSeen:
-                DateTime.fromMillisecondsSinceEpoch(onStatusChange.lastSeen),
-          );
-        }
-      },
-    );
-    chatRepository.listenOnChatTyping(
-      hubConnection: hubConnection,
-      onChatTyping: (onChatTyping) async* {
-        if (onChatTyping.userId == chatInfo.userId) {
-          yield state.copyWith(isTyping: onChatTyping.isTyping);
-        }
-      },
-    );
-    chatRepository.listenOnMessageSeen(
-      hubConnection: hubConnection,
-      onMessageSeen: (onMessageSeen) async* {
-        if (onMessageSeen.userId == chatInfo.userId) {
-          state.messages
-              .forEach((message) => message.rebuild((b) => b..seen = true));
-          yield state.copyWith(messages: List.of(state.messages));
-        }
-      },
+      onStatusChanged: (onStatusChanged) => add(StatusChanged(onStatusChanged)),
     );
     chatRepository.listenOnMessageReceived(
       hubConnection: hubConnection,
-      onMessageReceived: (chatMessageReceive) async* {
-        if (chatMessageReceive.senderId == chatInfo.userId) {
-          state.messages.add(
-            Message(
-              (b) => b
-                ..id = chatMessageReceive.id
-                ..seen = true
-                ..sentByMe = false
-                ..type = chatMessageReceive.type
-                ..text = chatMessageReceive.text
-                ..sentAt = DateTime.fromMillisecondsSinceEpoch(
-                    chatMessageReceive.date),
-            ),
-          );
-          yield state.copyWith(messages: List.of(state.messages));
-        }
-      },
+      onMessageReceived: (chatMessageReceive) =>
+          add(MessageReceived(chatMessageReceive)),
     );
+    chatRepository.listenOnMessageSeen(
+      hubConnection: hubConnection,
+      onMessageSeen: (onMessageSeen) => add(ChatSeenReceived(onMessageSeen)),
+    );
+    chatRepository.listenOnChatIsTyping(
+      hubConnection: hubConnection,
+      onChatIsTyping: (onChatIsTyping) => add(IsTypingReceived(onChatIsTyping)),
+    );
+  }
+
+  Stream<ChatState> _mapStatusChangedToState(StatusChanged event) async* {
+    if (event.onStatusChanged.userId == chatInfo.userId) {
+      yield state.copyWith(
+        isOnline: event.onStatusChanged.online,
+        lastSeen:
+            DateTime.fromMillisecondsSinceEpoch(event.onStatusChanged.lastSeen),
+      );
+    }
+  }
+
+  Stream<ChatState> _mapMessageReceivedToState(MessageReceived event) async* {
+    if (event.onChatMessageReceived.senderId == chatInfo.userId) {
+      //todo: should add some event like scroll or make new messages and separate seen message
+      await _seenMessages();
+      final message = Message(
+        (b) => b
+          ..id = event.onChatMessageReceived.id
+          ..seen = true
+          ..sentByMe = false
+          ..type = event.onChatMessageReceived.type
+          ..text = event.onChatMessageReceived.text
+          ..sentAt = DateTime.fromMillisecondsSinceEpoch(
+              event.onChatMessageReceived.date),
+      );
+      yield state.copyWith(
+          messages: List.of(state.messages)..insert(0, message));
+    }
+  }
+
+  //todo: why it called for twice for each first state and new state?
+  Stream<ChatState> _mapChatSeenReceivedToState(ChatSeenReceived event) async* {
+    if (event.onMessageSeen.userId == chatInfo.userId) {
+      yield state.copyWith(
+        messages: List.of(state.messages
+            .map((message) => message.rebuild((b) => b..seen = true))),
+      );
+    }
+  }
+
+  Stream<ChatState> _mapIsTypingReceivedToState(IsTypingReceived event) async* {
+    //todo: handle timer for idle typing
+    if (event.onChatIsTyping.userId == chatInfo.userId) {
+      yield state.copyWith(isTyping: event.onChatIsTyping.isTyping);
+    }
   }
 
   Stream<ChatState> _mapGetMessagesRequestedToState(
@@ -228,7 +249,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   Stream<ChatState> _mapTextMessageChangedToState(
       TextMessageChanged event) async* {
-    //todo: handle timer for idle typing
     try {
       yield state.copyWith(textMessage: event.textMessage);
       await chatRepository.sendUserIsTyping(
@@ -253,8 +273,12 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       await chatRepository.sendUserChatSeen(
         hubConnection: socketRepository.hubConnection,
         userId: chatInfo.userId,
-        lastMessageId: state.messages.last.id,
+        lastMessageId: state.messages.first.id,
       );
+
+      // Update ChatInfo new messages count
+      homeBloc.add(UpdateChatInfoRequested(
+          chatInfo.rebuild((b) => b..newMessagesCount = 0)));
     }
   }
 }

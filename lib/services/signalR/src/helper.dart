@@ -26,9 +26,9 @@ class SignalRHelper {
                   queryParams,
                 ).toString(),
           HttpConnectionOptions(
-              // accessTokenFactory: () async => token,
-              // logging: (level, message) => print(message),
-              ),
+            // accessTokenFactory: () async => token,
+            logging: (level, message) => print(message),
+          ),
         )
         .withAutomaticReconnect()
         .build()
