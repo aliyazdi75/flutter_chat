@@ -140,8 +140,6 @@ class HttpHelper implements HttpClientBase {
           headers: await HttpHeader.setHeader(headerType),
         ),
       );
-      // } on NoTokenException catch (e) {
-      //   throw NoTokenException();
     } on SocketException catch (e) {
       throw SocketException(e.url, e.key, e.value);
     }
@@ -173,8 +171,6 @@ class HttpHelper implements HttpClientBase {
         ),
         badRequestModel: badRequestModel,
       );
-      // } on NoTokenException catch (e) {
-      //   throw NoTokenException;
     } on SocketException catch (e) {
       throw SocketException(e.url, e.key, e.value);
     } on JsonUnsupportedObjectError catch (e) {
