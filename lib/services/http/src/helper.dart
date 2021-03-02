@@ -8,8 +8,6 @@ import 'package:http/http.dart' as http;
 import 'exception.dart';
 import 'header.dart';
 
-typedef HttpMethod = Future<http.Response> Function();
-
 abstract class HttpClientBase {
   Future<Map<String, dynamic>> httpGet({
     Map<String, String> queryParams,

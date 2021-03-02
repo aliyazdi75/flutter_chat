@@ -13,9 +13,11 @@ part 'state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc({
-    this.homeRepository,
-    this.socketRepository,
-  }) : super(const HomeState());
+    @required this.homeRepository,
+    @required this.socketRepository,
+  })  : assert(homeRepository != null),
+        assert(socketRepository != null),
+        super(const HomeState());
 
   final HomeRepository homeRepository;
   final SocketRepository socketRepository;
@@ -34,6 +36,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       yield* _mapIsTypingReceivedToState(event);
     } else if (event is UpdateChatInfoRequested) {
       yield* _mapUpdateChatInfoRequestedToState(event);
+    } else if (event is UpdateNewMessageCountRequested) {
+      yield* _mapUpdateNewMessageCountRequestedToState(event);
     }
   }
 
@@ -44,7 +48,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   Stream<HomeState> _mapGetChatListRequestedToState() async* {
-    assert(homeRepository != null);
     yield state.copyWith(status: HomeStatus.loading);
 
     try {
@@ -61,24 +64,24 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   void _listenOnHub() {
-    assert(homeRepository != null && socketRepository != null);
     final hubConnection = socketRepository.hubConnection;
     homeRepository.listenOnStatusChanged(
       hubConnection: hubConnection,
-      onStatusChanged: (onStatusChanged) => add(StatusChanged(onStatusChanged)),
+      onStatusChanged: (chatStatusChange) =>
+          add(StatusChanged(chatStatusChange)),
     );
     homeRepository.listenOnMessageReceived(
       hubConnection: hubConnection,
       onMessageReceived: (chatMessageReceive) =>
           add(MessageReceived(chatMessageReceive)),
     );
-    homeRepository.listenOnMessageSeen(
+    homeRepository.listenOnChatSeen(
       hubConnection: hubConnection,
-      onMessageSeen: (onMessageSeen) => add(ChatSeenReceived(onMessageSeen)),
+      onChatSeen: (chatSeen) => add(ChatSeenReceived(chatSeen)),
     );
     homeRepository.listenOnChatIsTyping(
       hubConnection: hubConnection,
-      onChatIsTyping: (onChatIsTyping) => add(IsTypingReceived(onChatIsTyping)),
+      onChatIsTyping: (chatIsTyping) => add(IsTypingReceived(chatIsTyping)),
     );
   }
 
@@ -90,9 +93,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     if (chat != null) {
       yield state.copyWith(
         chats: List.of(state.chats)
-          ..[state.chats.indexWhere(
-                  (chat) => event.onStatusChanged.userId == chat.userId)] =
-              chat.rebuild(
+          ..[state.chats.indexOf(chat)] = chat.rebuild(
             (b) => b
               ..isOnline = event.onStatusChanged.online
               ..lastSeen = DateTime.fromMillisecondsSinceEpoch(
@@ -121,9 +122,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       );
       yield state.copyWith(
         chats: List.of(state.chats)
-          ..[state.chats.indexWhere((chat) =>
-                  event.onChatMessageReceived.senderId == chat.userId)] =
-              chat.rebuild(
+          ..[state.chats.indexOf(chat)] = chat.rebuild(
             (b) => b
               ..newMessagesCount += 1
               ..lastMessage = message.toBuilder(),
@@ -138,12 +137,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       orElse: () => null,
     );
     if (chat != null) {
-      chat.rebuild((b) => b..lastMessage.seen = true);
       yield state.copyWith(
         chats: List.of(state.chats)
-          ..[state.chats.indexWhere(
-                  (chat) => event.onMessageSeen.userId == chat.userId)] =
-              chat.rebuild(
+          ..[state.chats.indexOf(chat)] = chat.rebuild(
             (b) => b..lastMessage.seen = true,
           ),
       );
@@ -156,13 +152,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       orElse: () => null,
     );
     if (chat != null) {
-      chat.rebuild((b) => b..isTyping = true);
       yield state.copyWith(chats: List.of(state.chats));
       yield state.copyWith(
         chats: List.of(state.chats)
-          ..[state.chats.indexWhere(
-                  (chat) => event.onChatIsTyping.userId == chat.userId)] =
-              chat.rebuild(
+          ..[state.chats.indexOf(chat)] = chat.rebuild(
             (b) => b..isTyping = event.onChatIsTyping.isTyping,
           ),
       );
@@ -171,11 +164,33 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   Stream<HomeState> _mapUpdateChatInfoRequestedToState(
       UpdateChatInfoRequested event) async* {
-    yield state.copyWith(
-      chats: List.of(state.chats)
-        ..[state.chats.indexWhere(
-                (chat) => chat.containerId == event.chatInfo.containerId)] =
-            event.chatInfo,
+    final chat = state.chats.firstWhere(
+      (chat) => event.chatInfo.userId == chat.userId,
+      orElse: () => null,
     );
+    if (chat != null) {
+      chat.rebuild((b) => b..newMessagesCount = 0);
+      yield state.copyWith(
+        chats: List.of(state.chats)
+          ..[state.chats.indexOf(chat)] = event.chatInfo,
+      );
+    }
+  }
+
+  Stream<HomeState> _mapUpdateNewMessageCountRequestedToState(
+      UpdateNewMessageCountRequested event) async* {
+    final chat = state.chats.firstWhere(
+      (chat) => event.chatInfo.userId == chat.userId,
+      orElse: () => null,
+    );
+    if (chat != null) {
+      chat.rebuild((b) => b..newMessagesCount = 0);
+      yield state.copyWith(
+        chats: List.of(state.chats)
+          ..[state.chats.indexOf(chat)] = chat.rebuild(
+            (b) => b..newMessagesCount = 0,
+          ),
+      );
+    }
   }
 }

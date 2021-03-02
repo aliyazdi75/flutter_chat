@@ -1,90 +1,86 @@
 import 'package:flutter_chat/data/constants/index.dart';
 import 'package:flutter_chat/data/models/chat/index.dart';
 import 'package:flutter_chat/services/signalR/index.dart';
-import 'package:signalr_core/signalr_core.dart';
 
-class HubMethod {
-  HubMethod(this.methodName, this.methodFunction);
+class _HubMethod {
+  _HubMethod(this.methodName, this.methodFunction);
 
   final String methodName;
-  final Function(List<dynamic> arguments) methodFunction;
+  final SocketResponseCallBack methodFunction;
 }
 
 class ChatHub {
-  static ChatHub _instance;
-  List<HubMethod> _hubMethodListenOnList;
-
-  factory ChatHub() {
-    _instance ??= ChatHub._();
-    return _instance;
-  }
-
-  ChatHub._() {
-    _hubMethodListenOnList = <HubMethod>[];
-  }
+  List<_HubMethod> _hubMethodListenOnList = <_HubMethod>[];
 
   void listenOnStatusChanged(
     HubConnection hubConnection,
     Function(ChatStatusChange chatStatusChange) onStatusChanged,
   ) {
-    final chatStatusChange = (List<dynamic> arguments) => onStatusChanged(
-        ChatStatusChange.fromJson(arguments.first as Map<String, dynamic>));
+    final SocketResponseCallBack chatStatusChange =
+        (response) => onStatusChanged(ChatStatusChange.fromJson(response));
+    final hubMethod =
+        _HubMethod(chatUserStatusChangeMethodName, chatStatusChange);
+    if (_hubMethodListenOnList.contains(hubMethod)) return;
     SignalRHelper(hubConnection: hubConnection).on(
       chatUserStatusChangeMethodName,
       chatStatusChange,
     );
-    _hubMethodListenOnList
-        .add(HubMethod(chatUserStatusChangeMethodName, chatStatusChange));
+    _hubMethodListenOnList.add(hubMethod);
   }
 
   void listenOnMessageReceived(
     HubConnection hubConnection,
     Function(ChatMessageReceive chatMessageReceive) onMessageReceived,
   ) {
-    final chatMessageReceived = (List<dynamic> arguments) => onMessageReceived(
-        ChatMessageReceive.fromJson(arguments.first as Map<String, dynamic>));
+    final SocketResponseCallBack chatMessageReceived =
+        (response) => onMessageReceived(ChatMessageReceive.fromJson(response));
+    final hubMethod = _HubMethod(chatMessageMethodName, chatMessageReceived);
+    if (_hubMethodListenOnList.contains(hubMethod)) return;
     SignalRHelper(hubConnection: hubConnection).on(
       chatMessageMethodName,
       chatMessageReceived,
     );
-    _hubMethodListenOnList
-        .add(HubMethod(chatMessageMethodName, chatMessageReceived));
+    _hubMethodListenOnList.add(hubMethod);
   }
 
-  void listenOnMessageSeen(
+  void listenOnChatSeen(
     HubConnection hubConnection,
-    Function(ChatSeen chatSeen) onMessageSeen,
+    Function(ChatSeen chatSeen) onChatSeen,
   ) {
-    final chatMessageSeen = (List<dynamic> arguments) => onMessageSeen(
-        ChatSeen.fromJson(arguments.first as Map<String, dynamic>));
+    final SocketResponseCallBack chatMessageSeen =
+        (response) => onChatSeen(ChatSeen.fromJson(response));
+    final hubMethod = _HubMethod(chatSeenMethodName, chatMessageSeen);
+    if (_hubMethodListenOnList.contains(hubMethod)) return;
     SignalRHelper(hubConnection: hubConnection).on(
       chatSeenMethodName,
       chatMessageSeen,
     );
-    _hubMethodListenOnList.add(HubMethod(chatSeenMethodName, chatMessageSeen));
+    _hubMethodListenOnList.add(hubMethod);
   }
 
   void listenOnChatIsTyping(
     HubConnection hubConnection,
     Function(ChatIsTyping chatIsTyping) onChatIsTyping,
   ) {
-    final chatTyping = (List<dynamic> arguments) => onChatIsTyping(
-        ChatIsTyping.fromJson(arguments.first as Map<String, dynamic>));
+    final SocketResponseCallBack chatIsTyping =
+        (response) => onChatIsTyping(ChatIsTyping.fromJson(response));
+    final hubMethod = _HubMethod(chatTypingMethodName, chatIsTyping);
+    if (_hubMethodListenOnList.contains(hubMethod)) return;
     SignalRHelper(hubConnection: hubConnection).on(
       chatTypingMethodName,
-      chatTyping,
+      chatIsTyping,
     );
-    _hubMethodListenOnList.add(HubMethod(chatTypingMethodName, chatTyping));
+    _hubMethodListenOnList.add(hubMethod);
   }
 
   void listenOff(HubConnection hubConnection) {
     _hubMethodListenOnList.forEach(
       (hubMethod) => SignalRHelper(hubConnection: hubConnection).off(
         hubMethod.methodName,
-        methodFunction: hubMethod.methodFunction,
+        responseCallBack: hubMethod.methodFunction,
       ),
     );
-    _hubMethodListenOnList = const <HubMethod>[];
+    _hubMethodListenOnList = const <_HubMethod>[];
   }
 
   static Future<SocketChatMessageReceive> sendChatMessage(

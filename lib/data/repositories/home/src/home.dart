@@ -1,10 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_chat/data/models/chat/index.dart';
 import 'package:flutter_chat/data/providers/api/home/index.dart';
-import 'package:flutter_chat/data/providers/hub/home/index.dart';
+import 'package:flutter_chat/data/providers/hub/chat/index.dart';
 import 'package:signalr_core/signalr_core.dart';
 
 class HomeRepository {
+  HomeRepository() : chatHub = ChatHub();
+
+  final ChatHub chatHub;
   ChatList _chatsList;
 
   Future<ChatList> getChatsList({bool update = false}) async {
@@ -20,7 +23,7 @@ class HomeRepository {
     @required Function(ChatStatusChange chatStatusChange) onStatusChanged,
   }) {
     assert(hubConnection != null);
-    HomeHub().listenOnStatusChanged(hubConnection, onStatusChanged);
+    chatHub.listenOnStatusChanged(hubConnection, onStatusChanged);
   }
 
   void listenOnMessageReceived({
@@ -28,15 +31,15 @@ class HomeRepository {
     @required Function(ChatMessageReceive chatMessageReceive) onMessageReceived,
   }) {
     assert(hubConnection != null);
-    HomeHub().listenOnMessageReceived(hubConnection, onMessageReceived);
+    chatHub.listenOnMessageReceived(hubConnection, onMessageReceived);
   }
 
-  void listenOnMessageSeen({
+  void listenOnChatSeen({
     @required HubConnection hubConnection,
-    @required Function(ChatSeen chatSeen) onMessageSeen,
+    @required Function(ChatSeen chatSeen) onChatSeen,
   }) {
     assert(hubConnection != null);
-    HomeHub().listenOnMessageSeen(hubConnection, onMessageSeen);
+    chatHub.listenOnChatSeen(hubConnection, onChatSeen);
   }
 
   void listenOnChatIsTyping({
@@ -44,11 +47,11 @@ class HomeRepository {
     @required Function(ChatIsTyping chatIsTyping) onChatIsTyping,
   }) {
     assert(hubConnection != null);
-    HomeHub().listenOnChatIsTyping(hubConnection, onChatIsTyping);
+    chatHub.listenOnChatIsTyping(hubConnection, onChatIsTyping);
   }
 
   void listenOff({@required HubConnection hubConnection}) {
     assert(hubConnection != null);
-    HomeHub().listenOff(hubConnection);
+    chatHub.listenOff(hubConnection);
   }
 }

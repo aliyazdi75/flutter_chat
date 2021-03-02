@@ -1,11 +1,34 @@
 import 'package:flutter_chat/data/constants/index.dart';
 import 'package:signalr_core/signalr_core.dart';
 
-class SignalRHelper {
+import 'exception.dart';
+
+export 'package:signalr_core/signalr_core.dart';
+
+typedef SocketResponseCallBack = void Function(Map<String, dynamic> response);
+
+abstract class SignalRBase {
+  Future<HubConnection> startConnection(
+    String token, {
+    Function onReconnecting,
+    Function onReconnected,
+  });
+
+  Future<void> stopConnection();
+
+  void on(String methodName, SocketResponseCallBack responseCallBack);
+
+  void off(String methodName, {SocketResponseCallBack responseCallBack});
+
+  Future<Map<String, dynamic>> invoke(String methodName, {List<dynamic> args});
+}
+
+class SignalRHelper implements SignalRBase {
   SignalRHelper({this.hubConnection});
 
   final HubConnection hubConnection;
 
+  @override
   Future<HubConnection> startConnection(
     String token, {
     Function onReconnecting,
@@ -39,31 +62,56 @@ class SignalRHelper {
     return hubConnection;
   }
 
+  @override
   Future<void> stopConnection() async {
     assert(hubConnection != null);
     await hubConnection.stop();
   }
 
+  @override
   void on(
     String methodName,
-    Function(List<dynamic> arguments) methodFunction,
+    SocketResponseCallBack responseCallBack,
   ) {
     assert(hubConnection != null);
-    hubConnection.on(methodName, methodFunction);
+    hubConnection.on(
+        methodName, _functionConvert(methodName, responseCallBack));
   }
 
+  @override
   void off(
     String methodName, {
-    Function(List<dynamic> arguments) methodFunction,
+    SocketResponseCallBack responseCallBack,
   }) {
     assert(hubConnection != null);
-    hubConnection.off(methodName, method: methodFunction);
+    hubConnection.on(
+        methodName, _functionConvert(methodName, responseCallBack));
   }
 
+  @override
   Future<Map<String, dynamic>> invoke(String methodName,
       {List<dynamic> args}) async {
     assert(hubConnection != null);
-    return await hubConnection.invoke(methodName, args: args)
-        as Map<String, dynamic>;
+    try {
+      return await hubConnection.invoke(methodName, args: args)
+          as Map<String, dynamic>;
+    } on FormatException catch (_) {
+      throw SocketResponseException(methodName);
+    }
+  }
+
+  MethodInvacationFunc _functionConvert(
+      String methodName, SocketResponseCallBack responseCallBack) {
+    return (arguments) {
+      try {
+        if (arguments.isEmpty) {
+          throw SocketEmptyResponseException(methodName);
+        }
+        final response = arguments.first as Map<String, dynamic>;
+        responseCallBack(response);
+      } on FormatException catch (_) {
+        throw SocketResponseException(methodName);
+      }
+    };
   }
 }

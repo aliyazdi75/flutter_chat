@@ -22,13 +22,14 @@ class SplashPage extends StatelessWidget {
       listener: (context, state) {
         switch (state.status) {
           case AuthenticationStatus.authenticated:
-            Navigator.of(context).pushReplacement(
+            Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute<void>(
                 builder: (context) => HomePage(
                   authenticationRepository: authenticationRepository,
                   accountRepository: accountRepository,
                 ),
               ),
+              (route) => false,
             );
             break;
           case AuthenticationStatus.unauthenticated:

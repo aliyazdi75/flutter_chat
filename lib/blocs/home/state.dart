@@ -5,7 +5,7 @@ enum HomeStatus { initial, loading, success, failure }
 class HomeState extends Equatable {
   const HomeState({
     this.status = HomeStatus.initial,
-    this.chats = const <ChatInfo>[],
+    this.chats,
   });
 
   final HomeStatus status;

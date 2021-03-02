@@ -5,6 +5,10 @@ import 'package:flutter_chat/data/providers/hub/chat/index.dart';
 import 'package:signalr_core/signalr_core.dart';
 
 class ChatRepository {
+  ChatRepository() : chatHub = ChatHub();
+
+  final ChatHub chatHub;
+
   Future<Chat> openChat({String userId, int containerId}) async {
     assert(userId != null || containerId != null);
     final body = OpenChatInputBody(
@@ -56,7 +60,7 @@ class ChatRepository {
     @required Function(ChatStatusChange chatStatusChange) onStatusChanged,
   }) {
     assert(hubConnection != null);
-    ChatHub().listenOnStatusChanged(hubConnection, onStatusChanged);
+    chatHub.listenOnStatusChanged(hubConnection, onStatusChanged);
   }
 
   void listenOnMessageReceived({
@@ -64,15 +68,15 @@ class ChatRepository {
     @required Function(ChatMessageReceive chatMessageReceive) onMessageReceived,
   }) {
     assert(hubConnection != null);
-    ChatHub().listenOnMessageReceived(hubConnection, onMessageReceived);
+    chatHub.listenOnMessageReceived(hubConnection, onMessageReceived);
   }
 
-  void listenOnMessageSeen({
+  void listenOnChatSeen({
     @required HubConnection hubConnection,
-    @required Function(ChatSeen chatSeen) onMessageSeen,
+    @required Function(ChatSeen chatSeen) onChatSeen,
   }) {
     assert(hubConnection != null);
-    ChatHub().listenOnMessageSeen(hubConnection, onMessageSeen);
+    chatHub.listenOnChatSeen(hubConnection, onChatSeen);
   }
 
   void listenOnChatIsTyping({
@@ -80,12 +84,12 @@ class ChatRepository {
     @required Function(ChatIsTyping chatIsTyping) onChatIsTyping,
   }) {
     assert(hubConnection != null);
-    ChatHub().listenOnChatIsTyping(hubConnection, onChatIsTyping);
+    chatHub.listenOnChatIsTyping(hubConnection, onChatIsTyping);
   }
 
   void listenOff({@required HubConnection hubConnection}) {
     assert(hubConnection != null);
-    ChatHub().listenOff(hubConnection);
+    chatHub.listenOff(hubConnection);
   }
 
   Future<SocketChatMessageReceive> sendChatMessage({

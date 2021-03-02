@@ -56,3 +56,12 @@ class UpdateChatInfoRequested extends HomeEvent {
   @override
   List<Object> get props => [chatInfo];
 }
+
+class UpdateNewMessageCountRequested extends HomeEvent {
+  const UpdateNewMessageCountRequested(this.chatInfo);
+
+  final ChatInfo chatInfo;
+
+  @override
+  List<Object> get props => [chatInfo];
+}

@@ -12,9 +12,10 @@ import 'package:meta/meta.dart';
 part 'event.dart';
 part 'state.dart';
 
+//todo: add lazy loading
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
   ChatBloc({
-    @required this.chatInfo,
+    @required ChatInfo chatInfo,
     @required this.chatRepository,
     @required this.socketRepository,
     @required this.homeBloc,
@@ -34,7 +35,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           ),
         );
 
-  final ChatInfo chatInfo;
   final ChatRepository chatRepository;
   final SocketRepository socketRepository;
   final HomeBloc homeBloc;
@@ -67,8 +67,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   @override
   Future<void> close() async {
     chatRepository.listenOff(hubConnection: socketRepository.hubConnection);
-    await chatRepository.closeChat(containerId: chatInfo.containerId);
-    await homeBloc.close();
+    await chatRepository.closeChat(containerId: state.chatInfo.containerId);
     await super.close();
   }
 
@@ -77,8 +76,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     yield state.copyWith(status: ChatStatus.openChatLoading);
 
     try {
-      final chat =
-          await chatRepository.openChat(containerId: chatInfo.containerId);
+      final chat = await chatRepository.openChat(
+          containerId: state.chatInfo.containerId);
       _listenOnHub();
       yield state.copyWith(
         status: ChatStatus.success,
@@ -86,7 +85,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         isOnline: chat.isOnline,
         lastSeen: chat.lastSeen,
       );
-      await chatRepository.readChat(containerId: chatInfo.containerId);
+      await chatRepository.readChat(containerId: state.chatInfo.containerId);
       await _seenMessages();
     } on SocketException catch (_) {
       print('kir to netet');
@@ -100,25 +99,26 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     final hubConnection = socketRepository.hubConnection;
     chatRepository.listenOnStatusChanged(
       hubConnection: hubConnection,
-      onStatusChanged: (onStatusChanged) => add(StatusChanged(onStatusChanged)),
+      onStatusChanged: (chatStatusChange) =>
+          add(StatusChanged(chatStatusChange)),
     );
     chatRepository.listenOnMessageReceived(
       hubConnection: hubConnection,
       onMessageReceived: (chatMessageReceive) =>
           add(MessageReceived(chatMessageReceive)),
     );
-    chatRepository.listenOnMessageSeen(
+    chatRepository.listenOnChatSeen(
       hubConnection: hubConnection,
-      onMessageSeen: (onMessageSeen) => add(ChatSeenReceived(onMessageSeen)),
+      onChatSeen: (chatSeen) => add(ChatSeenReceived(chatSeen)),
     );
     chatRepository.listenOnChatIsTyping(
       hubConnection: hubConnection,
-      onChatIsTyping: (onChatIsTyping) => add(IsTypingReceived(onChatIsTyping)),
+      onChatIsTyping: (chatIsTyping) => add(IsTypingReceived(chatIsTyping)),
     );
   }
 
   Stream<ChatState> _mapStatusChangedToState(StatusChanged event) async* {
-    if (event.onStatusChanged.userId == chatInfo.userId) {
+    if (event.onStatusChanged.userId == state.chatInfo.userId) {
       yield state.copyWith(
         isOnline: event.onStatusChanged.online,
         lastSeen:
@@ -128,7 +128,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   }
 
   Stream<ChatState> _mapMessageReceivedToState(MessageReceived event) async* {
-    if (event.onChatMessageReceived.senderId == chatInfo.userId) {
+    if (event.onChatMessageReceived.senderId == state.chatInfo.userId) {
       //todo: should add some event like scroll or make new messages and separate seen message
       await _seenMessages();
       final message = Message(
@@ -141,14 +141,18 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           ..sentAt = DateTime.fromMillisecondsSinceEpoch(
               event.onChatMessageReceived.date),
       );
+      final chatInfo =
+          state.chatInfo.rebuild((b) => b..lastMessage = message.toBuilder());
       yield state.copyWith(
-          messages: List.of(state.messages)..insert(0, message));
+        chatInfo: chatInfo,
+        messages: List.of(state.messages)..insert(0, message),
+      );
     }
   }
 
   //todo: why it called for twice for each first state and new state?
   Stream<ChatState> _mapChatSeenReceivedToState(ChatSeenReceived event) async* {
-    if (event.onMessageSeen.userId == chatInfo.userId) {
+    if (event.onMessageSeen.userId == state.chatInfo.userId) {
       yield state.copyWith(
         messages: List.of(state.messages
             .map((message) => message.rebuild((b) => b..seen = true))),
@@ -158,7 +162,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   Stream<ChatState> _mapIsTypingReceivedToState(IsTypingReceived event) async* {
     //todo: handle timer for idle typing
-    if (event.onChatIsTyping.userId == chatInfo.userId) {
+    if (event.onChatIsTyping.userId == state.chatInfo.userId) {
       yield state.copyWith(isTyping: event.onChatIsTyping.isTyping);
     }
   }
@@ -169,7 +173,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
     try {
       final getMessages = await chatRepository.getMessages(
-        userId: chatInfo.userId,
+        userId: state.chatInfo.userId,
         maxId: event.maxId,
       );
       state.messages.addAll(getMessages.messages.toList());
@@ -186,11 +190,12 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       ReadChatRequested event) async* {
     try {
       await chatRepository.readChat(
-        containerId: chatInfo.containerId,
+        containerId: state.chatInfo.containerId,
         read: event.read,
       );
-      //todo: check whether if this change for parent bloc
-      chatInfo.rebuild((b) => b..isUnread = !event.read);
+      //todo: change read status of parent chat info
+      state.copyWith(
+          chatInfo: state.chatInfo.rebuild((b) => b..isUnread = !event.read));
     } on SocketException catch (_) {
       print('kir to netet');
       yield state.copyWith(status: ChatStatus.failure);
@@ -201,6 +206,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   Stream<ChatState> _mapSendChatMessageRequestedToState(
       SendChatMessageRequested event) async* {
+    if (state.textMessage.isEmpty) return;
     try {
       // Create Message
       final message = Message(
@@ -214,17 +220,19 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       );
 
       // Update State
+      final chatInfo =
+          state.chatInfo.rebuild((b) => b..lastMessage = message.toBuilder());
       yield state.copyWith(
+          chatInfo: chatInfo,
           messages: List.of(state.messages)..insert(0, message));
 
       // Update ChatInfo
-      homeBloc.add(UpdateChatInfoRequested(
-          chatInfo.rebuild((b) => b..lastMessage = message.toBuilder())));
+      homeBloc.add(UpdateChatInfoRequested(chatInfo));
 
       // Send Message
       final socketMessage = await chatRepository.sendChatMessage(
         hubConnection: socketRepository.hubConnection,
-        userId: chatInfo.userId,
+        userId: state.chatInfo.userId,
         message: state.textMessage,
       );
 
@@ -235,13 +243,15 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           ..isSent = true,
       );
 
-      // Update ChatInfo
-      homeBloc.add(UpdateChatInfoRequested(
-          chatInfo.rebuild((b) => b..lastMessage = sentMessage.toBuilder())));
-
       // Update State
+      final sentChatInfo = state.chatInfo
+          .rebuild((b) => b..lastMessage = sentMessage.toBuilder());
       yield state.copyWith(
+          chatInfo: sentChatInfo,
           messages: List.of(state.messages)..first = sentMessage);
+
+      // Update ChatInfo
+      homeBloc.add(UpdateChatInfoRequested(sentChatInfo));
     } on Exception catch (_) {
       yield state.copyWith(status: ChatStatus.failure);
     }
@@ -253,7 +263,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       yield state.copyWith(textMessage: event.textMessage);
       await chatRepository.sendUserIsTyping(
         hubConnection: socketRepository.hubConnection,
-        userId: chatInfo.userId,
+        userId: state.chatInfo.userId,
       );
     } on Exception catch (_) {
       yield state.copyWith(status: ChatStatus.failure);
@@ -272,13 +282,12 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     if (state.messages.isNotEmpty) {
       await chatRepository.sendUserChatSeen(
         hubConnection: socketRepository.hubConnection,
-        userId: chatInfo.userId,
+        userId: state.chatInfo.userId,
         lastMessageId: state.messages.first.id,
       );
 
       // Update ChatInfo new messages count
-      homeBloc.add(UpdateChatInfoRequested(
-          chatInfo.rebuild((b) => b..newMessagesCount = 0)));
+      homeBloc.add(UpdateNewMessageCountRequested(state.chatInfo));
     }
   }
 }
