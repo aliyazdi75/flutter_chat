@@ -220,7 +220,8 @@ class WebRTCBloc extends Bloc<WebRTCEvent, WebRTCState> {
 
   Stream<WebRTCState> _mapHangUpRequestedToState(
       HangUpCallRequested event) async* {
-    assert(state.status == WebRTCStatus.inCall);
+    assert(state.status == WebRTCStatus.inCall ||
+        state.status == WebRTCStatus.callSentRinging);
 
     yield state.copyWith(
       status: WebRTCStatus.hangUp,
@@ -234,7 +235,8 @@ class WebRTCBloc extends Bloc<WebRTCEvent, WebRTCState> {
   }
 
   Stream<WebRTCState> _mapCallHungUpToState(CallHungUp event) async* {
-    assert(state.status == WebRTCStatus.inCall);
+    assert(state.status == WebRTCStatus.inCall ||
+        state.status == WebRTCStatus.callReceivedRinging);
 
     yield state.copyWith(
       status: WebRTCStatus.hangUp,

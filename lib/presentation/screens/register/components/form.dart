@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_chat/blocs/login/bloc.dart';
 import 'package:flutter_chat/blocs/register/bloc.dart';
 
 class RegisterForm extends StatelessWidget {
@@ -10,7 +9,7 @@ class RegisterForm extends StatelessWidget {
   Widget build(BuildContext context) {
     final onSubmit = () {
       if (formKey.currentState.validate()) {
-        BlocProvider.of<LoginBloc>(context).add(const LoginSubmitted());
+        BlocProvider.of<RegisterBloc>(context).add(const RegisterSubmitted());
       }
     };
     return BlocListener<RegisterBloc, RegisterState>(
@@ -59,8 +58,8 @@ class _PasswordInput extends StatelessWidget {
           obscureText: true,
           keyboardType: TextInputType.visiblePassword,
           onFieldSubmitted: (_) => onSubmit(),
-          onChanged: (password) => BlocProvider.of<LoginBloc>(context)
-              .add(LoginPasswordChanged(password)),
+          onChanged: (password) => BlocProvider.of<RegisterBloc>(context)
+              .add(RegisterPasswordChanged(password)),
           validator: (password) =>
               password.isEmpty ? 'Password must not empty' : null,
           decoration: const InputDecoration(labelText: 'Password'),

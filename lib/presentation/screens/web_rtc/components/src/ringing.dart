@@ -20,10 +20,9 @@ class RingingDialogPage extends StatelessWidget {
       value: webRTCBloc,
       child: BlocListener<WebRTCBloc, WebRTCState>(
         listener: (context, state) {
-          //todo: should pop but reject listen for own reject state
-          if (state.status == WebRTCStatus.reject &&
-              state.webRTCReject.userId == webRTCOffer.userId) {
-            // Navigator.of(context).pop();
+          if (state.status == WebRTCStatus.hangUp &&
+              state.webRTCHangUp.userId == webRTCOffer.userId) {
+            Navigator.of(context).pop();
           }
         },
         child: AlertDialog(
