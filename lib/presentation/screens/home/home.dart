@@ -175,20 +175,6 @@ class HomePage extends StatelessWidget {
                   return Scaffold(
                     appBar: AppBar(
                       actions: [
-                        IconButton(
-                          icon: const Icon(Icons.video_call),
-                          onPressed: () => Navigator.of(context).push<void>(
-                            MaterialPageRoute(
-                              builder: (_) => WebRTCPage(
-                                userId: '012262e5-4cb6-4b9a-8f49-769ed77ae67d',
-                                socketRepository: socketRepository,
-                                webRTCRepository: webRTCRepository,
-                                webRTCBloc:
-                                    BlocProvider.of<WebRTCBloc>(context),
-                              ),
-                            ),
-                          ),
-                        ),
                         BlocBuilder<HomeBloc, HomeState>(
                           builder: (context, homeState) => IconButton(
                             icon: homeState.status == HomeStatus.logOutLoading
