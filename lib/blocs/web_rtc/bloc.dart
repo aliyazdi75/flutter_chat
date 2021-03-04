@@ -78,6 +78,9 @@ class WebRTCBloc extends Bloc<WebRTCEvent, WebRTCState> {
       hubConnection: socketRepository.hubConnection,
       onWebRTCRejectReceived: (webRTCReject) => add(CallRejected(webRTCReject)),
     );
+    webRTCRepository.listenOnWebRTCIceCandidateReceived(
+      hubConnection: socketRepository.hubConnection,
+    );
     yield state.copyWith(status: WebRTCStatus.readyForCall);
   }
 
@@ -117,21 +120,18 @@ class WebRTCBloc extends Bloc<WebRTCEvent, WebRTCState> {
 
   Stream<WebRTCState> _mapAnswerCallRequestedToState(
       AnswerCallRequested event) async* {
-    assert(state.status == WebRTCStatus.accept);
+    assert(state.webRTCOffer != null, state.status == WebRTCStatus.accept);
 
     yield* _initialVideoRenders();
 
-    yield state.copyWith(
-      status: WebRTCStatus.handShaking,
-      webRTCOffer: state.webRTCOffer,
-    );
+    yield state.copyWith(status: WebRTCStatus.handShaking);
 
     await webRTCRepository.answerCall(
       hubConnection: socketRepository.hubConnection,
       webRTCOffer: state.webRTCOffer,
       onLocalVideoRenderActivated: (stream) =>
           add(LocalVideoRenderActivated(stream)),
-      onRemoteVideoRenderdActivated: (stream) =>
+      onRemoteVideoRenderActivated: (stream) =>
           add(RemoteVideoRenderActivated(stream)),
       onRemoteVideoRenderDeactivated: (stream) =>
           add(const RemoteVideoRenderDeactivated()),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_chat/blocs/authentication/bloc.dart';
 import 'package:flutter_chat/blocs/chat/bloc.dart';
 import 'package:flutter_chat/blocs/home/bloc.dart';
 import 'package:flutter_chat/blocs/socket/bloc.dart';
@@ -22,6 +23,7 @@ class ChatPage extends StatelessWidget {
     @required this.accountRepository,
     @required this.socketRepository,
     @required this.webRTCRepository,
+    @required this.authenticationBloc,
     @required this.socketBloc,
     @required this.homeBloc,
     @required this.webRTCBloc,
@@ -32,6 +34,7 @@ class ChatPage extends StatelessWidget {
   final AccountRepository accountRepository;
   final SocketRepository socketRepository;
   final WebRTCRepository webRTCRepository;
+  final AuthenticationBloc authenticationBloc;
   final SocketBloc socketBloc;
   final HomeBloc homeBloc;
   final WebRTCBloc webRTCBloc;
@@ -53,6 +56,7 @@ class ChatPage extends StatelessWidget {
               socketRepository: socketRepository,
               chatInfo: chatInfo,
               chatRepository: chatRepository,
+              authenticationBloc: authenticationBloc,
               homeBloc: homeBloc,
             )..add(const OpenChatRequested()),
           ),

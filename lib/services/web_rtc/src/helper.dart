@@ -116,15 +116,16 @@ class WebRTCHelper {
   }) async {
     final iceServers = {
       'iceServers': [
-        {'url': 'stun:stun.l.google.com:19302'},
-        /*
-        * turn server configuration example.
         {
-          'url': 'turn:123.45.67.89:3478',
-          'username': 'change_to_real_user',
-          'credential': 'change_to_real_secret'
+          'url': 'stun:numb.viagenie.ca',
+          'username': 'ma.yazdi75@gmail.com',
+          'credential': 'CNL72teJDNbBNtx'
         },
-        */
+        {
+          'url': 'turn:numb.viagenie.ca',
+          'username': 'ma.yazdi75@gmail.com',
+          'credential': 'CNL72teJDNbBNtx'
+        },
       ]
     };
 
@@ -159,9 +160,7 @@ class WebRTCHelper {
       'optional': <dynamic>[],
     };
     try {
-      final description = await peerConnection.createOffer(offerSdpConstraints);
-      await peerConnection.setLocalDescription(description);
-      return description;
+      return await peerConnection.createOffer(offerSdpConstraints);
     } catch (e) {
       throw CreatingOfferException(e.toString());
     }
@@ -177,10 +176,7 @@ class WebRTCHelper {
       'optional': <dynamic>[],
     };
     try {
-      final description =
-          await peerConnection.createAnswer(answerSdpConstraints);
-      await peerConnection.setLocalDescription(description);
-      return description;
+      return await peerConnection.createAnswer(answerSdpConstraints);
     } catch (e) {
       throw CreatingAnswerException(e.toString());
     }

@@ -128,6 +128,7 @@ class HomePage extends StatelessWidget {
                   case WebRTCStatus.callReceivedRinging:
                     final ringingResponse = await showDialog<RingingResponse>(
                       context: context,
+                      barrierDismissible: false,
                       builder: (_) => RingingDialogPage(
                         webRTCOffer: state.webRTCOffer,
                         webRTCBloc: BlocProvider.of<WebRTCBloc>(context),
@@ -138,7 +139,7 @@ class HomePage extends StatelessWidget {
                           .add(const CallAcceptRequested());
                       await Navigator.of(context).push<void>(
                         MaterialPageRoute(
-                          builder: (context) => WebRTCPage(
+                          builder: (_) => WebRTCPage(
                             userId: state.webRTCOffer.userId,
                             socketRepository: socketRepository,
                             webRTCRepository: webRTCRepository,
@@ -167,36 +168,51 @@ class HomePage extends StatelessWidget {
               },
             ),
           ],
-          child: Builder(builder: (context) {
-            return Scaffold(
-              appBar: AppBar(
-                actions: [
-                  BlocBuilder<HomeBloc, HomeState>(
-                    builder: (context, homeState) => IconButton(
-                      icon: homeState.status == HomeStatus.logOutLoading
-                          ? const CircularProgressIndicator(
-                              backgroundColor: Colors.white)
-                          : const Icon(Icons.logout),
-                      onPressed: () => BlocProvider.of<HomeBloc>(context)
-                          .add(const LoggedOutRequested()),
+          child: BlocBuilder<SocketBloc, SocketState>(
+            builder: (context, socketState) {
+              return BlocBuilder<HomeBloc, HomeState>(
+                builder: (context, homeState) {
+                  return Scaffold(
+                    appBar: AppBar(
+                      actions: [
+                        IconButton(
+                          icon: const Icon(Icons.video_call),
+                          onPressed: () => Navigator.of(context).push<void>(
+                            MaterialPageRoute(
+                              builder: (_) => WebRTCPage(
+                                userId: '012262e5-4cb6-4b9a-8f49-769ed77ae67d',
+                                socketRepository: socketRepository,
+                                webRTCRepository: webRTCRepository,
+                                webRTCBloc:
+                                    BlocProvider.of<WebRTCBloc>(context),
+                              ),
+                            ),
+                          ),
+                        ),
+                        BlocBuilder<HomeBloc, HomeState>(
+                          builder: (context, homeState) => IconButton(
+                            icon: homeState.status == HomeStatus.logOutLoading
+                                ? const CircularProgressIndicator(
+                                    backgroundColor: Colors.white)
+                                : const Icon(Icons.logout),
+                            onPressed: () => BlocProvider.of<HomeBloc>(context)
+                                .add(const LoggedOutRequested()),
+                          ),
+                        ),
+                      ],
+                      title: Text(
+                        'Welcome to Flutter Chat ${accountRepository.account?.user?.firstName ?? 'Anonymous!'}',
+                      ),
                     ),
-                  ),
-                ],
-                title: Text(
-                  'Welcome to Flutter Chat ${accountRepository.account?.user?.firstName ?? 'Anonymous!'}',
-                ),
-              ),
-              body: BlocBuilder<SocketBloc, SocketState>(
-                builder: (context, socketState) {
-                  if (socketState.status == SocketStatus.loading) {
-                    return const Center(child: Text('Connecting to Socket...'));
-                  }
-                  if (socketState.status == SocketStatus.reconnect) {
-                    return const Center(
-                        child: Text('Reconnecting to Socket...'));
-                  }
-                  return BlocBuilder<HomeBloc, HomeState>(
-                    builder: (context, homeState) {
+                    body: Builder(builder: (context) {
+                      if (socketState.status == SocketStatus.loading) {
+                        return const Center(
+                            child: Text('Connecting to Socket...'));
+                      }
+                      if (socketState.status == SocketStatus.reconnect) {
+                        return const Center(
+                            child: Text('Reconnecting to Socket...'));
+                      }
                       if (homeState.status == HomeStatus.loading ||
                           homeState.status == HomeStatus.initial) {
                         return const Center(
@@ -221,6 +237,8 @@ class HomePage extends StatelessWidget {
                                                 accountRepository,
                                             socketRepository: socketRepository,
                                             webRTCRepository: webRTCRepository,
+                                            authenticationBloc:
+                                                authenticationBloc,
                                             socketBloc:
                                                 BlocProvider.of<SocketBloc>(
                                                     context),
@@ -236,12 +254,12 @@ class HomePage extends StatelessWidget {
                                   )
                                   .toList(),
                             );
-                    },
+                    }),
                   );
                 },
-              ),
-            );
-          }),
+              );
+            },
+          ),
         ),
       ),
     );

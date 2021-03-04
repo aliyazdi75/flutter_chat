@@ -20,19 +20,22 @@ class ChatInfoWidget extends StatelessWidget {
             ? 'Typing...'
             : chatInfo.lastMessage?.text ?? 'Start your first chat!',
       ),
-      trailing: chatInfo.lastMessage.sentByMe
-          ? Icon(
-              chatInfo.lastMessage.isSent
-                  ? chatInfo.lastMessage.seen
-                      ? Icons.done_all
-                      : Icons.done
-                  : Icons.query_builder,
-            )
-          : Text(
-              chatInfo.newMessagesCount.toString(),
-              style: TextStyle(
-                  color: chatInfo.newMessagesCount == 0 ? null : Colors.red),
-            ),
+      trailing: chatInfo.lastMessage == null
+          ? null
+          : chatInfo.lastMessage.sentByMe
+              ? Icon(
+                  chatInfo.lastMessage.isSent
+                      ? chatInfo.lastMessage.seen
+                          ? Icons.done_all
+                          : Icons.done
+                      : Icons.query_builder,
+                )
+              : Text(
+                  chatInfo.newMessagesCount.toString(),
+                  style: TextStyle(
+                      color:
+                          chatInfo.newMessagesCount == 0 ? null : Colors.red),
+                ),
       onTap: () => onTap(),
     );
   }

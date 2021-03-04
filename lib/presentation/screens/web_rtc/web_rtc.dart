@@ -64,37 +64,30 @@ class _WebRTCPageState extends State<WebRTCPage> {
                 BlocProvider.of<WebRTCBloc>(context)
                     .add(const AnswerCallRequested());
               }
-              return WillPopScope(
-                onWillPop: () async {
-                  // BlocProvider.of<WebRTCBloc>(context)
-                  //     .add(CallDisposedRequested(widget.userId));
-                  return true;
-                },
-                child: Scaffold(
-                  appBar: AppBar(title: Text(widget.userId)),
-                  body: state.status == WebRTCStatus.readyForCall ||
-                          state.status ==
-                              WebRTCStatus.videoRendersActivationLoading
-                      ? const Center(child: CircularProgressIndicator())
-                      : Column(
-                          children: [
-                            const Text('Remote'),
-                            Expanded(
-                              child: state.remoteVideoRendererActivationStatus
-                                  ? RTCVideoView(state.remoteVideoRender)
-                                  : const Center(
-                                      child: CircularProgressIndicator()),
-                            ),
-                            const Text('Local'),
-                            Expanded(
-                              child: state.localVideoRendererActivationStatus
-                                  ? RTCVideoView(state.localVideoRender)
-                                  : const Center(
-                                      child: CircularProgressIndicator()),
-                            ),
-                          ],
-                        ),
-                ),
+              return Scaffold(
+                appBar: AppBar(title: Text(widget.userId)),
+                body: state.status == WebRTCStatus.readyForCall ||
+                        state.status ==
+                            WebRTCStatus.videoRendersActivationLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : Column(
+                        children: [
+                          const Text('Remote'),
+                          Expanded(
+                            child: state.remoteVideoRendererActivationStatus
+                                ? RTCVideoView(state.remoteVideoRender)
+                                : const Center(
+                                    child: CircularProgressIndicator()),
+                          ),
+                          const Text('Local'),
+                          Expanded(
+                            child: state.localVideoRendererActivationStatus
+                                ? RTCVideoView(state.localVideoRender)
+                                : const Center(
+                                    child: CircularProgressIndicator()),
+                          ),
+                        ],
+                      ),
               );
             },
           ),
