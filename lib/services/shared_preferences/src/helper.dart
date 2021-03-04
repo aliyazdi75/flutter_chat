@@ -12,6 +12,8 @@ abstract class SharedPreferencesBase {
     @required String key,
     @required Map<String, dynamic> value,
   });
+
+  Future<void> removeObject({@required String key});
 }
 
 class SharedPreferencesHelper implements SharedPreferencesBase {
@@ -31,5 +33,11 @@ class SharedPreferencesHelper implements SharedPreferencesBase {
   }) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(key, json.encode(value));
+  }
+
+  @override
+  Future<void> removeObject({@required String key}) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(key);
   }
 }

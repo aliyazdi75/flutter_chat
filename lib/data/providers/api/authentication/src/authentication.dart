@@ -31,9 +31,8 @@ class AuthenticationApi {
   }
 
   static Future<void> logout() async {
-    final response = await HttpHelper('auth/signout').httpGet(
+    await HttpHelper('auth/signout').httpGet(
       headerType: HttpHeaderType.authenticated,
     );
-    return Authentication.fromJson(response);
   }
 }

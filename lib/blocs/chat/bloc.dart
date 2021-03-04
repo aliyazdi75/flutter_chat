@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_chat/blocs/authentication/bloc.dart';
 import 'package:flutter_chat/blocs/home/bloc.dart';
 import 'package:flutter_chat/data/models/chat/index.dart';
 import 'package:flutter_chat/data/repositories/chat/index.dart';
@@ -18,6 +19,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     @required ChatInfo chatInfo,
     @required this.chatRepository,
     @required this.socketRepository,
+    @required this.authenticationBloc,
     @required this.homeBloc,
   })  : assert(chatInfo != null),
         assert(chatRepository != null),
@@ -37,6 +39,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   final ChatRepository chatRepository;
   final SocketRepository socketRepository;
+  final AuthenticationBloc authenticationBloc;
   final HomeBloc homeBloc;
 
   @override
@@ -87,10 +90,13 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       );
       await chatRepository.readChat(containerId: state.chatInfo.containerId);
       await _seenMessages();
-    } on SocketException catch (_) {
+    } on SocketException {
       print('kir to netet');
       yield state.copyWith(status: ChatStatus.failure);
-    } on Exception catch (_) {
+    } on UnauthorisedException {
+      print('sik kon');
+      authenticationBloc.add(const UnauthorizedRequested());
+    } on Exception {
       yield state.copyWith(status: ChatStatus.failure);
     }
   }
@@ -178,10 +184,13 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       );
       state.messages.addAll(getMessages.messages.toList());
       yield state.copyWith(status: ChatStatus.success);
-    } on SocketException catch (_) {
+    } on SocketException {
       print('kir to netet');
       yield state.copyWith(status: ChatStatus.failure);
-    } on Exception catch (_) {
+    } on UnauthorisedException {
+      print('sik kon');
+      authenticationBloc.add(const UnauthorizedRequested());
+    } on Exception {
       yield state.copyWith(status: ChatStatus.failure);
     }
   }
@@ -196,10 +205,13 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       //todo: change read status of parent chat info
       state.copyWith(
           chatInfo: state.chatInfo.rebuild((b) => b..isUnread = !event.read));
-    } on SocketException catch (_) {
+    } on SocketException {
       print('kir to netet');
       yield state.copyWith(status: ChatStatus.failure);
-    } on Exception catch (_) {
+    } on UnauthorisedException {
+      print('sik kon');
+      authenticationBloc.add(const UnauthorizedRequested());
+    } on Exception {
       yield state.copyWith(status: ChatStatus.failure);
     }
   }
@@ -252,7 +264,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
       // Update ChatInfo
       homeBloc.add(UpdateChatInfoRequested(sentChatInfo));
-    } on Exception catch (_) {
+    } on Exception {
       yield state.copyWith(status: ChatStatus.failure);
     }
   }
@@ -265,7 +277,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         hubConnection: socketRepository.hubConnection,
         userId: state.chatInfo.userId,
       );
-    } on Exception catch (_) {
+    } on Exception {
       yield state.copyWith(status: ChatStatus.failure);
     }
   }
@@ -273,7 +285,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   Stream<ChatState> _mapSendUserChatSeenRequestedToState() async* {
     try {
       await _seenMessages();
-    } on Exception catch (_) {
+    } on Exception {
       yield state.copyWith(status: ChatStatus.failure);
     }
   }

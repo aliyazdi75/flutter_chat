@@ -95,7 +95,7 @@ class SignalRHelper implements SignalRBase {
     try {
       return await hubConnection.invoke(methodName, args: args)
           as Map<String, dynamic>;
-    } on FormatException catch (_) {
+    } on FormatException {
       throw SocketResponseException(methodName);
     }
   }
@@ -109,7 +109,7 @@ class SignalRHelper implements SignalRBase {
         }
         final response = arguments.first as Map<String, dynamic>;
         responseCallBack(response);
-      } on FormatException catch (_) {
+      } on FormatException {
         throw SocketResponseException(methodName);
       }
     };

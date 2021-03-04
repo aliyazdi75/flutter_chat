@@ -17,4 +17,8 @@ class AuthenticationStorage {
     final value = authentication.toJson();
     await SharedPreferencesHelper().saveObject(key: key, value: value);
   }
+
+  static Future<void> removeCredit() async {
+    await SharedPreferencesHelper().removeObject(key: key);
+  }
 }

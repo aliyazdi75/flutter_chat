@@ -15,12 +15,14 @@ class SocketBloc extends Bloc<SocketEvent, SocketState> {
   SocketBloc({
     @required this.socketRepository,
     @required this.authenticationRepository,
+    @required this.authenticationBloc,
   })  : assert(socketRepository != null),
         assert(authenticationRepository != null),
         super(const SocketState.initial());
 
   final SocketRepository socketRepository;
   final AuthenticationRepository authenticationRepository;
+  final AuthenticationBloc authenticationBloc;
 
   @override
   Stream<SocketState> mapEventToState(SocketEvent event) async* {
@@ -46,11 +48,11 @@ class SocketBloc extends Bloc<SocketEvent, SocketState> {
         },
       );
       yield const SocketState.connect();
-    } on NoTokenException catch (_) {
+    } on NoTokenException {
       print('kir to unsaved token');
-      AuthenticationBloc().add(const UnAuthorizedRequested());
-    } on Exception catch (_) {
-      AuthenticationBloc().add(const UnAuthorizedRequested());
+      authenticationBloc.add(const UnauthorizedRequested());
+    } on Exception {
+      authenticationBloc.add(const UnauthorizedRequested());
       yield const SocketState.failure();
     }
   }

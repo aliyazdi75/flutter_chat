@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_chat/blocs/authentication/bloc.dart';
 import 'package:flutter_chat/data/models/chat/index.dart';
 import 'package:flutter_chat/data/repositories/home/index.dart';
 import 'package:flutter_chat/data/repositories/socket/index.dart';
@@ -15,12 +16,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc({
     @required this.homeRepository,
     @required this.socketRepository,
+    @required this.authenticationBloc,
   })  : assert(homeRepository != null),
         assert(socketRepository != null),
         super(const HomeState());
 
   final HomeRepository homeRepository;
   final SocketRepository socketRepository;
+  final AuthenticationBloc authenticationBloc;
 
   @override
   Stream<HomeState> mapEventToState(HomeEvent event) async* {
@@ -28,6 +31,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       yield* _mapGetChatListRequestedToState();
     } else if (event is StatusChanged) {
       yield* _mapStatusChangedToState(event);
+    } else if (event is LoggedOutRequested) {
+      yield* _mapLoggedOutRequestedToState();
     } else if (event is MessageReceived) {
       yield* _mapMessageReceivedToState(event);
     } else if (event is ChatSeenReceived) {
@@ -55,10 +60,23 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       final chats = chatsList.chats.toList();
       _listenOnHub();
       yield state.copyWith(status: HomeStatus.success, chats: chats);
-    } on SocketException catch (_) {
+    } on SocketException {
       print('kir to netet');
       yield state.copyWith(status: HomeStatus.failure);
-    } on Exception catch (_) {
+    } on UnauthorisedException {
+      print('sik kon');
+      authenticationBloc.add(const UnauthorizedRequested());
+    } on Exception {
+      yield state.copyWith(status: HomeStatus.failure);
+    }
+  }
+
+  Stream<HomeState> _mapLoggedOutRequestedToState() async* {
+    yield state.copyWith(status: HomeStatus.logOutLoading);
+
+    try {
+      authenticationBloc.add(const AuthenticationLoggedOutRequested());
+    } on Exception {
       yield state.copyWith(status: HomeStatus.failure);
     }
   }

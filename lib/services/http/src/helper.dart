@@ -101,13 +101,13 @@ class HttpHelper implements HttpClientBase {
             response.statusCode.toString(),
           );
       }
-    } on JsonUnsupportedObjectError catch (_) {
+    } on JsonUnsupportedObjectError {
       throw ServerException(
         response.request.url.path,
         'Server Unsupported Json Object',
         utf8.decode(response.bodyBytes),
       );
-    } on FormatException catch (_) {
+    } on FormatException {
       throw ServerException(
         response.request.url.path,
         'Server Unsupported Json Format',

@@ -1,6 +1,6 @@
 part of 'bloc.dart';
 
-enum AuthenticationStatus { unknown, authenticated, unauthenticated, loading }
+enum AuthenticationStatus { unknown, loading, authenticated, unauthenticated }
 
 class AuthenticationState extends Equatable {
   const AuthenticationState._({
@@ -13,14 +13,14 @@ class AuthenticationState extends Equatable {
 
   const AuthenticationState.unknown() : this._();
 
+  const AuthenticationState.loading()
+      : this._(status: AuthenticationStatus.loading);
+
   const AuthenticationState.authenticated(Account account)
       : this._(status: AuthenticationStatus.authenticated, account: account);
 
   const AuthenticationState.unauthenticated()
       : this._(status: AuthenticationStatus.unauthenticated);
-
-  const AuthenticationState.loading()
-      : this._(status: AuthenticationStatus.loading);
 
   @override
   List<Object> get props => [status, account];

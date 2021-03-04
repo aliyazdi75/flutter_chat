@@ -1,6 +1,6 @@
 part of 'bloc.dart';
 
-enum HomeStatus { initial, loading, success, failure }
+enum HomeStatus { initial, logOutLoading, loading, success, failure }
 
 class HomeState extends Equatable {
   const HomeState({

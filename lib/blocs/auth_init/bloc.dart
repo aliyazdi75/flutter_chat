@@ -43,15 +43,15 @@ class AuthInitBloc extends Bloc<AuthInitEvent, AuthInitState> {
             ? AuthInitStatus.existence
             : AuthInitStatus.nonexistence,
       );
-    } on BadRequestException catch (e) {
+    } on BadRequestException {
       // final error = e.model as LoginBadRequest;
       // print(
       //     'kir to requestet ba ina ${error.email ?? error.password ?? error.nonFieldErrors}');
       yield state.copyWith(status: AuthInitStatus.failure);
-    } on SocketException catch (_) {
+    } on SocketException {
       print('kir to netet');
       yield state.copyWith(status: AuthInitStatus.failure);
-    } on Exception catch (_) {
+    } on Exception {
       yield state.copyWith(status: AuthInitStatus.failure);
     }
   }

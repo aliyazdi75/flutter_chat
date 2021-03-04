@@ -64,7 +64,8 @@ class AuthenticationRepository {
     return await AuthenticationStorage.getCredit();
   }
 
-  Future<void> logout() async {
+  static Future<void> logout() async {
     await AuthenticationApi.logout();
+    await AuthenticationStorage.removeCredit();
   }
 }

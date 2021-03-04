@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_chat/blocs/authentication/bloc.dart';
 import 'package:flutter_chat/blocs/home/bloc.dart';
 import 'package:flutter_chat/blocs/socket/bloc.dart';
 import 'package:flutter_chat/blocs/web_rtc/bloc.dart';
@@ -19,10 +20,12 @@ class HomePage extends StatelessWidget {
   HomePage({
     @required this.authenticationRepository,
     @required this.accountRepository,
+    @required this.authenticationBloc,
   });
 
   final AuthenticationRepository authenticationRepository;
   final AccountRepository accountRepository;
+  final AuthenticationBloc authenticationBloc;
 
   final socketRepository = SocketRepository();
   final homeRepository = HomeRepository();
@@ -42,12 +45,14 @@ class HomePage extends StatelessWidget {
             create: (_) => SocketBloc(
               authenticationRepository: authenticationRepository,
               socketRepository: socketRepository,
+              authenticationBloc: authenticationBloc,
             )..add(const SocketConnectRequested()),
           ),
           BlocProvider<HomeBloc>(
             create: (_) => HomeBloc(
               socketRepository: socketRepository,
               homeRepository: homeRepository,
+              authenticationBloc: authenticationBloc,
             ),
           ),
           BlocProvider<WebRTCBloc>(
@@ -162,64 +167,81 @@ class HomePage extends StatelessWidget {
               },
             ),
           ],
-          child: Scaffold(
-            appBar: AppBar(
-              title: Text(
-                'Welcome to Flutter Chat ${accountRepository.account?.user?.firstName ?? 'Anonymous!'}',
+          child: Builder(builder: (context) {
+            return Scaffold(
+              appBar: AppBar(
+                actions: [
+                  BlocBuilder<HomeBloc, HomeState>(
+                    builder: (context, homeState) => IconButton(
+                      icon: homeState.status == HomeStatus.logOutLoading
+                          ? const CircularProgressIndicator(
+                              backgroundColor: Colors.white)
+                          : const Icon(Icons.logout),
+                      onPressed: () => BlocProvider.of<HomeBloc>(context)
+                          .add(const LoggedOutRequested()),
+                    ),
+                  ),
+                ],
+                title: Text(
+                  'Welcome to Flutter Chat ${accountRepository.account?.user?.firstName ?? 'Anonymous!'}',
+                ),
               ),
-            ),
-            body: BlocBuilder<SocketBloc, SocketState>(
-              builder: (context, state) {
-                if (state.status == SocketStatus.loading) {
-                  return const Center(child: Text('Connecting to Socket...'));
-                }
-                if (state.status == SocketStatus.reconnect) {
-                  return const Center(child: Text('Reconnecting to Socket...'));
-                }
-                return BlocBuilder<HomeBloc, HomeState>(
-                  builder: (context, homeState) {
-                    if (homeState.status == HomeStatus.loading ||
-                        homeState.status == HomeStatus.initial) {
-                      return const Center(child: Text('Getting Chat List...'));
-                    }
-                    return homeState.chats.isEmpty
-                        ? const Center(
-                            child: Text(
-                                'You don\'t have any chats or friends here :('))
-                        : ListView(
-                            children: homeState.chats
-                                .map(
-                                  (chatInfo) => ChatInfoWidget(
-                                    chatInfo: chatInfo,
-                                    onTap: () => Navigator.of(context).push(
-                                      MaterialPageRoute<void>(
-                                        builder: (_) => ChatPage(
-                                          chatInfo: chatInfo,
-                                          authenticationRepository:
-                                              authenticationRepository,
-                                          accountRepository: accountRepository,
-                                          socketRepository: socketRepository,
-                                          webRTCRepository: webRTCRepository,
-                                          socketBloc:
-                                              BlocProvider.of<SocketBloc>(
-                                                  context),
-                                          webRTCBloc:
-                                              BlocProvider.of<WebRTCBloc>(
-                                                  context),
-                                          homeBloc: BlocProvider.of<HomeBloc>(
-                                              context),
+              body: BlocBuilder<SocketBloc, SocketState>(
+                builder: (context, socketState) {
+                  if (socketState.status == SocketStatus.loading) {
+                    return const Center(child: Text('Connecting to Socket...'));
+                  }
+                  if (socketState.status == SocketStatus.reconnect) {
+                    return const Center(
+                        child: Text('Reconnecting to Socket...'));
+                  }
+                  return BlocBuilder<HomeBloc, HomeState>(
+                    builder: (context, homeState) {
+                      if (homeState.status == HomeStatus.loading ||
+                          homeState.status == HomeStatus.initial) {
+                        return const Center(
+                            child: Text('Getting Chat List...'));
+                      }
+                      return homeState.chats.isEmpty
+                          ? const Center(
+                              child: Text(
+                                  'You don\'t have any chats or friends here :('))
+                          : ListView(
+                              children: homeState.chats
+                                  .map(
+                                    (chatInfo) => ChatInfoWidget(
+                                      chatInfo: chatInfo,
+                                      onTap: () => Navigator.of(context).push(
+                                        MaterialPageRoute<void>(
+                                          builder: (_) => ChatPage(
+                                            chatInfo: chatInfo,
+                                            authenticationRepository:
+                                                authenticationRepository,
+                                            accountRepository:
+                                                accountRepository,
+                                            socketRepository: socketRepository,
+                                            webRTCRepository: webRTCRepository,
+                                            socketBloc:
+                                                BlocProvider.of<SocketBloc>(
+                                                    context),
+                                            webRTCBloc:
+                                                BlocProvider.of<WebRTCBloc>(
+                                                    context),
+                                            homeBloc: BlocProvider.of<HomeBloc>(
+                                                context),
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                )
-                                .toList(),
-                          );
-                  },
-                );
-              },
-            ),
-          ),
+                                  )
+                                  .toList(),
+                            );
+                    },
+                  );
+                },
+              ),
+            );
+          }),
         ),
       ),
     );

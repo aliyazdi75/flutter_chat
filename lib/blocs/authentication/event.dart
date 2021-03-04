@@ -12,8 +12,10 @@ class AuthenticationStatusCheckRequested extends AuthenticationEvent {
   const AuthenticationStatusCheckRequested();
 }
 
-class AuthenticationUnLoggedOutRequested extends AuthenticationEvent {}
+class AuthenticationLoggedOutRequested extends AuthenticationEvent {
+  const AuthenticationLoggedOutRequested();
+}
 
-class UnAuthorizedRequested extends AuthenticationEvent {
-  const UnAuthorizedRequested();
+class UnauthorizedRequested extends AuthenticationEvent {
+  const UnauthorizedRequested();
 }

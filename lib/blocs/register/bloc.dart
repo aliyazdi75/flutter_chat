@@ -42,15 +42,15 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         password: state.password,
       );
       yield state.copyWith(status: RegisterStatus.success);
-    } on BadRequestException catch (e) {
+    } on BadRequestException {
       // final error = e.model as LoginBadRequest;
       // print(
       //     'kir to requestet ba ina ${error.email ?? error.password ?? error.nonFieldErrors}');
       yield state.copyWith(status: RegisterStatus.failure);
-    } on SocketException catch (_) {
+    } on SocketException {
       print('kir to netet');
       yield state.copyWith(status: RegisterStatus.failure);
-    } on Exception catch (_) {
+    } on Exception {
       yield state.copyWith(status: RegisterStatus.failure);
     }
   }
