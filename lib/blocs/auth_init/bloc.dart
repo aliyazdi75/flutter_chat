@@ -37,7 +37,12 @@ class AuthInitBloc extends Bloc<AuthInitEvent, AuthInitState> {
     yield state.copyWith(status: AuthInitStatus.loading);
     try {
       final authInit = await authenticationRepository.init(
-          email: kDebugMode ? testEmail1 : state.email);
+        email: state.email == '1'
+            ? testEmail1
+            : state.email == '2'
+                ? testEmail2
+                : state.email,
+      );
       yield state.copyWith(
         status: authInit.exists
             ? AuthInitStatus.existence
@@ -51,7 +56,8 @@ class AuthInitBloc extends Bloc<AuthInitEvent, AuthInitState> {
     } on SocketException {
       print('kir to netet');
       yield state.copyWith(status: AuthInitStatus.failure);
-    } on Exception {
+    } on Exception catch (e) {
+      print(e.toString());
       yield state.copyWith(status: AuthInitStatus.failure);
     }
   }
