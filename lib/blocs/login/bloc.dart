@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_chat/data/constants/index.dart';
 import 'package:flutter_chat/data/repositories/authentication/index.dart';
 import 'package:flutter_chat/services/http/index.dart';
 import 'package:meta/meta.dart';
@@ -40,16 +39,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     yield state.copyWith(status: LoginStatus.loading);
     try {
       await authenticationRepository.login(
-        email: email == '1'
-            ? testEmail1
-            : email == '2'
-                ? testEmail2
-                : email,
-        password: state.password == '1'
-            ? testPassword2
-            : state.password == '2'
-                ? testPassword2
-                : state.password,
+        email: email,
+        password: state.password,
       );
       yield state.copyWith(status: LoginStatus.success);
     } on BadRequestException {

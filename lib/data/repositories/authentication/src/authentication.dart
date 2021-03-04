@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter_chat/data/constants/index.dart';
 import 'package:flutter_chat/data/models/authentication/index.dart';
 import 'package:flutter_chat/data/providers/api/authentication/index.dart';
 import 'package:flutter_chat/data/providers/storage/authentication/index.dart';
@@ -38,8 +39,16 @@ class AuthenticationRepository {
     final deviceOS = deviceInfoHelper.getPlatformOS();
     final loginRequest = LoginRequest(
       (b) async => b
-        ..email = email
-        ..password = password
+        ..email = email == '1'
+            ? testEmail1
+            : email == '2'
+                ? testEmail2
+                : email
+        ..password = password == '1'
+            ? testPassword2
+            : password == '2'
+                ? testPassword2
+                : password
         ..deviceId = deviceId
         ..deviceName = deviceName
         ..deviceFriendlyName = deviceFriendlyName
@@ -55,7 +64,14 @@ class AuthenticationRepository {
   Future<AuthInitResponse> init({@required String email}) async {
     assert(email != null);
 
-    final authInitRequest = AuthInitRequest((b) => b..email = email);
+    final authInitRequest = AuthInitRequest(
+      (b) => b
+        ..email = email == '1'
+            ? testEmail1
+            : email == '2'
+                ? testEmail2
+                : email,
+    );
 
     return await AuthenticationApi.init(authInitRequest);
   }

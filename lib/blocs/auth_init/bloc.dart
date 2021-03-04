@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_chat/data/constants/index.dart';
 import 'package:flutter_chat/data/repositories/authentication/index.dart';
 import 'package:flutter_chat/services/http/index.dart';
 import 'package:meta/meta.dart';
@@ -36,13 +35,7 @@ class AuthInitBloc extends Bloc<AuthInitEvent, AuthInitState> {
 
     yield state.copyWith(status: AuthInitStatus.loading);
     try {
-      final authInit = await authenticationRepository.init(
-        email: state.email == '1'
-            ? testEmail1
-            : state.email == '2'
-                ? testEmail2
-                : state.email,
-      );
+      final authInit = await authenticationRepository.init(email: state.email);
       yield state.copyWith(
         status: authInit.exists
             ? AuthInitStatus.existence
