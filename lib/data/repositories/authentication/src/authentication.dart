@@ -45,7 +45,7 @@ class AuthenticationRepository {
                 ? testEmail2
                 : email
         ..password = password == '1'
-            ? testPassword2
+            ? testPassword1
             : password == '2'
                 ? testPassword2
                 : password
