@@ -225,27 +225,39 @@ class UserBuilder implements Builder<User, UserBuilder> {
   _$User _$v;
 
   String _firstName;
+
   String get firstName => _$this._firstName;
+
   set firstName(String firstName) => _$this._firstName = firstName;
 
   String _lastName;
+
   String get lastName => _$this._lastName;
+
   set lastName(String lastName) => _$this._lastName = lastName;
 
   String _fullName;
+
   String get fullName => _$this._fullName;
+
   set fullName(String fullName) => _$this._fullName = fullName;
 
   int _cityId;
+
   int get cityId => _$this._cityId;
+
   set cityId(int cityId) => _$this._cityId = cityId;
 
   Gender _gender;
+
   Gender get gender => _$this._gender;
+
   set gender(Gender gender) => _$this._gender = gender;
 
   DateTime _birthDate;
+
   DateTime get birthDate => _$this._birthDate;
+
   set birthDate(DateTime birthDate) => _$this._birthDate = birthDate;
 
   UserBuilder();

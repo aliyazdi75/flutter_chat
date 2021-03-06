@@ -674,16 +674,22 @@ class ChatBuilder implements Builder<Chat, ChatBuilder> {
   _$Chat _$v;
 
   ListBuilder<Message> _messages;
+
   ListBuilder<Message> get messages =>
       _$this._messages ??= new ListBuilder<Message>();
+
   set messages(ListBuilder<Message> messages) => _$this._messages = messages;
 
   DateTime _lastSeen;
+
   DateTime get lastSeen => _$this._lastSeen;
+
   set lastSeen(DateTime lastSeen) => _$this._lastSeen = lastSeen;
 
   bool _isOnline;
+
   bool get isOnline => _$this._isOnline;
+
   set isOnline(bool isOnline) => _$this._isOnline = isOnline;
 
   ChatBuilder();
@@ -784,11 +790,15 @@ class OpenChatInputBodyBuilder
   _$OpenChatInputBody _$v;
 
   String _userId;
+
   String get userId => _$this._userId;
+
   set userId(String userId) => _$this._userId = userId;
 
   int _containerId;
+
   int get containerId => _$this._containerId;
+
   set containerId(int containerId) => _$this._containerId = containerId;
 
   OpenChatInputBodyBuilder();
@@ -876,15 +886,21 @@ class GetMessagesInputQueryBuilder
   _$GetMessagesInputQuery _$v;
 
   int _minId;
+
   int get minId => _$this._minId;
+
   set minId(int minId) => _$this._minId = minId;
 
   int _maxId;
+
   int get maxId => _$this._maxId;
+
   set maxId(int maxId) => _$this._maxId = maxId;
 
   int _count;
+
   int get count => _$this._count;
+
   set count(int count) => _$this._count = count;
 
   GetMessagesInputQueryBuilder();
@@ -971,11 +987,15 @@ class ChatReadInputBodyBuilder
   _$ChatReadInputBody _$v;
 
   int _containerId;
+
   int get containerId => _$this._containerId;
+
   set containerId(int containerId) => _$this._containerId = containerId;
 
   bool _read;
+
   bool get read => _$this._read;
+
   set read(bool read) => _$this._read = read;
 
   ChatReadInputBodyBuilder();
@@ -1062,11 +1082,15 @@ class CloseChatInputBodyBuilder
   _$CloseChatInputBody _$v;
 
   String _userId;
+
   String get userId => _$this._userId;
+
   set userId(String userId) => _$this._userId = userId;
 
   int _containerId;
+
   int get containerId => _$this._containerId;
+
   set containerId(int containerId) => _$this._containerId = containerId;
 
   CloseChatInputBodyBuilder();
@@ -1147,8 +1171,10 @@ class GetMessageResponseBuilder
   _$GetMessageResponse _$v;
 
   ListBuilder<Message> _messages;
+
   ListBuilder<Message> get messages =>
       _$this._messages ??= new ListBuilder<Message>();
+
   set messages(ListBuilder<Message> messages) => _$this._messages = messages;
 
   GetMessageResponseBuilder();
@@ -1251,15 +1277,21 @@ class ChatStatusChangeBuilder
   _$ChatStatusChange _$v;
 
   String _userId;
+
   String get userId => _$this._userId;
+
   set userId(String userId) => _$this._userId = userId;
 
   bool _online;
+
   bool get online => _$this._online;
+
   set online(bool online) => _$this._online = online;
 
   int _lastSeen;
+
   int get lastSeen => _$this._lastSeen;
+
   set lastSeen(int lastSeen) => _$this._lastSeen = lastSeen;
 
   ChatStatusChangeBuilder();
@@ -1373,23 +1405,33 @@ class ChatMessageReceiveBuilder
   _$ChatMessageReceive _$v;
 
   int _id;
+
   int get id => _$this._id;
+
   set id(int id) => _$this._id = id;
 
   String _senderId;
+
   String get senderId => _$this._senderId;
+
   set senderId(String senderId) => _$this._senderId = senderId;
 
   MessageType _type;
+
   MessageType get type => _$this._type;
+
   set type(MessageType type) => _$this._type = type;
 
   String _text;
+
   String get text => _$this._text;
+
   set text(String text) => _$this._text = text;
 
   int _date;
+
   int get date => _$this._date;
+
   set date(int date) => _$this._date = date;
 
   ChatMessageReceiveBuilder();
@@ -1484,11 +1526,15 @@ class ChatSeenBuilder implements Builder<ChatSeen, ChatSeenBuilder> {
   _$ChatSeen _$v;
 
   String _userId;
+
   String get userId => _$this._userId;
+
   set userId(String userId) => _$this._userId = userId;
 
   int _lastId;
+
   int get lastId => _$this._lastId;
+
   set lastId(int lastId) => _$this._lastId = lastId;
 
   ChatSeenBuilder();
@@ -1575,11 +1621,15 @@ class ChatIsTypingBuilder
   _$ChatIsTyping _$v;
 
   String _userId;
+
   String get userId => _$this._userId;
+
   set userId(String userId) => _$this._userId = userId;
 
   bool _isTyping;
+
   bool get isTyping => _$this._isTyping;
+
   set isTyping(bool isTyping) => _$this._isTyping = isTyping;
 
   ChatIsTypingBuilder();
@@ -1671,11 +1721,15 @@ class SocketChatMessageReceiveBuilder
   _$SocketChatMessageReceive _$v;
 
   int _id;
+
   int get id => _$this._id;
+
   set id(int id) => _$this._id = id;
 
   String _text;
+
   String get text => _$this._text;
+
   set text(String text) => _$this._text = text;
 
   SocketChatMessageReceiveBuilder();

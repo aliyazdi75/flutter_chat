@@ -86,6 +86,48 @@ class _WebRTCPageState extends State<WebRTCPage> {
                                 : const Center(
                                     child: CircularProgressIndicator()),
                           ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.call_end),
+                                onPressed: () => Navigator.of(context).pop(),
+                              ),
+                              if (state.hasTorch)
+                                IconButton(
+                                  icon: Icon(
+                                    state.torchStatus
+                                        ? Icons.flash_on
+                                        : Icons.flash_off,
+                                  ),
+                                  onPressed: () =>
+                                      BlocProvider.of<WebRTCBloc>(context)
+                                          .add(const ToggleTorchRequested()),
+                                ),
+                              IconButton(
+                                icon: const Icon(Icons.flip_camera_ios),
+                                onPressed: () =>
+                                    BlocProvider.of<WebRTCBloc>(context)
+                                        .add(const SwitchCameraRequested()),
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.camera_alt),
+                                onPressed: () =>
+                                    BlocProvider.of<WebRTCBloc>(context)
+                                        .add(const AnswerCallRequested()),
+                              ),
+                              IconButton(
+                                icon: Icon(
+                                  state.micMuteStatus
+                                      ? Icons.mic_off
+                                      : Icons.mic,
+                                ),
+                                onPressed: () =>
+                                    BlocProvider.of<WebRTCBloc>(context)
+                                        .add(const ToggleMicMuteRequested()),
+                              ),
+                            ],
+                          ),
                         ],
                       ),
               );

@@ -136,7 +136,9 @@ class AuthInitRequestBuilder
   _$AuthInitRequest _$v;
 
   String _email;
+
   String get email => _$this._email;
+
   set email(String email) => _$this._email = email;
 
   AuthInitRequestBuilder();
@@ -216,7 +218,9 @@ class AuthInitResponseBuilder
   _$AuthInitResponse _$v;
 
   bool _exists;
+
   bool get exists => _$this._exists;
+
   set exists(bool exists) => _$this._exists = exists;
 
   AuthInitResponseBuilder();

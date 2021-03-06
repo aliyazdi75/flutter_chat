@@ -161,19 +161,27 @@ class PaginationBuilder<T>
   _$Pagination<T> _$v;
 
   int _count;
+
   int get count => _$this._count;
+
   set count(int count) => _$this._count = count;
 
   String _next;
+
   String get next => _$this._next;
+
   set next(String next) => _$this._next = next;
 
   String _previous;
+
   String get previous => _$this._previous;
+
   set previous(String previous) => _$this._previous = previous;
 
   ListBuilder<T> _results;
+
   ListBuilder<T> get results => _$this._results ??= new ListBuilder<T>();
+
   set results(ListBuilder<T> results) => _$this._results = results;
 
   PaginationBuilder();

@@ -156,9 +156,11 @@ class WebRTCBloc extends Bloc<WebRTCEvent, WebRTCState> {
   Stream<WebRTCState> _mapLocalVideoRendersActivatedToState(
       LocalVideoRenderActivated event) async* {
     assert(state.localVideoRender != null);
-    //todo: test this
-    // final hasTorch = await webRTCRepository.hasTorch();
+
+    final hasTorch =
+        await webRTCRepository.hasTorch(mediaStream: event.localStream);
     yield state.copyWith(
+      hasTorch: hasTorch,
       localMediaStream: event.localStream,
       localVideoRender: state.localVideoRender..srcObject = event.localStream,
       localVideoRendererActivationStatus: true,
@@ -273,17 +275,28 @@ class WebRTCBloc extends Bloc<WebRTCEvent, WebRTCState> {
   Stream<WebRTCState> _mapToggleTorchRequestedToState() async* {
     assert(state.hasTorch);
 
-    // final torchStatus = await webRTCRepository.toggleTorch(state.torchStatus);
-    // yield state.copyWith(torchStatus: torchStatus);
+    final torchStatus = await webRTCRepository.toggleTorch(
+        mediaStream: state.localMediaStream, torchStatus: state.torchStatus);
+    yield state.copyWith(torchStatus: torchStatus);
   }
 
   Stream<WebRTCState> _mapSwitchCameraRequestedToState() async* {
-    // final cameraFrontSideStatus = await webRTCRepository.switchCamera();
-    // yield state.copyWith(cameraFrontSideStatus: cameraFrontSideStatus);
+    final cameraFrontSideStatus = await webRTCRepository.switchCamera(
+        mediaStream: state.localMediaStream);
+    final hasTorch =
+        await webRTCRepository.hasTorch(mediaStream: state.localMediaStream);
+    yield state.copyWith(
+      cameraFrontSideStatus: cameraFrontSideStatus,
+      hasTorch: hasTorch,
+      torchStatus: false,
+    );
   }
 
   Stream<WebRTCState> _mapToggleMicMuteRequestedToState() async* {
-    // final micMuteStatus = webRTCRepository.toggleMicMute(state.micMuteStatus);
-    // yield state.copyWith(micMuteStatus: micMuteStatus);
+    final micMuteStatus = webRTCRepository.toggleMicMute(
+      mediaStream: state.localMediaStream,
+      micMuteStatus: state.micMuteStatus,
+    );
+    yield state.copyWith(micMuteStatus: micMuteStatus);
   }
 }

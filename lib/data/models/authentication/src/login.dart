@@ -22,6 +22,7 @@ abstract class LoginRequest
   String get deviceOS;
 
   LoginRequest._();
+
   factory LoginRequest([void Function(LoginRequestBuilder) updates]) =
       _$LoginRequest;
 

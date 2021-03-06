@@ -106,11 +106,15 @@ class AuthenticationBuilder
   _$Authentication _$v;
 
   String _token;
+
   String get token => _$this._token;
+
   set token(String token) => _$this._token = token;
 
   UserBuilder _user;
+
   UserBuilder get user => _$this._user ??= new UserBuilder();
+
   set user(UserBuilder user) => _$this._user = user;
 
   AuthenticationBuilder();

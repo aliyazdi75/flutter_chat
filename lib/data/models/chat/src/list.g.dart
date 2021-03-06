@@ -196,8 +196,10 @@ class ChatListBuilder implements Builder<ChatList, ChatListBuilder> {
   _$ChatList _$v;
 
   ListBuilder<ChatInfo> _chats;
+
   ListBuilder<ChatInfo> get chats =>
       _$this._chats ??= new ListBuilder<ChatInfo>();
+
   set chats(ListBuilder<ChatInfo> chats) => _$this._chats = chats;
 
   ChatListBuilder();
@@ -350,41 +352,59 @@ class ChatInfoBuilder implements Builder<ChatInfo, ChatInfoBuilder> {
   _$ChatInfo _$v;
 
   int _containerId;
+
   int get containerId => _$this._containerId;
+
   set containerId(int containerId) => _$this._containerId = containerId;
 
   String _firstName;
+
   String get firstName => _$this._firstName;
+
   set firstName(String firstName) => _$this._firstName = firstName;
 
   String _userId;
+
   String get userId => _$this._userId;
+
   set userId(String userId) => _$this._userId = userId;
 
   int _newMessagesCount;
+
   int get newMessagesCount => _$this._newMessagesCount;
+
   set newMessagesCount(int newMessagesCount) =>
       _$this._newMessagesCount = newMessagesCount;
 
   bool _isUnread;
+
   bool get isUnread => _$this._isUnread;
+
   set isUnread(bool isUnread) => _$this._isUnread = isUnread;
 
   bool _isOnline;
+
   bool get isOnline => _$this._isOnline;
+
   set isOnline(bool isOnline) => _$this._isOnline = isOnline;
 
   bool _isTyping;
+
   bool get isTyping => _$this._isTyping;
+
   set isTyping(bool isTyping) => _$this._isTyping = isTyping;
 
   DateTime _lastSeen;
+
   DateTime get lastSeen => _$this._lastSeen;
+
   set lastSeen(DateTime lastSeen) => _$this._lastSeen = lastSeen;
 
   MessageBuilder _lastMessage;
+
   MessageBuilder get lastMessage =>
       _$this._lastMessage ??= new MessageBuilder();
+
   set lastMessage(MessageBuilder lastMessage) =>
       _$this._lastMessage = lastMessage;
 

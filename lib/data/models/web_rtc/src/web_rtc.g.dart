@@ -355,15 +355,21 @@ class WebRTCOfferBuilder implements Builder<WebRTCOffer, WebRTCOfferBuilder> {
   _$WebRTCOffer _$v;
 
   String _userId;
+
   String get userId => _$this._userId;
+
   set userId(String userId) => _$this._userId = userId;
 
   String _sdp;
+
   String get sdp => _$this._sdp;
+
   set sdp(String sdp) => _$this._sdp = sdp;
 
   WebRTCType _type;
+
   WebRTCType get type => _$this._type;
+
   set type(WebRTCType type) => _$this._type = type;
 
   WebRTCOfferBuilder();
@@ -458,15 +464,21 @@ class WebRTCAnswerBuilder
   _$WebRTCAnswer _$v;
 
   String _userId;
+
   String get userId => _$this._userId;
+
   set userId(String userId) => _$this._userId = userId;
 
   String _sdp;
+
   String get sdp => _$this._sdp;
+
   set sdp(String sdp) => _$this._sdp = sdp;
 
   WebRTCType _type;
+
   WebRTCType get type => _$this._type;
+
   set type(WebRTCType type) => _$this._type = type;
 
   WebRTCAnswerBuilder();
@@ -549,7 +561,9 @@ class WebRTCRejectBuilder
   _$WebRTCReject _$v;
 
   String _userId;
+
   String get userId => _$this._userId;
+
   set userId(String userId) => _$this._userId = userId;
 
   WebRTCRejectBuilder();
@@ -655,19 +669,27 @@ class WebRTCIceCandidateBuilder
   _$WebRTCIceCandidate _$v;
 
   String _userId;
+
   String get userId => _$this._userId;
+
   set userId(String userId) => _$this._userId = userId;
 
   int _sdpMLineIndex;
+
   int get sdpMLineIndex => _$this._sdpMLineIndex;
+
   set sdpMLineIndex(int sdpMLineIndex) => _$this._sdpMLineIndex = sdpMLineIndex;
 
   String _sdpMid;
+
   String get sdpMid => _$this._sdpMid;
+
   set sdpMid(String sdpMid) => _$this._sdpMid = sdpMid;
 
   String _candidate;
+
   String get candidate => _$this._candidate;
+
   set candidate(String candidate) => _$this._candidate = candidate;
 
   WebRTCIceCandidateBuilder();
@@ -753,7 +775,9 @@ class WebRTCHangUpBuilder
   _$WebRTCHangUp _$v;
 
   String _userId;
+
   String get userId => _$this._userId;
+
   set userId(String userId) => _$this._userId = userId;
 
   WebRTCHangUpBuilder();

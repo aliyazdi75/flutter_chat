@@ -17,19 +17,21 @@ class WebRTCRepository {
     return await WebRTCProvider.activateVideoRender();
   }
 
-  Future<bool> hasTorch(MediaStream mediaStream) async {
+  Future<bool> hasTorch({@required MediaStream mediaStream}) async {
     return await WebRTCProvider.hasTorch(mediaStream);
   }
 
-  Future<bool> toggleTorch(MediaStream mediaStream, bool torchStatus) async {
+  Future<bool> toggleTorch(
+      {@required MediaStream mediaStream, @required bool torchStatus}) async {
     return await WebRTCProvider.toggleTorch(mediaStream, torchStatus);
   }
 
-  Future<bool> switchCamera(MediaStream mediaStream) async {
+  Future<bool> switchCamera({@required MediaStream mediaStream}) async {
     return await WebRTCProvider.switchCamera(mediaStream);
   }
 
-  bool toggleMicMute(MediaStream mediaStream, bool micMuteStatus) {
+  bool toggleMicMute(
+      {@required MediaStream mediaStream, @required bool micMuteStatus}) {
     return WebRTCProvider.toggleMicMute(mediaStream, micMuteStatus);
   }
 
@@ -53,20 +55,14 @@ class WebRTCRepository {
       onIceCandidate: (candidate) async {
         await _sendWebRTCIceCandidate(hubConnection, userId, candidate);
       },
-      onIceConnectionState: (state) {},
+      onIceConnectionState: (state) {
+        // todo
+        print('iceeeeeeeeeee' + state.toString());
+      },
+      onAddStream: onRemoteVideoRenderActivated,
       onRemoveStream: onRemoteVideoRenderDeactivated,
     );
 
-    //Add remote video track
-    _peerConnection.onTrack = (event) {
-      if (event.track.kind == 'video') {
-        onRemoteVideoRenderActivated(event.streams[0]);
-      }
-    };
-
-    _peerConnection.onIceConnectionState = (state) {
-      print('iceeeeeeeeeee' + state.toString());
-    };
     //Add Ex-Candidates
     _iceCandidates.forEach(
         (candidate) async => await _peerConnection.addCandidate(candidate));
@@ -104,19 +100,13 @@ class WebRTCRepository {
         await _sendWebRTCIceCandidate(
             hubConnection, webRTCOffer.userId, candidate);
       },
-      onIceConnectionState: (state) {},
+      onIceConnectionState: (state) {
+        // todo
+        print('iceeeeeeeeeee' + state.toString());
+      },
+      onAddStream: onRemoteVideoRenderActivated,
       onRemoveStream: onRemoteVideoRenderDeactivated,
     );
-
-    _peerConnection.onIceConnectionState = (state) {
-      print('iceeeeeeeeeee' + state.toString());
-    };
-    //Add remote video track
-    _peerConnection.onTrack = (event) {
-      if (event.track.kind == 'video') {
-        onRemoteVideoRenderActivated(event.streams[0]);
-      }
-    };
 
     //Add Ex-Candidates
     _iceCandidates.forEach(

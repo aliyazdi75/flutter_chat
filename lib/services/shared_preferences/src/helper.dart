@@ -3,22 +3,8 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-abstract class SharedPreferencesBase {
-  Future<Map<String, dynamic>> getObject({
-    @required String key,
-  });
-
-  Future<void> saveObject({
-    @required String key,
-    @required Map<String, dynamic> value,
-  });
-
-  Future<void> removeObject({@required String key});
-}
-
-class SharedPreferencesHelper implements SharedPreferencesBase {
-  @override
-  Future<Map<String, dynamic>> getObject({
+class SharedPreferencesHelper {
+  static Future<Map<String, dynamic>> getObject({
     @required String key,
   }) async {
     final prefs = await SharedPreferences.getInstance();
@@ -26,8 +12,7 @@ class SharedPreferencesHelper implements SharedPreferencesBase {
     return object == null ? null : json.decode(object) as Map<String, dynamic>;
   }
 
-  @override
-  Future<void> saveObject({
+  static Future<void> saveObject({
     @required String key,
     @required Map<String, dynamic> value,
   }) async {
@@ -35,8 +20,7 @@ class SharedPreferencesHelper implements SharedPreferencesBase {
     await prefs.setString(key, json.encode(value));
   }
 
-  @override
-  Future<void> removeObject({@required String key}) async {
+  static Future<void> removeObject({@required String key}) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(key);
   }

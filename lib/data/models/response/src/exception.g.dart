@@ -219,7 +219,9 @@ class HttpExceptionModelBuilder
   _$HttpExceptionModel _$v;
 
   List<ExceptionDescription> _exceptions;
+
   List<ExceptionDescription> get exceptions => _$this._exceptions;
+
   set exceptions(List<ExceptionDescription> exceptions) =>
       _$this._exceptions = exceptions;
 
@@ -306,11 +308,15 @@ class ExceptionDescriptionBuilder
   _$ExceptionDescription _$v;
 
   String _method;
+
   String get method => _$this._method;
+
   set method(String method) => _$this._method = method;
 
   String _message;
+
   String get message => _$this._message;
+
   set message(String message) => _$this._message = message;
 
   ExceptionDescriptionBuilder();
@@ -410,15 +416,21 @@ class ValidationExceptionBuilder
   _$ValidationException _$v;
 
   String _method;
+
   String get method => _$this._method;
+
   set method(String method) => _$this._method = method;
 
   String _message;
+
   String get message => _$this._message;
+
   set message(String message) => _$this._message = message;
 
   List<String> _fields;
+
   List<String> get fields => _$this._fields;
+
   set fields(List<String> fields) => _$this._fields = fields;
 
   ValidationExceptionBuilder();

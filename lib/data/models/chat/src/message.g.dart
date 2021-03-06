@@ -231,31 +231,45 @@ class MessageBuilder implements Builder<Message, MessageBuilder> {
   _$Message _$v;
 
   int _id;
+
   int get id => _$this._id;
+
   set id(int id) => _$this._id = id;
 
   bool _seen;
+
   bool get seen => _$this._seen;
+
   set seen(bool seen) => _$this._seen = seen;
 
   bool _sentByMe;
+
   bool get sentByMe => _$this._sentByMe;
+
   set sentByMe(bool sentByMe) => _$this._sentByMe = sentByMe;
 
   bool _isSent;
+
   bool get isSent => _$this._isSent;
+
   set isSent(bool isSent) => _$this._isSent = isSent;
 
   DateTime _sentAt;
+
   DateTime get sentAt => _$this._sentAt;
+
   set sentAt(DateTime sentAt) => _$this._sentAt = sentAt;
 
   MessageType _type;
+
   MessageType get type => _$this._type;
+
   set type(MessageType type) => _$this._type = type;
 
   String _text;
+
   String get text => _$this._text;
+
   set text(String text) => _$this._text = text;
 
   MessageBuilder() {

@@ -5,22 +5,6 @@ import 'exception.dart';
 
 export 'package:flutter_webrtc/flutter_webrtc.dart';
 
-// abstract class WebRTCRBase {
-//   Future<RTCPeerConnection> createPeerConnection(
-//     String token, {
-//     Function onReconnecting,
-//     Function onReconnected,
-//   });
-//
-//   Future<void> stopConnection();
-//
-//   void on(String methodName, SocketResponseCallBack responseCallBack);
-//
-//   void off(String methodName, {SocketResponseCallBack responseCallBack});
-//
-//   Future<Map<String, dynamic>> invoke(String methodName, {List<dynamic> args});
-// }
-
 class WebRTCHelper {
   static Future<RTCVideoRenderer> activateVideoRender() async {
     final videoRender = RTCVideoRenderer();
@@ -58,7 +42,8 @@ class WebRTCHelper {
   static Future<bool> hasTorch(MediaStream mediaStream) async {
     final videoTrack = mediaStream
         .getVideoTracks()
-        .firstWhere((track) => track.kind == 'video');
+        .firstWhere((track) => track.kind == 'video', orElse: () => null);
+    assert(videoTrack != null);
     return await videoTrack.hasTorch();
   }
 
@@ -66,7 +51,8 @@ class WebRTCHelper {
       MediaStream mediaStream, bool torchStatus) async {
     final videoTrack = mediaStream
         .getVideoTracks()
-        .firstWhere((track) => track.kind == 'video');
+        .firstWhere((track) => track.kind == 'video', orElse: () => null);
+    assert(videoTrack != null);
     final hasTorch = await videoTrack.hasTorch();
     if (hasTorch) {
       await videoTrack.setTorch(!torchStatus);
@@ -79,7 +65,8 @@ class WebRTCHelper {
   static Future<bool> switchCamera(MediaStream mediaStream) async {
     final videoTrack = mediaStream
         .getVideoTracks()
-        .firstWhere((track) => track.kind == 'video');
+        .firstWhere((track) => track.kind == 'video', orElse: () => null);
+    assert(videoTrack != null);
     try {
       if (kIsWeb) {
         final cameraDevices = await Helper.cameras;
@@ -101,8 +88,9 @@ class WebRTCHelper {
     // mediaStream.getAudioTracks().first.enabled = enabled;
     // return enabled;
     final audioTrack = mediaStream
-        .getVideoTracks()
-        .firstWhere((track) => track.kind == 'audio');
+        .getAudioTracks()
+        .firstWhere((track) => track.kind == 'audio', orElse: () => null);
+    assert(audioTrack != null);
     audioTrack.setMicrophoneMute(!micMuteStatus);
     return !micMuteStatus;
   }

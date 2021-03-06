@@ -5,7 +5,7 @@ const key = 'token';
 
 class AuthenticationStorage {
   static Future<Authentication> getCredit() async {
-    final response = await SharedPreferencesHelper().getObject(key: key);
+    final response = await SharedPreferencesHelper.getObject(key: key);
     if (response != null) {
       return Authentication.fromJson(response);
     } else {
@@ -15,10 +15,10 @@ class AuthenticationStorage {
 
   static Future<void> saveCredit(Authentication authentication) async {
     final value = authentication.toJson();
-    await SharedPreferencesHelper().saveObject(key: key, value: value);
+    await SharedPreferencesHelper.saveObject(key: key, value: value);
   }
 
   static Future<void> removeCredit() async {
-    await SharedPreferencesHelper().removeObject(key: key);
+    await SharedPreferencesHelper.removeObject(key: key);
   }
 }

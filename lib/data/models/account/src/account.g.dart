@@ -87,7 +87,9 @@ class AccountBuilder implements Builder<Account, AccountBuilder> {
   _$Account _$v;
 
   UserBuilder _user;
+
   UserBuilder get user => _$this._user ??= new UserBuilder();
+
   set user(UserBuilder user) => _$this._user = user;
 
   AccountBuilder();

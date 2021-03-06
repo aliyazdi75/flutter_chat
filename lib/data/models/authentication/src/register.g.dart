@@ -152,11 +152,15 @@ class RegisterRequestBuilder
   _$RegisterRequest _$v;
 
   String _email;
+
   String get email => _$this._email;
+
   set email(String email) => _$this._email = email;
 
   String _password;
+
   String get password => _$this._password;
+
   set password(String password) => _$this._password = password;
 
   RegisterRequestBuilder();
@@ -240,7 +244,9 @@ class RegisterResponseBuilder
   _$RegisterResponse _$v;
 
   bool _success;
+
   bool get success => _$this._success;
+
   set success(bool success) => _$this._success = success;
 
   RegisterResponseBuilder();

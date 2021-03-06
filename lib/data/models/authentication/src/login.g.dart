@@ -184,33 +184,47 @@ class LoginRequestBuilder
   _$LoginRequest _$v;
 
   String _email;
+
   String get email => _$this._email;
+
   set email(String email) => _$this._email = email;
 
   String _password;
+
   String get password => _$this._password;
+
   set password(String password) => _$this._password = password;
 
   String _deviceId;
+
   String get deviceId => _$this._deviceId;
+
   set deviceId(String deviceId) => _$this._deviceId = deviceId;
 
   String _deviceName;
+
   String get deviceName => _$this._deviceName;
+
   set deviceName(String deviceName) => _$this._deviceName = deviceName;
 
   String _deviceFriendlyName;
+
   String get deviceFriendlyName => _$this._deviceFriendlyName;
+
   set deviceFriendlyName(String deviceFriendlyName) =>
       _$this._deviceFriendlyName = deviceFriendlyName;
 
   String _deviceVersion;
+
   String get deviceVersion => _$this._deviceVersion;
+
   set deviceVersion(String deviceVersion) =>
       _$this._deviceVersion = deviceVersion;
 
   String _deviceOS;
+
   String get deviceOS => _$this._deviceOS;
+
   set deviceOS(String deviceOS) => _$this._deviceOS = deviceOS;
 
   LoginRequestBuilder();

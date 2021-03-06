@@ -23,7 +23,7 @@ class WebRTCState extends Equatable {
     this.webRTCHangUp,
     this.localVideoRender,
     this.remoteVideoRender,
-    this.hasTorch,
+    this.hasTorch = true,
     this.localVideoRendererActivationStatus = false,
     this.remoteVideoRendererActivationStatus = false,
     this.torchStatus = false,
