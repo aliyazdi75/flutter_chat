@@ -11,7 +11,6 @@ class WebRTCRepository {
   final WebRTCHub webRTCHub;
 
   RTCPeerConnection _peerConnection;
-  List<RTCIceCandidate> _iceCandidates = [];
 
   Future<RTCVideoRenderer> activateVideoRender() async {
     return await WebRTCProvider.activateVideoRender();
@@ -42,6 +41,7 @@ class WebRTCRepository {
     @required Function(MediaStream stream) onRemoteVideoRenderActivated,
     @required Function(MediaStream stream) onRemoteVideoRenderDeactivated,
     @required Function(WebRTCHangUp webRTCHangUp) onWebRTCHangUpReceived,
+    @required Function(WebRTCReject webRTCReject) onWebRTCRejectReceived,
   }) async {
     assert(hubConnection != null);
 
@@ -63,15 +63,14 @@ class WebRTCRepository {
       onRemoveStream: onRemoteVideoRenderDeactivated,
     );
 
-    //Add Ex-Candidates
-    _iceCandidates.forEach(
-        (candidate) async => await _peerConnection.addCandidate(candidate));
-
     //Listen on Hubs
     webRTCHub.listenOnWebRTCAnswerReceived(
         hubConnection, _setRemoteAnswerDescription);
+    webRTCHub.listenOnWebRTCIceCandidateReceived(hubConnection, _addCandidate);
     webRTCHub.listenOnWebRTCHangUpReceived(
         hubConnection, onWebRTCHangUpReceived);
+    webRTCHub.listenOnWebRTCRejectReceived(
+        hubConnection, onWebRTCRejectReceived);
 
     //Create an Offer and send
     final description = await WebRTCProvider.createOffer(_peerConnection);
@@ -82,6 +81,7 @@ class WebRTCRepository {
   Future<void> answerCall({
     @required HubConnection hubConnection,
     @required WebRTCOffer webRTCOffer,
+    @required List<RTCIceCandidate> iceCandidates,
     @required Function(MediaStream stream) onLocalVideoRenderActivated,
     @required Function(MediaStream stream) onRemoteVideoRenderActivated,
     @required Function(MediaStream stream) onRemoteVideoRenderDeactivated,
@@ -109,10 +109,11 @@ class WebRTCRepository {
     );
 
     //Add Ex-Candidates
-    _iceCandidates.forEach(
+    iceCandidates.forEach(
         (candidate) async => await _peerConnection.addCandidate(candidate));
 
     //Listen on Hubs
+    webRTCHub.listenOnWebRTCIceCandidateReceived(hubConnection, _addCandidate);
     webRTCHub.listenOnWebRTCHangUpReceived(
         hubConnection, onWebRTCHangUpReceived);
 
@@ -123,6 +124,16 @@ class WebRTCRepository {
     final description = await WebRTCProvider.createAnswer(_peerConnection);
     await _peerConnection.setLocalDescription(description);
     await _sendWebRTCAnswer(hubConnection, webRTCOffer.userId, description);
+  }
+
+  Future<void> _addCandidate(WebRTCIceCandidate webRTCIceCandidate) async {
+    assert(_peerConnection != null);
+    final candidate = RTCIceCandidate(
+      webRTCIceCandidate.candidate,
+      webRTCIceCandidate.sdpMid,
+      webRTCIceCandidate.sdpMLineIndex,
+    );
+    await _peerConnection.addCandidate(candidate);
   }
 
   Future<void> _setRemoteOfferDescription(WebRTCOffer webRTCOffer) async {
@@ -145,60 +156,12 @@ class WebRTCRepository {
     return await WebRTCProvider.getUserMediaStream();
   }
 
-  void listenOnWebRTCIceCandidateReceived(
-      {@required HubConnection hubConnection}) {
-    assert(hubConnection != null);
-    webRTCHub.listenOnWebRTCIceCandidateReceived(hubConnection, _addCandidate);
-  }
-
-  Future<void> _addCandidate(WebRTCIceCandidate webRTCIceCandidate) async {
-    final candidate = RTCIceCandidate(webRTCIceCandidate.candidate,
-        webRTCIceCandidate.sdpMid, webRTCIceCandidate.sdpMLineIndex);
-    if (_peerConnection == null) {
-      _iceCandidates.add(candidate);
-    } else {
-      await _peerConnection.addCandidate(candidate);
-    }
-  }
-
-  void listenOnWebRTCOfferReceived({
-    @required HubConnection hubConnection,
-    @required Function(WebRTCOffer webRTCOffer) onWebRTCOfferReceived,
-  }) {
-    assert(hubConnection != null);
-    webRTCHub.listenOnWebRTCOfferReceived(hubConnection, onWebRTCOfferReceived);
-  }
-
-  void listenOnWebRTCRejectReceived({
-    @required HubConnection hubConnection,
-    @required Function(WebRTCReject webRTCReject) onWebRTCRejectReceived,
-  }) {
-    assert(hubConnection != null);
-    webRTCHub.listenOnWebRTCRejectReceived(
-        hubConnection, onWebRTCRejectReceived);
-  }
-
-  Future<void> reject({
-    @required HubConnection hubConnection,
-    @required WebRTCReject webRTCReject,
-  }) async {
-    assert(hubConnection != null);
-    _resetVariables();
-    await _sendWebRTCReject(hubConnection, webRTCReject.userId);
-  }
-
   Future<void> hangUp({
     @required HubConnection hubConnection,
     @required WebRTCHangUp webRTCHangUp,
   }) async {
     assert(hubConnection != null);
-    _resetVariables();
     await _sendWebRTCHangUp(hubConnection, webRTCHangUp.userId);
-  }
-
-  void _resetVariables() {
-    _peerConnection = null;
-    _iceCandidates = [];
   }
 
   Future<void> _sendWebRTCOffer(HubConnection hubConnection, String userId,
@@ -224,12 +187,6 @@ class WebRTCRepository {
       HubConnection hubConnection, String userId) async {
     assert(hubConnection != null);
     await WebRTCHub.sendWebRTCHangUp(hubConnection, userId);
-  }
-
-  Future<void> _sendWebRTCReject(
-      HubConnection hubConnection, String userId) async {
-    assert(hubConnection != null);
-    await WebRTCHub.sendWebRTCReject(hubConnection, userId);
   }
 
   void listenOff({@required HubConnection hubConnection}) {

@@ -2,13 +2,10 @@ part of 'bloc.dart';
 
 enum WebRTCStatus {
   initial,
-  readyForCall,
   videoRendersActivationLoading,
-  callSentRinging,
-  callReceivedRinging,
+  ringing,
   handShaking,
   inCall,
-  accept,
   reject,
   hangUp,
   failure,
@@ -17,10 +14,9 @@ enum WebRTCStatus {
 class WebRTCState extends Equatable {
   const WebRTCState({
     this.status = WebRTCStatus.initial,
+    this.userId,
+    this.iceCandidates = const <RTCIceCandidate>[],
     this.localMediaStream,
-    this.webRTCOffer,
-    this.webRTCReject,
-    this.webRTCHangUp,
     this.localVideoRender,
     this.remoteVideoRender,
     this.hasTorch = true,
@@ -32,10 +28,9 @@ class WebRTCState extends Equatable {
   });
 
   final WebRTCStatus status;
+  final String userId;
+  final List<RTCIceCandidate> iceCandidates;
   final MediaStream localMediaStream;
-  final WebRTCOffer webRTCOffer;
-  final WebRTCReject webRTCReject;
-  final WebRTCHangUp webRTCHangUp;
   final RTCVideoRenderer localVideoRender;
   final RTCVideoRenderer remoteVideoRender;
   final bool hasTorch;
@@ -45,14 +40,11 @@ class WebRTCState extends Equatable {
   final bool cameraFrontSideStatus;
   final bool micMuteStatus;
 
-  const WebRTCState.readyForCall() : this(status: WebRTCStatus.readyForCall);
-
   WebRTCState copyWith({
     WebRTCStatus status,
+    String userId,
+    List<RTCIceCandidate> iceCandidates,
     MediaStream localMediaStream,
-    WebRTCOffer webRTCOffer,
-    WebRTCReject webRTCReject,
-    WebRTCHangUp webRTCHangUp,
     RTCVideoRenderer localVideoRender,
     RTCVideoRenderer remoteVideoRender,
     bool hasTorch,
@@ -64,10 +56,9 @@ class WebRTCState extends Equatable {
   }) {
     return WebRTCState(
       status: status ?? this.status,
-      webRTCOffer: webRTCOffer ?? this.webRTCOffer,
+      userId: userId ?? this.userId,
+      iceCandidates: iceCandidates ?? this.iceCandidates,
       localMediaStream: localMediaStream ?? this.localMediaStream,
-      webRTCReject: webRTCReject ?? this.webRTCReject,
-      webRTCHangUp: webRTCHangUp ?? this.webRTCHangUp,
       localVideoRender: localVideoRender ?? this.localVideoRender,
       remoteVideoRender: remoteVideoRender ?? this.remoteVideoRender,
       hasTorch: hasTorch ?? this.hasTorch,

@@ -5,13 +5,12 @@ import 'package:flutter_chat/blocs/authentication/bloc.dart';
 import 'package:flutter_chat/blocs/chat/bloc.dart';
 import 'package:flutter_chat/blocs/home/bloc.dart';
 import 'package:flutter_chat/blocs/socket/bloc.dart';
-import 'package:flutter_chat/blocs/web_rtc/bloc.dart';
 import 'package:flutter_chat/data/models/chat/index.dart';
 import 'package:flutter_chat/data/repositories/account/index.dart';
 import 'package:flutter_chat/data/repositories/authentication/index.dart';
+import 'package:flutter_chat/data/repositories/call/index.dart';
 import 'package:flutter_chat/data/repositories/chat/index.dart';
 import 'package:flutter_chat/data/repositories/socket/index.dart';
-import 'package:flutter_chat/data/repositories/web_rtc/index.dart';
 import 'package:flutter_chat/presentation/screens/web_rtc/web_rtc.dart';
 
 import 'components/index.dart';
@@ -22,22 +21,20 @@ class ChatPage extends StatelessWidget {
     @required this.authenticationRepository,
     @required this.accountRepository,
     @required this.socketRepository,
-    @required this.webRTCRepository,
+    @required this.callRepository,
     @required this.authenticationBloc,
     @required this.socketBloc,
     @required this.homeBloc,
-    @required this.webRTCBloc,
   });
 
   final ChatInfo chatInfo;
   final AuthenticationRepository authenticationRepository;
   final AccountRepository accountRepository;
   final SocketRepository socketRepository;
-  final WebRTCRepository webRTCRepository;
+  final CallRepository callRepository;
   final AuthenticationBloc authenticationBloc;
   final SocketBloc socketBloc;
   final HomeBloc homeBloc;
-  final WebRTCBloc webRTCBloc;
   final chatRepository = ChatRepository();
 
   @override
@@ -50,7 +47,6 @@ class ChatPage extends StatelessWidget {
       child: MultiBlocProvider(
         providers: [
           BlocProvider.value(value: socketBloc),
-          BlocProvider.value(value: webRTCBloc),
           BlocProvider(
             create: (_) => ChatBloc(
               socketRepository: socketRepository,
@@ -127,8 +123,7 @@ class ChatPage extends StatelessWidget {
                           builder: (context) => WebRTCPage(
                             userId: chatInfo.userId,
                             socketRepository: socketRepository,
-                            webRTCRepository: webRTCRepository,
-                            webRTCBloc: webRTCBloc,
+                            callRepository: callRepository,
                           ),
                         ),
                       ),

@@ -1,28 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_chat/blocs/web_rtc/bloc.dart';
+import 'package:flutter_chat/blocs/call/bloc.dart';
 import 'package:flutter_chat/data/models/web_rtc/index.dart';
 
-enum RingingResponse { accept, reject }
+enum RingingResponse { accept, reject, rejected }
 
 class RingingDialogPage extends StatelessWidget {
   RingingDialogPage({
     @required this.webRTCOffer,
-    @required this.webRTCBloc,
+    @required this.callBloc,
   }) : assert(webRTCOffer != null);
 
   final WebRTCOffer webRTCOffer;
-  final WebRTCBloc webRTCBloc;
+  final CallBloc callBloc;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
-      value: webRTCBloc,
-      child: BlocListener<WebRTCBloc, WebRTCState>(
+      value: callBloc,
+      child: BlocListener<CallBloc, CallState>(
         listener: (context, state) {
-          if (state.status == WebRTCStatus.hangUp &&
-              state.webRTCHangUp.userId == webRTCOffer.userId) {
-            Navigator.of(context).pop();
+          if (state.status == CallStatus.hangUp) {
+            Navigator.of(context).pop(RingingResponse.rejected);
           }
         },
         child: AlertDialog(

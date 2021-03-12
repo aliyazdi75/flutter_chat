@@ -21,6 +21,8 @@ class AuthInitForm extends StatelessWidget {
     return BlocListener<AuthInitBloc, AuthInitState>(
       listener: (context, state) {
         if (state.status == AuthInitStatus.existence) {
+          BlocProvider.of<AuthInitBloc>(context)
+              .add(const AuthInitInitialStateRequested());
           Navigator.of(context).push(
             MaterialPageRoute<void>(
               builder: (context) => LoginPage(

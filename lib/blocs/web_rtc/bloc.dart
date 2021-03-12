@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_chat/data/models/web_rtc/index.dart';
+import 'package:flutter_chat/data/repositories/call/index.dart';
 import 'package:flutter_chat/data/repositories/socket/index.dart';
 import 'package:flutter_chat/data/repositories/web_rtc/index.dart';
 import 'package:flutter_chat/services/web_rtc/index.dart';
@@ -13,31 +14,32 @@ part 'state.dart';
 
 class WebRTCBloc extends Bloc<WebRTCEvent, WebRTCState> {
   WebRTCBloc({
+    @required this.userId,
     @required this.socketRepository,
+    @required this.callRepository,
     @required this.webRTCRepository,
-  })  : assert(socketRepository != null),
+  })  : assert(userId != null),
+        assert(socketRepository != null),
+        assert(callRepository != null),
         assert(webRTCRepository != null),
-        super(const WebRTCState());
+        super(WebRTCState(userId: userId));
 
-  final WebRTCRepository webRTCRepository;
+  final String userId;
   final SocketRepository socketRepository;
+  final CallRepository callRepository;
+  final WebRTCRepository webRTCRepository;
 
   @override
   Future<void> close() async {
     webRTCRepository.listenOff(hubConnection: socketRepository.hubConnection);
+    await _disposeCall();
     await super.close();
   }
 
   @override
   Stream<WebRTCState> mapEventToState(WebRTCEvent event) async* {
-    if (event is ReadyForCallRequested) {
-      yield* _mapReadyForCallRequestedToState();
-    } else if (event is WebRTCOfferReceived) {
-      yield* _mapWebRTCOfferReceivedToState(event);
-    } else if (event is CallingRequested) {
-      yield* _mapCallingRequestedToState(event);
-    } else if (event is CallAcceptRequested) {
-      yield* _mapCallAcceptRequestedToState();
+    if (event is RequestCall) {
+      yield* _mapRequestCallToState(event);
     } else if (event is AnswerCallRequested) {
       yield* _mapAnswerCallRequestedToState(event);
     } else if (event is LocalVideoRenderActivated) {
@@ -48,16 +50,12 @@ class WebRTCBloc extends Bloc<WebRTCEvent, WebRTCState> {
       yield* _mapLocalVideoRendersDeactivatedToState();
     } else if (event is RemoteVideoRenderDeactivated) {
       yield* _mapRemoteVideoRendersDeactivatedToState();
-    } else if (event is RejectCallRequested) {
-      yield* _mapCallRejectRequestedToState(event);
-    } else if (event is CallRejected) {
-      yield* _mapCallRejectedToState(event);
     } else if (event is HangUpCallRequested) {
       yield* _mapHangUpRequestedToState(event);
     } else if (event is CallHungUp) {
       yield* _mapCallHungUpToState(event);
-    } else if (event is CallDeactivatedRequested) {
-      yield* _mapCallDeactivatedRequestedToState(event);
+    } else if (event is CallRejected) {
+      yield* _mapCallRejectedToState(event);
     } else if (event is ToggleTorchRequested) {
       yield* _mapToggleTorchRequestedToState();
     } else if (event is SwitchCameraRequested) {
@@ -67,33 +65,7 @@ class WebRTCBloc extends Bloc<WebRTCEvent, WebRTCState> {
     }
   }
 
-  //todo: refuse calls when we are in a call
-  Stream<WebRTCState> _mapReadyForCallRequestedToState() async* {
-    webRTCRepository.listenOnWebRTCOfferReceived(
-      hubConnection: socketRepository.hubConnection,
-      onWebRTCOfferReceived: (webRTCOffer) =>
-          add(WebRTCOfferReceived(webRTCOffer)),
-    );
-    webRTCRepository.listenOnWebRTCRejectReceived(
-      hubConnection: socketRepository.hubConnection,
-      onWebRTCRejectReceived: (webRTCReject) => add(CallRejected(webRTCReject)),
-    );
-    webRTCRepository.listenOnWebRTCIceCandidateReceived(
-      hubConnection: socketRepository.hubConnection,
-    );
-    yield state.copyWith(status: WebRTCStatus.readyForCall);
-  }
-
-  Stream<WebRTCState> _mapWebRTCOfferReceivedToState(
-      WebRTCOfferReceived event) async* {
-    yield state.copyWith(
-      status: WebRTCStatus.callReceivedRinging,
-      webRTCOffer: event.webRTCOffer,
-    );
-  }
-
-  Stream<WebRTCState> _mapCallingRequestedToState(
-      CallingRequested event) async* {
+  Stream<WebRTCState> _mapRequestCallToState(RequestCall event) async* {
     yield* _initialVideoRenders();
 
     await webRTCRepository.requestCall(
@@ -107,20 +79,15 @@ class WebRTCBloc extends Bloc<WebRTCEvent, WebRTCState> {
           add(const RemoteVideoRenderDeactivated()),
       onWebRTCHangUpReceived: (webRTCHangUp) =>
           add(HangUpCallRequested(webRTCHangUp)),
+      onWebRTCRejectReceived: (webRTCHangUp) => add(CallRejected(webRTCHangUp)),
     );
 
-    yield state.copyWith(status: WebRTCStatus.callSentRinging);
-  }
-
-  Stream<WebRTCState> _mapCallAcceptRequestedToState() async* {
-    assert(state.status == WebRTCStatus.callReceivedRinging);
-
-    yield state.copyWith(status: WebRTCStatus.accept);
+    yield state.copyWith(status: WebRTCStatus.ringing);
   }
 
   Stream<WebRTCState> _mapAnswerCallRequestedToState(
       AnswerCallRequested event) async* {
-    assert(state.webRTCOffer != null, state.status == WebRTCStatus.accept);
+    assert(callRepository.webRTCOffer != null);
 
     yield* _initialVideoRenders();
 
@@ -128,7 +95,8 @@ class WebRTCBloc extends Bloc<WebRTCEvent, WebRTCState> {
 
     await webRTCRepository.answerCall(
       hubConnection: socketRepository.hubConnection,
-      webRTCOffer: state.webRTCOffer,
+      webRTCOffer: callRepository.webRTCOffer,
+      iceCandidates: callRepository.iceCandidates,
       onLocalVideoRenderActivated: (stream) =>
           add(LocalVideoRenderActivated(stream)),
       onRemoteVideoRenderActivated: (stream) =>
@@ -196,80 +164,41 @@ class WebRTCBloc extends Bloc<WebRTCEvent, WebRTCState> {
     );
   }
 
-  Stream<WebRTCState> _mapCallRejectRequestedToState(
-      RejectCallRequested event) async* {
-    assert(state.status == WebRTCStatus.callReceivedRinging);
-
-    yield state.copyWith(
-      status: WebRTCStatus.reject,
-      webRTCReject: event.webRTCReject,
-    );
-
-    await webRTCRepository.reject(
-      hubConnection: socketRepository.hubConnection,
-      webRTCReject: event.webRTCReject,
-    );
-  }
-
-  Stream<WebRTCState> _mapCallRejectedToState(CallRejected event) async* {
-    assert(state.status == WebRTCStatus.callSentRinging);
-
-    yield state.copyWith(
-      status: WebRTCStatus.reject,
-      webRTCReject: event.webRTCReject,
-    );
+  Future<void> _disposeCall() async {
+    if (state.status != WebRTCStatus.hangUp) {
+      await _sendHangUpRequest(WebRTCHangUp((b) => b..userId = state.userId));
+    }
+    await state.localMediaStream?.dispose();
+    state.localVideoRender?.srcObject = null;
+    await state.localVideoRender?.dispose();
+    state.remoteVideoRender?.srcObject = null;
+    await state.remoteVideoRender?.dispose();
   }
 
   Stream<WebRTCState> _mapHangUpRequestedToState(
       HangUpCallRequested event) async* {
-    assert(state.status == WebRTCStatus.inCall ||
-        state.status == WebRTCStatus.callSentRinging);
+    await _sendHangUpRequest(event.webRTCHangUp);
+    yield state.copyWith(status: WebRTCStatus.hangUp);
+  }
 
-    yield state.copyWith(
-      status: WebRTCStatus.hangUp,
-      webRTCHangUp: event.webRTCHangUp,
-    );
-
+  Future<void> _sendHangUpRequest(WebRTCHangUp webRTCHangUp) async {
     await webRTCRepository.hangUp(
       hubConnection: socketRepository.hubConnection,
-      webRTCHangUp: event.webRTCHangUp,
+      webRTCHangUp: webRTCHangUp,
     );
   }
 
   Stream<WebRTCState> _mapCallHungUpToState(CallHungUp event) async* {
-    assert(state.status == WebRTCStatus.inCall ||
-        state.status == WebRTCStatus.callReceivedRinging);
-
-    yield state.copyWith(
-      status: WebRTCStatus.hangUp,
-      webRTCHangUp: event.webRTCHangUp,
-    );
+    if (state.userId == event.webRTCHangUp.userId) {
+      yield state.copyWith(status: WebRTCStatus.hangUp);
+    }
   }
 
-  Stream<WebRTCState> _mapCallDeactivatedRequestedToState(
-      CallDeactivatedRequested event) async* {
-    switch (state.status) {
-      case WebRTCStatus.inCall:
-        //todo: this add event, returns the first state
-        // add(HangUpRequested(WebRTCHangUp((b) => b..userId = event.userId)));
-        break;
-      case WebRTCStatus.callSentRinging:
-        //todo: this add event, returns the first state
-        // add(CallRejectRequested(WebRTCReject((b) => b..userId = event.userId)));
-        break;
-      default:
-        break;
+  //Reject happens when the other user is on the other call
+  Stream<WebRTCState> _mapCallRejectedToState(CallRejected event) async* {
+    if (state.userId == event.webRTCReject.userId) {
+      yield state.copyWith(status: WebRTCStatus.reject);
     }
-
-    if (state.localVideoRendererActivationStatus) {
-      await state.localMediaStream.dispose();
-      state.localVideoRender.srcObject = null;
-      await state.localVideoRender.dispose();
-      state.remoteVideoRender.srcObject = null;
-      await state.remoteVideoRender.dispose();
-    }
-
-    yield const WebRTCState.readyForCall();
   }
 
   Stream<WebRTCState> _mapToggleTorchRequestedToState() async* {

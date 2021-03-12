@@ -39,8 +39,8 @@ class FlutterChat extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: MultiRepositoryProvider(
         providers: [
-          RepositoryProvider.value(value: authenticationRepository),
-          RepositoryProvider.value(value: accountRepository),
+          RepositoryProvider(create: (_) => authenticationRepository),
+          RepositoryProvider(create: (_) => accountRepository),
         ],
         child: BlocProvider(
           create: (_) => AuthenticationBloc(

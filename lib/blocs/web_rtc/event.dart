@@ -8,21 +8,17 @@ abstract class WebRTCEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class ReadyForCallRequested extends WebRTCEvent {
-  const ReadyForCallRequested();
-}
+class WebRTCIceCandidateReceived extends WebRTCEvent {
+  const WebRTCIceCandidateReceived(this.webRTCIceCandidate);
 
-class WebRTCOfferReceived extends WebRTCEvent {
-  const WebRTCOfferReceived(this.webRTCOffer);
-
-  final WebRTCOffer webRTCOffer;
+  final WebRTCIceCandidate webRTCIceCandidate;
 
   @override
-  List<Object> get props => [webRTCOffer];
+  List<Object> get props => [webRTCIceCandidate];
 }
 
-class CallingRequested extends WebRTCEvent {
-  const CallingRequested(this.userId);
+class RequestCall extends WebRTCEvent {
+  const RequestCall(this.userId);
 
   final String userId;
 
@@ -30,12 +26,13 @@ class CallingRequested extends WebRTCEvent {
   List<Object> get props => [userId];
 }
 
-class CallAcceptRequested extends WebRTCEvent {
-  const CallAcceptRequested();
-}
-
 class AnswerCallRequested extends WebRTCEvent {
-  const AnswerCallRequested();
+  const AnswerCallRequested(this.webRTCOffer);
+
+  final WebRTCOffer webRTCOffer;
+
+  @override
+  List<Object> get props => [webRTCOffer];
 }
 
 class LocalVideoRenderActivated extends WebRTCEvent {
@@ -64,24 +61,6 @@ class RemoteVideoRenderDeactivated extends WebRTCEvent {
   const RemoteVideoRenderDeactivated();
 }
 
-class RejectCallRequested extends WebRTCEvent {
-  const RejectCallRequested(this.webRTCReject);
-
-  final WebRTCReject webRTCReject;
-
-  @override
-  List<Object> get props => [webRTCReject];
-}
-
-class CallRejected extends WebRTCEvent {
-  const CallRejected(this.webRTCReject);
-
-  final WebRTCReject webRTCReject;
-
-  @override
-  List<Object> get props => [webRTCReject];
-}
-
 class HangUpCallRequested extends WebRTCEvent {
   const HangUpCallRequested(this.webRTCHangUp);
 
@@ -98,6 +77,15 @@ class CallHungUp extends WebRTCEvent {
 
   @override
   List<Object> get props => [webRTCHangUp];
+}
+
+class CallRejected extends WebRTCEvent {
+  const CallRejected(this.webRTCReject);
+
+  final WebRTCReject webRTCReject;
+
+  @override
+  List<Object> get props => [webRTCReject];
 }
 
 class CallDeactivatedRequested extends WebRTCEvent {

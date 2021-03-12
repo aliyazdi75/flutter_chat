@@ -1,47 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chat/blocs/web_rtc/bloc.dart';
+import 'package:flutter_chat/data/repositories/call/index.dart';
 import 'package:flutter_chat/data/repositories/socket/index.dart';
 import 'package:flutter_chat/data/repositories/web_rtc/index.dart';
 import 'package:flutter_chat/services/web_rtc/index.dart';
 
-class WebRTCPage extends StatefulWidget {
+class WebRTCPage extends StatelessWidget {
   WebRTCPage({
     @required this.userId,
     @required this.socketRepository,
-    @required this.webRTCRepository,
-    @required this.webRTCBloc,
+    @required this.callRepository,
   }) : assert(userId != null);
 
   final String userId;
   final SocketRepository socketRepository;
-  final WebRTCRepository webRTCRepository;
-  final WebRTCBloc webRTCBloc;
-
-  @override
-  _WebRTCPageState createState() => _WebRTCPageState();
-}
-
-class _WebRTCPageState extends State<WebRTCPage> {
-  @override
-  void deactivate() {
-    super.deactivate();
-    widget.webRTCBloc.add(CallDeactivatedRequested(widget.userId));
-  }
+  final CallRepository callRepository;
+  final webRTCRepository = WebRTCRepository();
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider.value(
-      value: widget.webRTCRepository,
-      child: BlocProvider.value(
-        value: widget.webRTCBloc,
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider.value(
+          value: callRepository,
+        ),
+        RepositoryProvider(
+          create: (_) => webRTCRepository,
+        ),
+      ],
+      child: BlocProvider(
+        create: (_) => WebRTCBloc(
+          userId: userId,
+          socketRepository: socketRepository,
+          callRepository: callRepository,
+          webRTCRepository: webRTCRepository,
+        ),
         child: BlocListener<WebRTCBloc, WebRTCState>(
           listener: (context, state) {
             switch (state.status) {
-              case WebRTCStatus.reject:
+              case WebRTCStatus.hangUp:
                 Navigator.of(context).pop();
                 break;
-              case WebRTCStatus.hangUp:
+              case WebRTCStatus.reject:
                 Navigator.of(context).pop();
                 break;
               case WebRTCStatus.failure:
@@ -57,16 +58,17 @@ class _WebRTCPageState extends State<WebRTCPage> {
           },
           child: BlocBuilder<WebRTCBloc, WebRTCState>(
             builder: (context, state) {
-              if (state.status == WebRTCStatus.readyForCall) {
-                BlocProvider.of<WebRTCBloc>(context)
-                    .add(CallingRequested(widget.userId));
-              } else if (state.status == WebRTCStatus.accept) {
-                BlocProvider.of<WebRTCBloc>(context)
-                    .add(const AnswerCallRequested());
+              if (state.status == WebRTCStatus.initial) {
+                if (callRepository.webRTCOffer != null) {
+                  BlocProvider.of<WebRTCBloc>(context)
+                      .add(AnswerCallRequested(callRepository.webRTCOffer));
+                } else {
+                  BlocProvider.of<WebRTCBloc>(context).add(RequestCall(userId));
+                }
               }
               return Scaffold(
-                appBar: AppBar(title: Text(widget.userId)),
-                body: state.status == WebRTCStatus.readyForCall ||
+                appBar: AppBar(title: Text(userId)),
+                body: state.status == WebRTCStatus.initial ||
                         state.status ==
                             WebRTCStatus.videoRendersActivationLoading
                     ? const Center(child: CircularProgressIndicator())
@@ -114,7 +116,7 @@ class _WebRTCPageState extends State<WebRTCPage> {
                                 icon: const Icon(Icons.camera_alt),
                                 onPressed: () =>
                                     BlocProvider.of<WebRTCBloc>(context)
-                                        .add(const AnswerCallRequested()),
+                                        .add(const SwitchCameraRequested()),
                               ),
                               IconButton(
                                 icon: Icon(

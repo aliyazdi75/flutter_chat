@@ -20,3 +20,7 @@ class AuthInitEmailChanged extends AuthInitEvent {
 class AuthInitSubmitted extends AuthInitEvent {
   const AuthInitSubmitted();
 }
+
+class AuthInitInitialStateRequested extends AuthInitEvent {
+  const AuthInitInitialStateRequested();
+}

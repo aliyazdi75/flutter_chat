@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chat/blocs/authentication/bloc.dart';
+import 'package:flutter_chat/blocs/call/bloc.dart';
 import 'package:flutter_chat/blocs/home/bloc.dart';
 import 'package:flutter_chat/blocs/socket/bloc.dart';
-import 'package:flutter_chat/blocs/web_rtc/bloc.dart';
 import 'package:flutter_chat/data/models/web_rtc/index.dart';
 import 'package:flutter_chat/data/repositories/account/index.dart';
 import 'package:flutter_chat/data/repositories/authentication/index.dart';
+import 'package:flutter_chat/data/repositories/call/index.dart';
 import 'package:flutter_chat/data/repositories/home/index.dart';
 import 'package:flutter_chat/data/repositories/socket/index.dart';
-import 'package:flutter_chat/data/repositories/web_rtc/index.dart';
 import 'package:flutter_chat/presentation/screens/chat/chat.dart';
 import 'package:flutter_chat/presentation/screens/web_rtc/components/index.dart';
 import 'package:flutter_chat/presentation/screens/web_rtc/web_rtc.dart';
@@ -29,7 +29,7 @@ class HomePage extends StatelessWidget {
 
   final socketRepository = SocketRepository();
   final homeRepository = HomeRepository();
-  final webRTCRepository = WebRTCRepository();
+  final callRepository = CallRepository();
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +37,7 @@ class HomePage extends StatelessWidget {
       providers: [
         RepositoryProvider(create: (_) => socketRepository),
         RepositoryProvider(create: (_) => homeRepository),
-        RepositoryProvider(create: (_) => webRTCRepository),
+        RepositoryProvider(create: (_) => callRepository),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -55,10 +55,10 @@ class HomePage extends StatelessWidget {
               authenticationBloc: authenticationBloc,
             ),
           ),
-          BlocProvider<WebRTCBloc>(
-            create: (_) => WebRTCBloc(
+          BlocProvider<CallBloc>(
+            create: (_) => CallBloc(
               socketRepository: socketRepository,
-              webRTCRepository: webRTCRepository,
+              callRepository: callRepository,
             ),
           ),
         ],
@@ -75,9 +75,9 @@ class HomePage extends StatelessWidget {
                             .add(const GetChatListRequested());
                       }
                       //Listen to new video calls
-                      if (BlocProvider.of<WebRTCBloc>(context).state.status ==
-                          WebRTCStatus.initial) {
-                        BlocProvider.of<WebRTCBloc>(context)
+                      if (BlocProvider.of<CallBloc>(context).state.status ==
+                          CallStatus.initial) {
+                        BlocProvider.of<CallBloc>(context)
                             .add(const ReadyForCallRequested());
                       }
                     }
@@ -122,45 +122,38 @@ class HomePage extends StatelessWidget {
                 }
               },
             ),
-            BlocListener<WebRTCBloc, WebRTCState>(
+            BlocListener<CallBloc, CallState>(
               listener: (context, state) async {
                 switch (state.status) {
-                  case WebRTCStatus.callReceivedRinging:
+                  case CallStatus.ringing:
                     final ringingResponse = await showDialog<RingingResponse>(
                       context: context,
                       barrierDismissible: false,
                       builder: (_) => RingingDialogPage(
                         webRTCOffer: state.webRTCOffer,
-                        webRTCBloc: BlocProvider.of<WebRTCBloc>(context),
+                        callBloc: BlocProvider.of<CallBloc>(context),
                       ),
                     );
                     if (ringingResponse == RingingResponse.accept) {
-                      BlocProvider.of<WebRTCBloc>(context)
+                      BlocProvider.of<CallBloc>(context)
                           .add(const CallAcceptRequested());
                       await Navigator.of(context).push<void>(
                         MaterialPageRoute(
                           builder: (_) => WebRTCPage(
                             userId: state.webRTCOffer.userId,
                             socketRepository: socketRepository,
-                            webRTCRepository: webRTCRepository,
-                            webRTCBloc: BlocProvider.of<WebRTCBloc>(context),
+                            callRepository: callRepository,
                           ),
                         ),
                       );
                     } else if (ringingResponse == RingingResponse.reject) {
-                      BlocProvider.of<WebRTCBloc>(context).add(
-                          RejectCallRequested(WebRTCReject(
+                      BlocProvider.of<CallBloc>(context).add(
+                          HangUpCallRequested(WebRTCHangUp(
                               (b) => b..userId = state.webRTCOffer.userId)));
+                    } else if (ringingResponse == RingingResponse.rejected) {
+                      BlocProvider.of<CallBloc>(context)
+                          .add(const ReadyForCallRequested());
                     }
-                    break;
-                  case WebRTCStatus.failure:
-                    ScaffoldMessenger.of(context)
-                      ..hideCurrentSnackBar()
-                      ..showSnackBar(
-                        const SnackBar(
-                          content: Text('Failure due to getting video chat!'),
-                        ),
-                      );
                     break;
                   default:
                     break;
@@ -222,14 +215,11 @@ class HomePage extends StatelessWidget {
                                             accountRepository:
                                                 accountRepository,
                                             socketRepository: socketRepository,
-                                            webRTCRepository: webRTCRepository,
+                                            callRepository: callRepository,
                                             authenticationBloc:
                                                 authenticationBloc,
                                             socketBloc:
                                                 BlocProvider.of<SocketBloc>(
-                                                    context),
-                                            webRTCBloc:
-                                                BlocProvider.of<WebRTCBloc>(
                                                     context),
                                             homeBloc: BlocProvider.of<HomeBloc>(
                                                 context),
