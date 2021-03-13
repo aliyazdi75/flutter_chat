@@ -129,8 +129,10 @@ class HomePage extends StatelessWidget {
                     final ringingResponse = await showDialog<RingingResponse>(
                       context: context,
                       barrierDismissible: false,
-                      builder: (_) =>
-                          RingingDialogPage(webRTCOffer: state.webRTCOffer),
+                      builder: (_) => RingingDialogPage(
+                        webRTCOffer: state.webRTCOffer,
+                        callBloc: BlocProvider.of<CallBloc>(context),
+                      ),
                     );
                     if (ringingResponse == RingingResponse.accept) {
                       BlocProvider.of<CallBloc>(context)
@@ -145,10 +147,6 @@ class HomePage extends StatelessWidget {
                           ),
                         ),
                       );
-                    } else if (ringingResponse == RingingResponse.reject) {
-                      BlocProvider.of<CallBloc>(context).add(EndCallRequested(
-                          WebRTCHangUp(
-                              (b) => b..userId = state.webRTCOffer.userId)));
                     }
                     break;
                   case CallStatus.hangUp:

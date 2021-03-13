@@ -1,30 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_chat/blocs/call/bloc.dart';
 import 'package:flutter_chat/data/models/web_rtc/index.dart';
 
-enum RingingResponse { accept, reject }
+enum RingingResponse { accept }
 
 class RingingDialogPage extends StatelessWidget {
   RingingDialogPage({
     @required this.webRTCOffer,
+    @required this.callBloc,
   }) : assert(webRTCOffer != null);
 
   final WebRTCOffer webRTCOffer;
+  final CallBloc callBloc;
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text(webRTCOffer.userId + ' is Ringing!'),
-      content: const Text('Do you want to Answer it, or  what?'),
-      actions: [
-        ElevatedButton(
-          onPressed: () => Navigator.of(context).pop(RingingResponse.accept),
-          child: const Text('Accept'),
+    return BlocProvider.value(
+      value: callBloc,
+      child: BlocListener<CallBloc, CallState>(
+        listener: (context, state) {
+          if (state.status == CallStatus.hangUp) {
+            Navigator.of(context).pop();
+          }
+        },
+        child: AlertDialog(
+          title: Text(webRTCOffer.userId + ' is Ringing!'),
+          content: const Text('Do you want to Answer it, or  what?'),
+          actions: [
+            ElevatedButton(
+              onPressed: () =>
+                  Navigator.of(context).pop(RingingResponse.accept),
+              child: const Text('Accept'),
+            ),
+            ElevatedButton(
+              onPressed: () => callBloc.add(EndCallRequested(
+                  WebRTCHangUp((b) => b..userId = webRTCOffer.userId))),
+              child: const Text('Reject'),
+            ),
+          ],
         ),
-        ElevatedButton(
-          onPressed: () => Navigator.of(context).pop(RingingResponse.reject),
-          child: const Text('Reject'),
-        ),
-      ],
+      ),
     );
   }
 }
