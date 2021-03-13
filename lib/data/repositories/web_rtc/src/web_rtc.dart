@@ -32,7 +32,7 @@ class WebRTCRepository {
   bool toggleCameraActivation(
       {@required MediaStream mediaStream,
       @required bool cameraActivationStatus}) {
-    return WebRTCProvider.toggleMicActivation(
+    return WebRTCProvider.toggleCameraActivation(
         mediaStream, cameraActivationStatus);
   }
 
@@ -64,6 +64,8 @@ class WebRTCRepository {
       },
       onIceConnectionState: (state) {
         // todo
+        // RTCIceConnectionState.RTCIceConnectionStateChecking
+        // RTCIceConnectionState.RTCIceConnectionStateConnected
         print('iceeeeeeeeeee' + state.toString());
       },
       onAddStream: onRemoteVideoRenderActivated,

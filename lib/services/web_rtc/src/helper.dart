@@ -81,11 +81,7 @@ class WebRTCHelper {
       MediaStream mediaStream, bool cameraActivationStatus) {
     final videoTrack = mediaStream.getVideoTracks().first;
     assert(videoTrack != null);
-    if (cameraActivationStatus) {
-      mediaStream.removeTrack(videoTrack);
-    } else {
-      mediaStream.addTrack(videoTrack);
-    }
+    videoTrack.enabled = !cameraActivationStatus;
     return !cameraActivationStatus;
   }
 

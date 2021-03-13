@@ -26,7 +26,7 @@ class WebRTCProvider {
 
   static bool toggleCameraActivation(
       MediaStream mediaStream, bool cameraActivationStatus) {
-    return WebRTCHelper.toggleMicActivation(
+    return WebRTCHelper.toggleCameraActivation(
         mediaStream, cameraActivationStatus);
   }
 
