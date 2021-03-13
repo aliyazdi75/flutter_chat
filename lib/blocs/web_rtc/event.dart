@@ -53,12 +53,13 @@ class RemoteVideoRenderActivated extends WebRTCEvent {
   List<Object> get props => [remoteStream];
 }
 
-class LocalVideoRenderDeactivated extends WebRTCEvent {
-  const LocalVideoRenderDeactivated();
-}
-
 class RemoteVideoRenderDeactivated extends WebRTCEvent {
-  const RemoteVideoRenderDeactivated();
+  const RemoteVideoRenderDeactivated(this.mediaStream);
+
+  final MediaStream mediaStream;
+
+  @override
+  List<Object> get props => [mediaStream];
 }
 
 class HangUpCallRequested extends WebRTCEvent {
@@ -105,6 +106,10 @@ class SwitchCameraRequested extends WebRTCEvent {
   const SwitchCameraRequested();
 }
 
-class ToggleMicMuteRequested extends WebRTCEvent {
-  const ToggleMicMuteRequested();
+class ToggleLocalVideoRenderActivationRequested extends WebRTCEvent {
+  const ToggleLocalVideoRenderActivationRequested();
+}
+
+class ToggleMicActivationRequested extends WebRTCEvent {
+  const ToggleMicActivationRequested();
 }

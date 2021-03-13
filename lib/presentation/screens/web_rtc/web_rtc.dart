@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_chat/blocs/call/bloc.dart';
 import 'package:flutter_chat/blocs/web_rtc/bloc.dart';
+import 'package:flutter_chat/data/models/web_rtc/index.dart';
 import 'package:flutter_chat/data/repositories/call/index.dart';
 import 'package:flutter_chat/data/repositories/socket/index.dart';
 import 'package:flutter_chat/data/repositories/web_rtc/index.dart';
@@ -11,11 +13,14 @@ class WebRTCPage extends StatelessWidget {
     @required this.userId,
     @required this.socketRepository,
     @required this.callRepository,
+    @required this.callBloc,
   }) : assert(userId != null);
 
   final String userId;
   final SocketRepository socketRepository;
   final CallRepository callRepository;
+  final CallBloc callBloc;
+
   final webRTCRepository = WebRTCRepository();
 
   @override
@@ -35,6 +40,7 @@ class WebRTCPage extends StatelessWidget {
           socketRepository: socketRepository,
           callRepository: callRepository,
           webRTCRepository: webRTCRepository,
+          callBloc: callBloc,
         ),
         child: BlocListener<WebRTCBloc, WebRTCState>(
           listener: (context, state) {
@@ -93,7 +99,10 @@ class WebRTCPage extends StatelessWidget {
                             children: [
                               IconButton(
                                 icon: const Icon(Icons.call_end),
-                                onPressed: () => Navigator.of(context).pop(),
+                                onPressed: () =>
+                                    BlocProvider.of<WebRTCBloc>(context).add(
+                                        HangUpCallRequested(WebRTCHangUp(
+                                            (b) => b..userId = userId))),
                               ),
                               if (state.hasTorch)
                                 IconButton(
@@ -113,10 +122,14 @@ class WebRTCPage extends StatelessWidget {
                                         .add(const SwitchCameraRequested()),
                               ),
                               IconButton(
-                                icon: const Icon(Icons.camera_alt),
+                                icon: Icon(
+                                  state.localVideoRendererActivationStatus
+                                      ? Icons.camera_alt
+                                      : Icons.camera_alt_outlined,
+                                ),
                                 onPressed: () =>
-                                    BlocProvider.of<WebRTCBloc>(context)
-                                        .add(const SwitchCameraRequested()),
+                                    BlocProvider.of<WebRTCBloc>(context).add(
+                                        const ToggleLocalVideoRenderActivationRequested()),
                               ),
                               IconButton(
                                 icon: Icon(
@@ -125,8 +138,8 @@ class WebRTCPage extends StatelessWidget {
                                       : Icons.mic,
                                 ),
                                 onPressed: () =>
-                                    BlocProvider.of<WebRTCBloc>(context)
-                                        .add(const ToggleMicMuteRequested()),
+                                    BlocProvider.of<WebRTCBloc>(context).add(
+                                        const ToggleMicActivationRequested()),
                               ),
                             ],
                           ),

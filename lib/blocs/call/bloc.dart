@@ -35,10 +35,10 @@ class CallBloc extends Bloc<CallEvent, CallState> {
       yield* _mapWebRTCOfferReceivedToState(event);
     } else if (event is CallAcceptRequested) {
       yield* _mapCallAcceptRequestedToState();
-    } else if (event is HangUpCallRequested) {
-      yield* _mapHangUpRequestedToState(event);
-    } else if (event is CallHungUp) {
-      yield* _mapCallHungUpToState(event);
+    } else if (event is EndCallRequested) {
+      yield* _mapEndCallRequestedToState(event);
+    } else if (event is CallEnded) {
+      yield* _mapCallEndedToState(event);
     } else if (event is RejectCallRequested) {
       yield* _mapRejectCallRequestedToState(event);
     }
@@ -53,7 +53,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
       );
       callRepository.listenOnWebRTCHangUpReceived(
         hubConnection: socketRepository.hubConnection,
-        onWebRTCHangUpReceived: (webRTCHangUp) => add(CallHungUp(webRTCHangUp)),
+        onWebRTCHangUpReceived: (webRTCHangUp) => add(CallEnded(webRTCHangUp)),
       );
       callRepository.listenOnWebRTCIceCandidateReceived(
         hubConnection: socketRepository.hubConnection,
@@ -85,9 +85,8 @@ class CallBloc extends Bloc<CallEvent, CallState> {
     yield state.copyWith(status: CallStatus.inCall);
   }
 
-  Stream<CallState> _mapHangUpRequestedToState(
-      HangUpCallRequested event) async* {
-    yield state.copyWith(status: CallStatus.readyForCall);
+  Stream<CallState> _mapEndCallRequestedToState(EndCallRequested event) async* {
+    yield state.copyWith(status: CallStatus.hangUp);
 
     await callRepository.hangUp(
       hubConnection: socketRepository.hubConnection,
@@ -95,7 +94,7 @@ class CallBloc extends Bloc<CallEvent, CallState> {
     );
   }
 
-  Stream<CallState> _mapCallHungUpToState(CallHungUp event) async* {
+  Stream<CallState> _mapCallEndedToState(CallEnded event) async* {
     if (callRepository.userId == event.webRTCHangUp.userId) {
       yield state.copyWith(status: CallStatus.hangUp);
     }

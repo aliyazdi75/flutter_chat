@@ -2,15 +2,8 @@ import 'package:flutter_chat/data/constants/index.dart';
 import 'package:flutter_chat/data/models/web_rtc/index.dart';
 import 'package:flutter_chat/services/signalR/index.dart';
 
-class _HubMethod {
-  _HubMethod(this.methodName, this.methodFunction);
-
-  final String methodName;
-  final SocketResponseCallBack methodFunction;
-}
-
 class WebRTCHub {
-  List<_HubMethod> _hubMethodListenOnList = <_HubMethod>[];
+  List<HubMethod> listenOnHubMethod = <HubMethod>[];
 
   void listenOnWebRTCOfferReceived(
     HubConnection hubConnection,
@@ -18,13 +11,14 @@ class WebRTCHub {
   ) {
     final SocketResponseCallBack webRTCOffer =
         (response) => onWebRTCOfferReceived(WebRTCOffer.fromJson(response));
-    final hubMethod = _HubMethod(webRTCOfferMethodName, webRTCOffer);
-    if (_hubMethodListenOnList.contains(hubMethod)) return;
+    final hubMethod = HubMethod(webRTCOfferMethodName,
+        SignalRHelper.toSocketFunction(webRTCOfferMethodName, webRTCOffer));
+    if (listenOnHubMethod.contains(hubMethod)) return;
     SignalRHelper(hubConnection: hubConnection).on(
-      webRTCOfferMethodName,
-      webRTCOffer,
+      hubMethod.methodName,
+      hubMethod.methodFunction,
     );
-    _hubMethodListenOnList.add(hubMethod);
+    listenOnHubMethod.add(hubMethod);
   }
 
   void listenOnWebRTCAnswerReceived(
@@ -33,13 +27,14 @@ class WebRTCHub {
   ) {
     final SocketResponseCallBack webRTCAnswer =
         (response) => onWebRTCAnswerReceived(WebRTCAnswer.fromJson(response));
-    final hubMethod = _HubMethod(webRTCAnswerMethodName, webRTCAnswer);
-    if (_hubMethodListenOnList.contains(hubMethod)) return;
+    final hubMethod = HubMethod(webRTCAnswerMethodName,
+        SignalRHelper.toSocketFunction(webRTCAnswerMethodName, webRTCAnswer));
+    if (listenOnHubMethod.contains(hubMethod)) return;
     SignalRHelper(hubConnection: hubConnection).on(
-      webRTCAnswerMethodName,
-      webRTCAnswer,
+      hubMethod.methodName,
+      hubMethod.methodFunction,
     );
-    _hubMethodListenOnList.add(hubMethod);
+    listenOnHubMethod.add(hubMethod);
   }
 
   void listenOnWebRTCRejectReceived(
@@ -48,13 +43,14 @@ class WebRTCHub {
   ) {
     final SocketResponseCallBack webRTCReject =
         (response) => onWebRTCRejectReceived(WebRTCReject.fromJson(response));
-    final hubMethod = _HubMethod(webRTCRejectMethodName, webRTCReject);
-    if (_hubMethodListenOnList.contains(hubMethod)) return;
+    final hubMethod = HubMethod(webRTCRejectMethodName,
+        SignalRHelper.toSocketFunction(webRTCRejectMethodName, webRTCReject));
+    if (listenOnHubMethod.contains(hubMethod)) return;
     SignalRHelper(hubConnection: hubConnection).on(
-      webRTCRejectMethodName,
-      webRTCReject,
+      hubMethod.methodName,
+      hubMethod.methodFunction,
     );
-    _hubMethodListenOnList.add(hubMethod);
+    listenOnHubMethod.add(hubMethod);
   }
 
   void listenOnWebRTCIceCandidateReceived(
@@ -64,14 +60,16 @@ class WebRTCHub {
   ) {
     final SocketResponseCallBack webRTCIceCandidate = (response) =>
         onWebRTCIceCandidateReceived(WebRTCIceCandidate.fromJson(response));
-    final hubMethod =
-        _HubMethod(webRTCIceCandidateMethodName, webRTCIceCandidate);
-    if (_hubMethodListenOnList.contains(hubMethod)) return;
+    final hubMethod = HubMethod(
+        webRTCIceCandidateMethodName,
+        SignalRHelper.toSocketFunction(
+            webRTCIceCandidateMethodName, webRTCIceCandidate));
+    if (listenOnHubMethod.contains(hubMethod)) return;
     SignalRHelper(hubConnection: hubConnection).on(
-      webRTCIceCandidateMethodName,
-      webRTCIceCandidate,
+      hubMethod.methodName,
+      hubMethod.methodFunction,
     );
-    _hubMethodListenOnList.add(hubMethod);
+    listenOnHubMethod.add(hubMethod);
   }
 
   void listenOnWebRTCHangUpReceived(
@@ -80,24 +78,24 @@ class WebRTCHub {
   ) {
     final SocketResponseCallBack webRTCHangUp =
         (response) => onWebRTCHangUpReceived(WebRTCHangUp.fromJson(response));
-    if (_hubMethodListenOnList
-        .contains(_HubMethod(webRTCHangUpMethodName, webRTCHangUp))) return;
+    final hubMethod = HubMethod(webRTCHangUpMethodName,
+        SignalRHelper.toSocketFunction(webRTCHangUpMethodName, webRTCHangUp));
+    if (listenOnHubMethod.contains(hubMethod)) return;
     SignalRHelper(hubConnection: hubConnection).on(
-      webRTCHangUpMethodName,
-      webRTCHangUp,
+      hubMethod.methodName,
+      hubMethod.methodFunction,
     );
-    _hubMethodListenOnList
-        .add(_HubMethod(webRTCHangUpMethodName, webRTCHangUp));
+    listenOnHubMethod.add(hubMethod);
   }
 
   void listenOff(HubConnection hubConnection) {
-    _hubMethodListenOnList.forEach(
+    listenOnHubMethod.forEach(
       (hubMethod) => SignalRHelper(hubConnection: hubConnection).off(
         hubMethod.methodName,
         responseCallBack: hubMethod.methodFunction,
       ),
     );
-    _hubMethodListenOnList = const <_HubMethod>[];
+    listenOnHubMethod = const <HubMethod>[];
   }
 
   static Future<void> sendWebRTCOffer(

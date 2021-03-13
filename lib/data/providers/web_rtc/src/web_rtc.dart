@@ -24,8 +24,15 @@ class WebRTCProvider {
     return await WebRTCHelper.switchCamera(mediaStream);
   }
 
-  static bool toggleMicMute(MediaStream mediaStream, bool micMuteStatus) {
-    return WebRTCHelper.toggleMicMute(mediaStream, micMuteStatus);
+  static bool toggleCameraActivation(
+      MediaStream mediaStream, bool cameraActivationStatus) {
+    return WebRTCHelper.toggleMicActivation(
+        mediaStream, cameraActivationStatus);
+  }
+
+  static bool toggleMicActivation(
+      MediaStream mediaStream, bool micActivationStatus) {
+    return WebRTCHelper.toggleMicActivation(mediaStream, micActivationStatus);
   }
 
   static Future<RTCPeerConnection> createPeerConnectionStream(

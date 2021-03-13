@@ -40,18 +40,14 @@ class WebRTCHelper {
   }
 
   static Future<bool> hasTorch(MediaStream mediaStream) async {
-    final videoTrack = mediaStream
-        .getVideoTracks()
-        .firstWhere((track) => track.kind == 'video', orElse: () => null);
+    final videoTrack = mediaStream.getVideoTracks().first;
     assert(videoTrack != null);
     return await videoTrack.hasTorch();
   }
 
   static Future<bool> toggleTorch(
       MediaStream mediaStream, bool torchStatus) async {
-    final videoTrack = mediaStream
-        .getVideoTracks()
-        .firstWhere((track) => track.kind == 'video', orElse: () => null);
+    final videoTrack = mediaStream.getVideoTracks().first;
     assert(videoTrack != null);
     final hasTorch = await videoTrack.hasTorch();
     if (hasTorch) {
@@ -63,9 +59,7 @@ class WebRTCHelper {
   }
 
   static Future<bool> switchCamera(MediaStream mediaStream) async {
-    final videoTrack = mediaStream
-        .getVideoTracks()
-        .firstWhere((track) => track.kind == 'video', orElse: () => null);
+    final videoTrack = mediaStream.getVideoTracks().first;
     assert(videoTrack != null);
     try {
       if (kIsWeb) {
@@ -83,16 +77,24 @@ class WebRTCHelper {
     }
   }
 
-  static bool toggleMicMute(MediaStream mediaStream, bool micMuteStatus) {
-    // final enabled = !mediaStream.getAudioTracks().first.enabled;
-    // mediaStream.getAudioTracks().first.enabled = enabled;
-    // return enabled;
-    final audioTrack = mediaStream
-        .getAudioTracks()
-        .firstWhere((track) => track.kind == 'audio', orElse: () => null);
+  static bool toggleCameraActivation(
+      MediaStream mediaStream, bool cameraActivationStatus) {
+    final videoTrack = mediaStream.getVideoTracks().first;
+    assert(videoTrack != null);
+    if (cameraActivationStatus) {
+      mediaStream.removeTrack(videoTrack);
+    } else {
+      mediaStream.addTrack(videoTrack);
+    }
+    return !cameraActivationStatus;
+  }
+
+  static bool toggleMicActivation(
+      MediaStream mediaStream, bool micActivationStatus) {
+    final audioTrack = mediaStream.getAudioTracks().first;
     assert(audioTrack != null);
-    audioTrack.setMicrophoneMute(!micMuteStatus);
-    return !micMuteStatus;
+    audioTrack.setMicrophoneMute(!micActivationStatus);
+    return !micActivationStatus;
   }
 
   static Future<RTCPeerConnection> createPeerConnectionStream(

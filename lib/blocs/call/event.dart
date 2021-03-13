@@ -34,8 +34,8 @@ class RejectCallRequested extends CallEvent {
   List<Object> get props => [webRTCReject];
 }
 
-class HangUpCallRequested extends CallEvent {
-  const HangUpCallRequested(this.webRTCHangUp);
+class EndCallRequested extends CallEvent {
+  const EndCallRequested(this.webRTCHangUp);
 
   final WebRTCHangUp webRTCHangUp;
 
@@ -43,8 +43,8 @@ class HangUpCallRequested extends CallEvent {
   List<Object> get props => [webRTCHangUp];
 }
 
-class CallHungUp extends CallEvent {
-  const CallHungUp(this.webRTCHangUp);
+class CallEnded extends CallEvent {
+  const CallEnded(this.webRTCHangUp);
 
   final WebRTCHangUp webRTCHangUp;
 

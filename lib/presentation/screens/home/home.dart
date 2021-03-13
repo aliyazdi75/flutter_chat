@@ -129,10 +129,8 @@ class HomePage extends StatelessWidget {
                     final ringingResponse = await showDialog<RingingResponse>(
                       context: context,
                       barrierDismissible: false,
-                      builder: (_) => RingingDialogPage(
-                        webRTCOffer: state.webRTCOffer,
-                        callBloc: BlocProvider.of<CallBloc>(context),
-                      ),
+                      builder: (_) =>
+                          RingingDialogPage(webRTCOffer: state.webRTCOffer),
                     );
                     if (ringingResponse == RingingResponse.accept) {
                       BlocProvider.of<CallBloc>(context)
@@ -143,17 +141,19 @@ class HomePage extends StatelessWidget {
                             userId: state.webRTCOffer.userId,
                             socketRepository: socketRepository,
                             callRepository: callRepository,
+                            callBloc: BlocProvider.of<CallBloc>(context),
                           ),
                         ),
                       );
                     } else if (ringingResponse == RingingResponse.reject) {
-                      BlocProvider.of<CallBloc>(context).add(
-                          HangUpCallRequested(WebRTCHangUp(
+                      BlocProvider.of<CallBloc>(context).add(EndCallRequested(
+                          WebRTCHangUp(
                               (b) => b..userId = state.webRTCOffer.userId)));
-                    } else if (ringingResponse == RingingResponse.rejected) {
-                      BlocProvider.of<CallBloc>(context)
-                          .add(const ReadyForCallRequested());
                     }
+                    break;
+                  case CallStatus.hangUp:
+                    BlocProvider.of<CallBloc>(context)
+                        .add(const ReadyForCallRequested());
                     break;
                   default:
                     break;
@@ -222,6 +222,8 @@ class HomePage extends StatelessWidget {
                                                 BlocProvider.of<SocketBloc>(
                                                     context),
                                             homeBloc: BlocProvider.of<HomeBloc>(
+                                                context),
+                                            callBloc: BlocProvider.of<CallBloc>(
                                                 context),
                                           ),
                                         ),

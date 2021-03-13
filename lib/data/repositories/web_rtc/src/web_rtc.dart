@@ -29,9 +29,16 @@ class WebRTCRepository {
     return await WebRTCProvider.switchCamera(mediaStream);
   }
 
-  bool toggleMicMute(
-      {@required MediaStream mediaStream, @required bool micMuteStatus}) {
-    return WebRTCProvider.toggleMicMute(mediaStream, micMuteStatus);
+  bool toggleCameraActivation(
+      {@required MediaStream mediaStream,
+      @required bool cameraActivationStatus}) {
+    return WebRTCProvider.toggleMicActivation(
+        mediaStream, cameraActivationStatus);
+  }
+
+  bool toggleMicActivation(
+      {@required MediaStream mediaStream, @required bool micActivationStatus}) {
+    return WebRTCProvider.toggleMicActivation(mediaStream, micActivationStatus);
   }
 
   Future<void> requestCall({
@@ -162,6 +169,10 @@ class WebRTCRepository {
   }) async {
     assert(hubConnection != null);
     await _sendWebRTCHangUp(hubConnection, webRTCHangUp.userId);
+  }
+
+  void disposePeerConnection() {
+    _peerConnection.dispose();
   }
 
   Future<void> _sendWebRTCOffer(HubConnection hubConnection, String userId,

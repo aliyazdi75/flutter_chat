@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_chat/blocs/call/bloc.dart';
 import 'package:flutter_chat/data/models/web_rtc/index.dart';
 import 'package:flutter_chat/data/repositories/call/index.dart';
 import 'package:flutter_chat/data/repositories/socket/index.dart';
@@ -18,21 +19,25 @@ class WebRTCBloc extends Bloc<WebRTCEvent, WebRTCState> {
     @required this.socketRepository,
     @required this.callRepository,
     @required this.webRTCRepository,
+    @required this.callBloc,
   })  : assert(userId != null),
         assert(socketRepository != null),
         assert(callRepository != null),
         assert(webRTCRepository != null),
+        assert(callBloc != null),
         super(WebRTCState(userId: userId));
 
   final String userId;
   final SocketRepository socketRepository;
   final CallRepository callRepository;
   final WebRTCRepository webRTCRepository;
+  final CallBloc callBloc;
 
   @override
   Future<void> close() async {
-    webRTCRepository.listenOff(hubConnection: socketRepository.hubConnection);
     await _disposeCall();
+    webRTCRepository.disposePeerConnection();
+    webRTCRepository.listenOff(hubConnection: socketRepository.hubConnection);
     await super.close();
   }
 
@@ -46,10 +51,8 @@ class WebRTCBloc extends Bloc<WebRTCEvent, WebRTCState> {
       yield* _mapLocalVideoRendersActivatedToState(event);
     } else if (event is RemoteVideoRenderActivated) {
       yield* _mapRemoteVideoRendersActivatedToState(event);
-    } else if (event is LocalVideoRenderDeactivated) {
-      yield* _mapLocalVideoRendersDeactivatedToState();
     } else if (event is RemoteVideoRenderDeactivated) {
-      yield* _mapRemoteVideoRendersDeactivatedToState();
+      yield* _mapRemoteVideoRendersDeactivatedToState(event);
     } else if (event is HangUpCallRequested) {
       yield* _mapHangUpRequestedToState(event);
     } else if (event is CallHungUp) {
@@ -60,8 +63,10 @@ class WebRTCBloc extends Bloc<WebRTCEvent, WebRTCState> {
       yield* _mapToggleTorchRequestedToState();
     } else if (event is SwitchCameraRequested) {
       yield* _mapSwitchCameraRequestedToState();
-    } else if (event is ToggleMicMuteRequested) {
-      yield* _mapToggleMicMuteRequestedToState();
+    } else if (event is ToggleLocalVideoRenderActivationRequested) {
+      yield* _mapToggleLocalVideoRenderActivationRequestedToState();
+    } else if (event is ToggleMicActivationRequested) {
+      yield* _mapToggleMicActivationRequestedToState();
     }
   }
 
@@ -76,9 +81,8 @@ class WebRTCBloc extends Bloc<WebRTCEvent, WebRTCState> {
       onRemoteVideoRenderActivated: (stream) =>
           add(RemoteVideoRenderActivated(stream)),
       onRemoteVideoRenderDeactivated: (stream) =>
-          add(const RemoteVideoRenderDeactivated()),
-      onWebRTCHangUpReceived: (webRTCHangUp) =>
-          add(HangUpCallRequested(webRTCHangUp)),
+          add(RemoteVideoRenderDeactivated(stream)),
+      onWebRTCHangUpReceived: (webRTCHangUp) => add(CallHungUp(webRTCHangUp)),
       onWebRTCRejectReceived: (webRTCHangUp) => add(CallRejected(webRTCHangUp)),
     );
 
@@ -102,9 +106,8 @@ class WebRTCBloc extends Bloc<WebRTCEvent, WebRTCState> {
       onRemoteVideoRenderActivated: (stream) =>
           add(RemoteVideoRenderActivated(stream)),
       onRemoteVideoRenderDeactivated: (stream) =>
-          add(const RemoteVideoRenderDeactivated()),
-      onWebRTCHangUpReceived: (webRTCHangUp) =>
-          add(HangUpCallRequested(webRTCHangUp)),
+          add(RemoteVideoRenderDeactivated(stream)),
+      onWebRTCHangUpReceived: (webRTCHangUp) => add(CallHungUp(webRTCHangUp)),
     );
 
     yield state.copyWith(status: WebRTCStatus.inCall);
@@ -146,26 +149,19 @@ class WebRTCBloc extends Bloc<WebRTCEvent, WebRTCState> {
     );
   }
 
-  Stream<WebRTCState> _mapLocalVideoRendersDeactivatedToState() async* {
-    assert(state.localVideoRendererActivationStatus);
-
-    yield state.copyWith(
-      localVideoRender: state.localVideoRender..srcObject = null,
-      localVideoRendererActivationStatus: false,
-    );
-  }
-
-  Stream<WebRTCState> _mapRemoteVideoRendersDeactivatedToState() async* {
+  Stream<WebRTCState> _mapRemoteVideoRendersDeactivatedToState(
+      RemoteVideoRenderDeactivated event) async* {
     assert(state.remoteVideoRendererActivationStatus);
 
     yield state.copyWith(
-      remoteVideoRender: state.remoteVideoRender..srcObject = null,
+      remoteVideoRender: state.remoteVideoRender..srcObject = event.mediaStream,
       remoteVideoRendererActivationStatus: false,
     );
   }
 
   Future<void> _disposeCall() async {
-    if (state.status != WebRTCStatus.hangUp) {
+    if (state.status != WebRTCStatus.hangUp &&
+        state.status != WebRTCStatus.reject) {
       await _sendHangUpRequest(WebRTCHangUp((b) => b..userId = state.userId));
     }
     await state.localMediaStream?.dispose();
@@ -182,6 +178,9 @@ class WebRTCBloc extends Bloc<WebRTCEvent, WebRTCState> {
   }
 
   Future<void> _sendHangUpRequest(WebRTCHangUp webRTCHangUp) async {
+    //CallBloc should be informed that this call has been ended
+    callBloc.add(CallEnded(WebRTCHangUp((b) => b..userId = state.userId)));
+
     await webRTCRepository.hangUp(
       hubConnection: socketRepository.hubConnection,
       webRTCHangUp: webRTCHangUp,
@@ -221,11 +220,21 @@ class WebRTCBloc extends Bloc<WebRTCEvent, WebRTCState> {
     );
   }
 
-  Stream<WebRTCState> _mapToggleMicMuteRequestedToState() async* {
-    final micMuteStatus = webRTCRepository.toggleMicMute(
+  Stream<WebRTCState>
+      _mapToggleLocalVideoRenderActivationRequestedToState() async* {
+    final cameraActivationStatus = webRTCRepository.toggleCameraActivation(
       mediaStream: state.localMediaStream,
-      micMuteStatus: state.micMuteStatus,
+      cameraActivationStatus: state.localVideoRendererActivationStatus,
     );
-    yield state.copyWith(micMuteStatus: micMuteStatus);
+    yield state.copyWith(
+        localVideoRendererActivationStatus: cameraActivationStatus);
+  }
+
+  Stream<WebRTCState> _mapToggleMicActivationRequestedToState() async* {
+    final micActivationStatus = webRTCRepository.toggleMicActivation(
+      mediaStream: state.localMediaStream,
+      micActivationStatus: state.micMuteStatus,
+    );
+    yield state.copyWith(micMuteStatus: micActivationStatus);
   }
 }

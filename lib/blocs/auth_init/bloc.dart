@@ -24,6 +24,8 @@ class AuthInitBloc extends Bloc<AuthInitEvent, AuthInitState> {
       yield state.copyWith(email: event.email);
     } else if (event is AuthInitSubmitted) {
       yield* _mapLoginSubmittedToState(state);
+    } else if (event is AuthInitInitialStateRequested) {
+      yield state.copyWith(status: AuthInitStatus.initial);
     }
   }
 

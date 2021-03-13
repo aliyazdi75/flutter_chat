@@ -7,6 +7,13 @@ export 'package:signalr_core/signalr_core.dart';
 
 typedef SocketResponseCallBack = void Function(Map<String, dynamic> response);
 
+class HubMethod {
+  HubMethod(this.methodName, this.methodFunction);
+
+  final String methodName;
+  final MethodInvacationFunc methodFunction;
+}
+
 abstract class SignalRBase {
   Future<HubConnection> startConnection(
     String token, {
@@ -16,9 +23,9 @@ abstract class SignalRBase {
 
   Future<void> stopConnection();
 
-  void on(String methodName, SocketResponseCallBack responseCallBack);
+  void on(String methodName, MethodInvacationFunc responseCallBack);
 
-  void off(String methodName, {SocketResponseCallBack responseCallBack});
+  void off(String methodName, {MethodInvacationFunc responseCallBack});
 
   Future<Map<String, dynamic>> invoke(String methodName, {List<dynamic> args});
 }
@@ -71,21 +78,19 @@ class SignalRHelper implements SignalRBase {
   @override
   void on(
     String methodName,
-    SocketResponseCallBack responseCallBack,
+    MethodInvacationFunc responseCallBack,
   ) {
     assert(hubConnection != null);
-    hubConnection.on(
-        methodName, _functionConvert(methodName, responseCallBack));
+    hubConnection.on(methodName, responseCallBack);
   }
 
   @override
   void off(
     String methodName, {
-    SocketResponseCallBack responseCallBack,
+    MethodInvacationFunc responseCallBack,
   }) {
     assert(hubConnection != null);
-    hubConnection.on(
-        methodName, _functionConvert(methodName, responseCallBack));
+    hubConnection.off(methodName, method: responseCallBack);
   }
 
   @override
@@ -100,7 +105,7 @@ class SignalRHelper implements SignalRBase {
     }
   }
 
-  MethodInvacationFunc _functionConvert(
+  static MethodInvacationFunc toSocketFunction(
       String methodName, SocketResponseCallBack responseCallBack) {
     return (arguments) {
       try {
