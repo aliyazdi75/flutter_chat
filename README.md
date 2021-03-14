@@ -1,6 +1,6 @@
 [![GitHub Repository Stars](https://img.shields.io/github/stars/aliyazdi75/flutter_chat?style=social)](https://github.com/aliyazdi75/flutter_chat/stargazers/)
 [![GitHub Forks](https://img.shields.io/github/forks/aliyazdi75/flutter_chat?style=social&label=Fork)](https://github.com/aliyazdi75/flutter_chat/network/)
-[![GitHub Watchers](https://img.shields.io/github/watchers/flutter_chat/gallery?label=Watch&style=social)](https://GitHub.com/aliyazdi75/flutter_chat/watchers/)
+[![GitHub Watchers](https://img.shields.io/github/watchers/aliyazdi75/flutter_chat?label=Watch&style=social)](https://GitHub.com/aliyazdi75/flutter_chat/watchers/)
 [![Twitter](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Faliyazdi75%2Fflutter_chat)
 [![Discord](https://img.shields.io/discord/783244968868446228.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/y4RcnyK5uT)
 
@@ -9,7 +9,9 @@
 A full-featured (simple message, voice, video) flutter chat application
 by SignalR and WebRTC.
 
-![Flutter Chat Demo](./screenshots/demo.gif)
+<p align="center">
+  <img src="./screenshots/demo.gif" />
+</p>
 
 ## Features
 
