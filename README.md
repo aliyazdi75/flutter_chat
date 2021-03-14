@@ -32,7 +32,7 @@ by SignalR and WebRTC.
 ## FAQs
 - This application uses a free STUN and TURN server from
   [here](https://numb.viagenie.ca/) which just works well on local
-  network. Please request good STUN and TURN servers in the issue.
+  network. Please mention good STUN and TURN servers in the issue.
 - The server source code is not open-source, but I will ask them to
   provide an open-source simple chatting. If you have time to make the
   server code with a simple user chatting and a simple socket handling,
