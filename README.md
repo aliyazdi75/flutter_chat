@@ -9,9 +9,7 @@
 A full-featured (simple message, voice, video) flutter chat application
 by SignalR and WebRTC.
 
-<p align="center">
-  <img src="./screenshots/demo.gif" alt="Flutter Chat Demo"/>
-</p>
+![Flutter Chat Demo](./screenshots/demo.gif)
 
 ## Features
 
