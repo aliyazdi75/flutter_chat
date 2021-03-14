@@ -1,14 +1,24 @@
 ## Demo
-![Flutter Chat Demo](demo.gif)
+<p align="center">
+  <img src="demo.gif" alt="Flutter Chat Demo"/>
+</p>
 
 ## Chat List
-![Chat List](chat_list.png)
+<p align="center">
+  <img src="chat_list.png" alt="Chat List"/>
+</p>
 
 ## Chat Page
-![Chat Page](chat_page.png)
+<p align="center">
+  <img src="chat_page.png" alt="Chat Page"/>
+</p>
 
 ## Call Ringing
-![Call Ringing](call_ringing.png)
+<p align="center">
+  <img src="call_ringing.png" alt="Call Ringing"/>
+</p>
 
 ## Video Call Page
-![Video Call Page](video_call.png)
+<p align="center">
+  <img src="video_call.png" alt="Video Call Page"/>
+</p>
