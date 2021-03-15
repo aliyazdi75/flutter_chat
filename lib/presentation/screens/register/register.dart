@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_chat/blocs/authentication/bloc.dart';
 import 'package:flutter_chat/blocs/register/bloc.dart';
 import 'package:flutter_chat/data/repositories/authentication/index.dart';
 
 import 'components/form.dart';
 
 class RegisterPage extends StatelessWidget {
-  const RegisterPage({@required this.email}) : assert(email != null);
+  const RegisterPage({
+    @required this.email,
+    @required this.authenticationRepository,
+    @required this.authenticationBloc,
+  }) : assert(email != null);
 
   final String email;
+  final AuthenticationRepository authenticationRepository;
+  final AuthenticationBloc authenticationBloc;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +31,7 @@ class RegisterPage extends StatelessWidget {
                   RepositoryProvider.of<AuthenticationRepository>(context),
             );
           },
-          child: RegisterForm(),
+          child: RegisterForm(authenticationBloc: authenticationBloc),
         ),
       ),
     );

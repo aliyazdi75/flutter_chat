@@ -14,6 +14,8 @@ by SignalR and WebRTC.
 ## Features
 
 - Full Authentication service
+- Bad request models and authentication validation from server (e.g.
+  email, password, user exists)
 - Storing authentication token
 - On demand log-out (e.g. an unauthorized request)
 - Chat list

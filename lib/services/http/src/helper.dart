@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter_chat/data/constants/index.dart';
 import 'package:http/http.dart' as http;
 
@@ -15,7 +14,6 @@ abstract class HttpClientBase {
   });
 
   Future<Map<String, dynamic>> httpPost({
-    @required Object badRequestModel,
     Map<String, String> queryParams,
     HttpHeaderType headerType,
     Map<String, dynamic> body,
@@ -28,10 +26,7 @@ class HttpHelper implements HttpClientBase {
   final http.Client _httpClient = http.Client();
   final String path;
 
-  Future<Map<String, dynamic>> _responseData(
-    http.Response response, {
-    Object badRequestModel,
-  }) async {
+  Future<Map<String, dynamic>> _responseData(http.Response response) async {
     try {
       switch (response.statusCode) {
         // 200
@@ -49,25 +44,10 @@ class HttpHelper implements HttpClientBase {
         case HttpStatus.noContent:
         // 400
         case HttpStatus.badRequest:
-          // if (badRequestModel == RegisterBadRequest) {
-          //   throw BadRequestException(
-          //     response.request.url.path,
-          //     RegisterBadRequest.fromJson(
-          //         json.decode(utf8.decode(response.bodyBytes))
-          //             as Map<String, dynamic>),
-          //   );
-          // } else if (badRequestModel == LoginBadRequest) {
-          //   throw BadRequestException(
-          //     response.request.url.path,
-          //     LoginBadRequest.fromJson(
-          //         json.decode(utf8.decode(response.bodyBytes))
-          //             as Map<String, dynamic>),
-          //   );
-          // }
-          throw NotHandleException(
+          throw BadRequestException(
             response.request.url.path,
-            'BadRequest Model not implemented',
-            response.statusCode.toString(),
+            json.decode(utf8.decode(response.bodyBytes))
+                as Map<String, dynamic>,
           );
         // 401
         case HttpStatus.unauthorized:
@@ -145,7 +125,6 @@ class HttpHelper implements HttpClientBase {
 
   @override
   Future<Map<String, dynamic>> httpPost({
-    Object badRequestModel,
     Map<String, String> queryParams,
     HttpHeaderType headerType = HttpHeaderType.anonymous,
     Map<String, dynamic> body,
@@ -167,7 +146,6 @@ class HttpHelper implements HttpClientBase {
           headers: await HttpHeader.setHeader(headerType),
           body: json.encode(body),
         ),
-        badRequestModel: badRequestModel,
       );
     } on SocketException catch (e) {
       throw SocketException(e.url, e.key, e.value);

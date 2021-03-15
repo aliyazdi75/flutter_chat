@@ -37,7 +37,7 @@ class LoginForm extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  _PasswordInput(onSubmit),
+                  _PasswordInput(onSubmit, state),
                   const Padding(padding: EdgeInsets.all(12)),
                   _LoginButton(state.status, onSubmit),
                 ],
@@ -51,9 +51,10 @@ class LoginForm extends StatelessWidget {
 }
 
 class _PasswordInput extends StatelessWidget {
-  _PasswordInput(this.onSubmit);
+  _PasswordInput(this.onSubmit, this.state);
 
   final Function onSubmit;
+  final LoginState state;
 
   @override
   Widget build(BuildContext context) {
@@ -64,8 +65,16 @@ class _PasswordInput extends StatelessWidget {
       onFieldSubmitted: (_) => onSubmit(),
       onChanged: (password) => BlocProvider.of<LoginBloc>(context)
           .add(LoginPasswordChanged(password)),
-      validator: (password) =>
-          password.isEmpty ? 'Password must not empty' : null,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      validator: (password) {
+        if (password.isEmpty) {
+          return 'Password must not be empty';
+        }
+        if (state.status == LoginStatus.failure && state.error != null) {
+          return state.error.message;
+        }
+        return null;
+      },
       decoration: const InputDecoration(labelText: 'Password'),
     );
   }

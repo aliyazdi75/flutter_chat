@@ -1,3 +1,4 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 
@@ -5,65 +6,93 @@ import 'serializers.dart';
 
 part 'exception.g.dart';
 
-abstract class HttpExceptionModel
-    implements Built<HttpExceptionModel, HttpExceptionModelBuilder> {
-  @nullable
-  List<ExceptionDescription> get exceptions;
+abstract class HttpExceptionModel<T>
+    implements Built<HttpExceptionModel<T>, HttpExceptionModelBuilder<T>> {
+  BuiltList<ExceptionClass<T>> get exceptions;
 
   HttpExceptionModel._();
 
   factory HttpExceptionModel(
-          [void Function(HttpExceptionModelBuilder) updates]) =
-      _$HttpExceptionModel;
+          [void Function(HttpExceptionModelBuilder<T>) updates]) =
+      _$HttpExceptionModel<T>;
 
-  static HttpExceptionModel fromJson(Map<String, dynamic> json) {
-    return serializers.deserializeWith(HttpExceptionModel.serializer, json);
+  static HttpExceptionModel<T> fromJson<T>(Map<String, dynamic> json) {
+    final specifiedType = FullType(HttpExceptionModel, [FullType(T)]);
+    final serializersWithBuilder = (serializers.toBuilder()
+          ..addBuilderFactory(
+            specifiedType,
+            () => HttpExceptionModelBuilder<T>(),
+          )
+          ..addBuilderFactory(
+            FullType(ExceptionClass, [FullType(T)]),
+            () => ExceptionClassBuilder<T>(),
+          )
+          ..addBuilderFactory(
+            FullType(BuiltList, [
+              FullType(ExceptionClass, [FullType(T)])
+            ]),
+            () => ListBuilder<ExceptionClass<T>>(),
+          ))
+        .build();
+    return serializersWithBuilder.deserialize(json,
+        specifiedType: specifiedType) as HttpExceptionModel<T>;
   }
 
   static Serializer<HttpExceptionModel> get serializer =>
       _$httpExceptionModelSerializer;
 }
 
-abstract class ExceptionDescription
-    implements Built<ExceptionDescription, ExceptionDescriptionBuilder> {
-  @BuiltValueField(wireName: 'class')
-  String get method;
+abstract class ExceptionClass<T>
+    implements Built<ExceptionClass<T>, ExceptionClassBuilder<T>> {
+  @nullable
+  T get errors;
 
+  @BuiltValueField(wireName: 'class')
+  ExceptionClassType get type;
+
+  @nullable
+  T get code;
+
+  @nullable
   String get message;
 
-  ExceptionDescription._();
+  ExceptionClass._();
 
-  factory ExceptionDescription(
-          [void Function(ExceptionDescriptionBuilder) updates]) =
-      _$ExceptionDescription;
+  factory ExceptionClass([void Function(ExceptionClassBuilder<T>) updates]) =
+      _$ExceptionClass<T>;
 
-  static ExceptionDescription fromJson(Map<String, dynamic> json) {
-    return serializers.deserializeWith(ExceptionDescription.serializer, json);
-  }
-
-  static Serializer<ExceptionDescription> get serializer =>
-      _$exceptionDescriptionSerializer;
+  static Serializer<ExceptionClass> get serializer =>
+      _$exceptionClassSerializer;
 }
 
-abstract class ValidationException
-    implements Built<ValidationException, ValidationExceptionBuilder> {
-  @BuiltValueField(wireName: 'class')
-  String get method;
+class ExceptionClassType extends EnumClass {
+  @BuiltValueEnumConst(wireName: 'ValidationException')
+  static const ExceptionClassType validationException = _$validationException;
 
+  @BuiltValueEnumConst(wireName: 'SignInException')
+  static const ExceptionClassType loginException = _$loginException;
+
+  const ExceptionClassType._(String name) : super(name);
+
+  static BuiltSet<ExceptionClassType> get values => _$exceptionClassTypeValues;
+
+  static ExceptionClassType valueOf(String name) =>
+      _$exceptionClassTypeValueOf(name);
+
+  static Serializer<ExceptionClassType> get serializer =>
+      _$exceptionClassTypeSerializer;
+}
+
+abstract class ValidationFieldError
+    implements Built<ValidationFieldError, ValidationFieldErrorBuilder> {
   String get message;
 
-  List<String> get fields;
+  ValidationFieldError._();
 
-  ValidationException._();
+  factory ValidationFieldError(
+          [void Function(ValidationFieldErrorBuilder) updates]) =
+      _$ValidationFieldError;
 
-  factory ValidationException(
-          [void Function(ValidationExceptionBuilder) updates]) =
-      _$ValidationException;
-
-  static ValidationException fromJson(Map<String, dynamic> json) {
-    return serializers.deserializeWith(ValidationException.serializer, json);
-  }
-
-  static Serializer<ValidationException> get serializer =>
-      _$validationExceptionSerializer;
+  static Serializer<ValidationFieldError> get serializer =>
+      _$validationFieldErrorSerializer;
 }

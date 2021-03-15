@@ -6,41 +6,79 @@ part of 'exception.dart';
 // BuiltValueGenerator
 // **************************************************************************
 
-Serializer<HttpExceptionModel> _$httpExceptionModelSerializer =
+const ExceptionClassType _$validationException =
+    const ExceptionClassType._('validationException');
+const ExceptionClassType _$loginException =
+    const ExceptionClassType._('loginException');
+
+ExceptionClassType _$exceptionClassTypeValueOf(String name) {
+  switch (name) {
+    case 'validationException':
+      return _$validationException;
+    case 'loginException':
+      return _$loginException;
+    default:
+      throw new ArgumentError(name);
+  }
+}
+
+final BuiltSet<ExceptionClassType> _$exceptionClassTypeValues =
+    new BuiltSet<ExceptionClassType>(const <ExceptionClassType>[
+  _$validationException,
+  _$loginException,
+]);
+
+Serializer<HttpExceptionModel<Object>> _$httpExceptionModelSerializer =
     new _$HttpExceptionModelSerializer();
-Serializer<ExceptionDescription> _$exceptionDescriptionSerializer =
-    new _$ExceptionDescriptionSerializer();
-Serializer<ValidationException> _$validationExceptionSerializer =
-    new _$ValidationExceptionSerializer();
+Serializer<ExceptionClass<Object>> _$exceptionClassSerializer =
+    new _$ExceptionClassSerializer();
+Serializer<ExceptionClassType> _$exceptionClassTypeSerializer =
+    new _$ExceptionClassTypeSerializer();
+Serializer<ValidationFieldError> _$validationFieldErrorSerializer =
+    new _$ValidationFieldErrorSerializer();
 
 class _$HttpExceptionModelSerializer
-    implements StructuredSerializer<HttpExceptionModel> {
+    implements StructuredSerializer<HttpExceptionModel<Object>> {
   @override
   final Iterable<Type> types = const [HttpExceptionModel, _$HttpExceptionModel];
   @override
   final String wireName = 'HttpExceptionModel';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, HttpExceptionModel object,
+  Iterable<Object> serialize(
+      Serializers serializers, HttpExceptionModel<Object> object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[];
-    Object value;
-    value = object.exceptions;
-    if (value != null) {
-      result
-        ..add('exceptions')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(
-                List, const [const FullType(ExceptionDescription)])));
-    }
+    final isUnderspecified =
+        specifiedType.isUnspecified || specifiedType.parameters.isEmpty;
+    if (!isUnderspecified) serializers.expectBuilder(specifiedType);
+    final parameterT =
+        isUnderspecified ? FullType.object : specifiedType.parameters[0];
+
+    final result = <Object>[
+      'exceptions',
+      serializers.serialize(object.exceptions,
+          specifiedType: new FullType(BuiltList, [
+            new FullType(ExceptionClass, [parameterT])
+          ])),
+    ];
+
     return result;
   }
 
   @override
-  HttpExceptionModel deserialize(
+  HttpExceptionModel<Object> deserialize(
       Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = new HttpExceptionModelBuilder();
+    final isUnderspecified =
+        specifiedType.isUnspecified || specifiedType.parameters.isEmpty;
+    if (!isUnderspecified) serializers.expectBuilder(specifiedType);
+    final parameterT =
+        isUnderspecified ? FullType.object : specifiedType.parameters[0];
+
+    final result = isUnderspecified
+        ? new HttpExceptionModelBuilder<Object>()
+        : serializers.newBuilder(specifiedType)
+            as HttpExceptionModelBuilder<Object>;
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
@@ -49,10 +87,10 @@ class _$HttpExceptionModelSerializer
       final Object value = iterator.current;
       switch (key) {
         case 'exceptions':
-          result.exceptions = serializers.deserialize(value,
-                  specifiedType: const FullType(
-                      List, const [const FullType(ExceptionDescription)]))
-              as List<ExceptionDescription>;
+          result.exceptions.replace(serializers.deserialize(value,
+              specifiedType: new FullType(BuiltList, [
+                new FullType(ExceptionClass, [parameterT])
+              ])) as BuiltList<Object>);
           break;
       }
     }
@@ -61,37 +99,65 @@ class _$HttpExceptionModelSerializer
   }
 }
 
-class _$ExceptionDescriptionSerializer
-    implements StructuredSerializer<ExceptionDescription> {
+class _$ExceptionClassSerializer
+    implements StructuredSerializer<ExceptionClass<Object>> {
   @override
-  final Iterable<Type> types = const [
-    ExceptionDescription,
-    _$ExceptionDescription
-  ];
+  final Iterable<Type> types = const [ExceptionClass, _$ExceptionClass];
   @override
-  final String wireName = 'ExceptionDescription';
+  final String wireName = 'ExceptionClass';
 
   @override
   Iterable<Object> serialize(
-      Serializers serializers, ExceptionDescription object,
+      Serializers serializers, ExceptionClass<Object> object,
       {FullType specifiedType = FullType.unspecified}) {
+    final isUnderspecified =
+        specifiedType.isUnspecified || specifiedType.parameters.isEmpty;
+    if (!isUnderspecified) serializers.expectBuilder(specifiedType);
+    final parameterT =
+        isUnderspecified ? FullType.object : specifiedType.parameters[0];
+
     final result = <Object>[
       'class',
-      serializers.serialize(object.method,
-          specifiedType: const FullType(String)),
-      'message',
-      serializers.serialize(object.message,
-          specifiedType: const FullType(String)),
+      serializers.serialize(object.type,
+          specifiedType: const FullType(ExceptionClassType)),
     ];
-
+    Object value;
+    value = object.errors;
+    if (value != null) {
+      result
+        ..add('errors')
+        ..add(serializers.serialize(value, specifiedType: parameterT));
+    }
+    value = object.code;
+    if (value != null) {
+      result
+        ..add('code')
+        ..add(serializers.serialize(value, specifiedType: parameterT));
+    }
+    value = object.message;
+    if (value != null) {
+      result
+        ..add('message')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
     return result;
   }
 
   @override
-  ExceptionDescription deserialize(
+  ExceptionClass<Object> deserialize(
       Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = new ExceptionDescriptionBuilder();
+    final isUnderspecified =
+        specifiedType.isUnspecified || specifiedType.parameters.isEmpty;
+    if (!isUnderspecified) serializers.expectBuilder(specifiedType);
+    final parameterT =
+        isUnderspecified ? FullType.object : specifiedType.parameters[0];
+
+    final result = isUnderspecified
+        ? new ExceptionClassBuilder<Object>()
+        : serializers.newBuilder(specifiedType)
+            as ExceptionClassBuilder<Object>;
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
@@ -99,9 +165,18 @@ class _$ExceptionDescriptionSerializer
       iterator.moveNext();
       final Object value = iterator.current;
       switch (key) {
+        case 'errors':
+          result.errors =
+              serializers.deserialize(value, specifiedType: parameterT);
+          break;
         case 'class':
-          result.method = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+          result.type = serializers.deserialize(value,
+                  specifiedType: const FullType(ExceptionClassType))
+              as ExceptionClassType;
+          break;
+        case 'code':
+          result.code =
+              serializers.deserialize(value, specifiedType: parameterT);
           break;
         case 'message':
           result.message = serializers.deserialize(value,
@@ -114,40 +189,61 @@ class _$ExceptionDescriptionSerializer
   }
 }
 
-class _$ValidationExceptionSerializer
-    implements StructuredSerializer<ValidationException> {
+class _$ExceptionClassTypeSerializer
+    implements PrimitiveSerializer<ExceptionClassType> {
+  static const Map<String, Object> _toWire = const <String, Object>{
+    'validationException': 'ValidationException',
+    'loginException': 'SignInException',
+  };
+  static const Map<Object, String> _fromWire = const <Object, String>{
+    'ValidationException': 'validationException',
+    'SignInException': 'loginException',
+  };
+
+  @override
+  final Iterable<Type> types = const <Type>[ExceptionClassType];
+  @override
+  final String wireName = 'ExceptionClassType';
+
+  @override
+  Object serialize(Serializers serializers, ExceptionClassType object,
+          {FullType specifiedType = FullType.unspecified}) =>
+      _toWire[object.name] ?? object.name;
+
+  @override
+  ExceptionClassType deserialize(Serializers serializers, Object serialized,
+          {FullType specifiedType = FullType.unspecified}) =>
+      ExceptionClassType.valueOf(_fromWire[serialized] ?? serialized as String);
+}
+
+class _$ValidationFieldErrorSerializer
+    implements StructuredSerializer<ValidationFieldError> {
   @override
   final Iterable<Type> types = const [
-    ValidationException,
-    _$ValidationException
+    ValidationFieldError,
+    _$ValidationFieldError
   ];
   @override
-  final String wireName = 'ValidationException';
+  final String wireName = 'ValidationFieldError';
 
   @override
   Iterable<Object> serialize(
-      Serializers serializers, ValidationException object,
+      Serializers serializers, ValidationFieldError object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
-      'class',
-      serializers.serialize(object.method,
-          specifiedType: const FullType(String)),
       'message',
       serializers.serialize(object.message,
           specifiedType: const FullType(String)),
-      'fields',
-      serializers.serialize(object.fields,
-          specifiedType: const FullType(List, const [const FullType(String)])),
     ];
 
     return result;
   }
 
   @override
-  ValidationException deserialize(
+  ValidationFieldError deserialize(
       Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = new ValidationExceptionBuilder();
+    final result = new ValidationFieldErrorBuilder();
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
@@ -155,19 +251,9 @@ class _$ValidationExceptionSerializer
       iterator.moveNext();
       final Object value = iterator.current;
       switch (key) {
-        case 'class':
-          result.method = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
-          break;
         case 'message':
           result.message = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
-          break;
-        case 'fields':
-          result.fields = serializers.deserialize(value,
-                  specifiedType:
-                      const FullType(List, const [const FullType(String)]))
-              as List<String>;
           break;
       }
     }
@@ -176,24 +262,30 @@ class _$ValidationExceptionSerializer
   }
 }
 
-class _$HttpExceptionModel extends HttpExceptionModel {
+class _$HttpExceptionModel<T> extends HttpExceptionModel<T> {
   @override
-  final List<ExceptionDescription> exceptions;
+  final BuiltList<ExceptionClass<T>> exceptions;
 
   factory _$HttpExceptionModel(
-          [void Function(HttpExceptionModelBuilder) updates]) =>
-      (new HttpExceptionModelBuilder()..update(updates)).build();
+          [void Function(HttpExceptionModelBuilder<T>) updates]) =>
+      (new HttpExceptionModelBuilder<T>()..update(updates)).build();
 
-  _$HttpExceptionModel._({this.exceptions}) : super._();
+  _$HttpExceptionModel._({this.exceptions}) : super._() {
+    BuiltValueNullFieldError.checkNotNull(
+        exceptions, 'HttpExceptionModel', 'exceptions');
+    if (T == dynamic) {
+      throw new BuiltValueMissingGenericsError('HttpExceptionModel', 'T');
+    }
+  }
 
   @override
-  HttpExceptionModel rebuild(
-          void Function(HttpExceptionModelBuilder) updates) =>
+  HttpExceptionModel<T> rebuild(
+          void Function(HttpExceptionModelBuilder<T>) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
-  HttpExceptionModelBuilder toBuilder() =>
-      new HttpExceptionModelBuilder()..replace(this);
+  HttpExceptionModelBuilder<T> toBuilder() =>
+      new HttpExceptionModelBuilder<T>()..replace(this);
 
   @override
   bool operator ==(Object other) {
@@ -214,104 +306,140 @@ class _$HttpExceptionModel extends HttpExceptionModel {
   }
 }
 
-class HttpExceptionModelBuilder
-    implements Builder<HttpExceptionModel, HttpExceptionModelBuilder> {
-  _$HttpExceptionModel _$v;
+class HttpExceptionModelBuilder<T>
+    implements Builder<HttpExceptionModel<T>, HttpExceptionModelBuilder<T>> {
+  _$HttpExceptionModel<T> _$v;
 
-  List<ExceptionDescription> _exceptions;
+  ListBuilder<ExceptionClass<T>> _exceptions;
 
-  List<ExceptionDescription> get exceptions => _$this._exceptions;
+  ListBuilder<ExceptionClass<T>> get exceptions =>
+      _$this._exceptions ??= new ListBuilder<ExceptionClass<T>>();
 
-  set exceptions(List<ExceptionDescription> exceptions) =>
+  set exceptions(ListBuilder<ExceptionClass<T>> exceptions) =>
       _$this._exceptions = exceptions;
 
   HttpExceptionModelBuilder();
 
-  HttpExceptionModelBuilder get _$this {
+  HttpExceptionModelBuilder<T> get _$this {
     final $v = _$v;
     if ($v != null) {
-      _exceptions = $v.exceptions;
+      _exceptions = $v.exceptions.toBuilder();
       _$v = null;
     }
     return this;
   }
 
   @override
-  void replace(HttpExceptionModel other) {
+  void replace(HttpExceptionModel<T> other) {
     ArgumentError.checkNotNull(other, 'other');
-    _$v = other as _$HttpExceptionModel;
+    _$v = other as _$HttpExceptionModel<T>;
   }
 
   @override
-  void update(void Function(HttpExceptionModelBuilder) updates) {
+  void update(void Function(HttpExceptionModelBuilder<T>) updates) {
     if (updates != null) updates(this);
   }
 
   @override
-  _$HttpExceptionModel build() {
-    final _$result = _$v ?? new _$HttpExceptionModel._(exceptions: exceptions);
+  _$HttpExceptionModel<T> build() {
+    _$HttpExceptionModel<T> _$result;
+    try {
+      _$result =
+          _$v ?? new _$HttpExceptionModel<T>._(exceptions: exceptions.build());
+    } catch (_) {
+      String _$failedField;
+      try {
+        _$failedField = 'exceptions';
+        exceptions.build();
+      } catch (e) {
+        throw new BuiltValueNestedFieldError(
+            'HttpExceptionModel', _$failedField, e.toString());
+      }
+      rethrow;
+    }
     replace(_$result);
     return _$result;
   }
 }
 
-class _$ExceptionDescription extends ExceptionDescription {
+class _$ExceptionClass<T> extends ExceptionClass<T> {
   @override
-  final String method;
+  final T errors;
+  @override
+  final ExceptionClassType type;
+  @override
+  final T code;
   @override
   final String message;
 
-  factory _$ExceptionDescription(
-          [void Function(ExceptionDescriptionBuilder) updates]) =>
-      (new ExceptionDescriptionBuilder()..update(updates)).build();
+  factory _$ExceptionClass([void Function(ExceptionClassBuilder<T>) updates]) =>
+      (new ExceptionClassBuilder<T>()..update(updates)).build();
 
-  _$ExceptionDescription._({this.method, this.message}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(
-        method, 'ExceptionDescription', 'method');
-    BuiltValueNullFieldError.checkNotNull(
-        message, 'ExceptionDescription', 'message');
+  _$ExceptionClass._({this.errors, this.type, this.code, this.message})
+      : super._() {
+    BuiltValueNullFieldError.checkNotNull(type, 'ExceptionClass', 'type');
+    if (T == dynamic) {
+      throw new BuiltValueMissingGenericsError('ExceptionClass', 'T');
+    }
   }
 
   @override
-  ExceptionDescription rebuild(
-          void Function(ExceptionDescriptionBuilder) updates) =>
+  ExceptionClass<T> rebuild(void Function(ExceptionClassBuilder<T>) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
-  ExceptionDescriptionBuilder toBuilder() =>
-      new ExceptionDescriptionBuilder()..replace(this);
+  ExceptionClassBuilder<T> toBuilder() =>
+      new ExceptionClassBuilder<T>()..replace(this);
 
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is ExceptionDescription &&
-        method == other.method &&
+    return other is ExceptionClass &&
+        errors == other.errors &&
+        type == other.type &&
+        code == other.code &&
         message == other.message;
   }
 
   @override
   int get hashCode {
-    return $jf($jc($jc(0, method.hashCode), message.hashCode));
+    return $jf($jc(
+        $jc($jc($jc(0, errors.hashCode), type.hashCode), code.hashCode),
+        message.hashCode));
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('ExceptionDescription')
-          ..add('method', method)
+    return (newBuiltValueToStringHelper('ExceptionClass')
+          ..add('errors', errors)
+          ..add('type', type)
+          ..add('code', code)
           ..add('message', message))
         .toString();
   }
 }
 
-class ExceptionDescriptionBuilder
-    implements Builder<ExceptionDescription, ExceptionDescriptionBuilder> {
-  _$ExceptionDescription _$v;
+class ExceptionClassBuilder<T>
+    implements Builder<ExceptionClass<T>, ExceptionClassBuilder<T>> {
+  _$ExceptionClass<T> _$v;
 
-  String _method;
+  T _errors;
 
-  String get method => _$this._method;
+  T get errors => _$this._errors;
 
-  set method(String method) => _$this._method = method;
+  set errors(T errors) => _$this._errors = errors;
+
+  ExceptionClassType _type;
+
+  ExceptionClassType get type => _$this._type;
+
+  set type(ExceptionClassType type) => _$this._type = type;
+
+  T _code;
+
+  T get code => _$this._code;
+
+  set code(T code) => _$this._code = code;
 
   String _message;
 
@@ -319,12 +447,14 @@ class ExceptionDescriptionBuilder
 
   set message(String message) => _$this._message = message;
 
-  ExceptionDescriptionBuilder();
+  ExceptionClassBuilder();
 
-  ExceptionDescriptionBuilder get _$this {
+  ExceptionClassBuilder<T> get _$this {
     final $v = _$v;
     if ($v != null) {
-      _method = $v.method;
+      _errors = $v.errors;
+      _type = $v.type;
+      _code = $v.code;
       _message = $v.message;
       _$v = null;
     }
@@ -332,94 +462,74 @@ class ExceptionDescriptionBuilder
   }
 
   @override
-  void replace(ExceptionDescription other) {
+  void replace(ExceptionClass<T> other) {
     ArgumentError.checkNotNull(other, 'other');
-    _$v = other as _$ExceptionDescription;
+    _$v = other as _$ExceptionClass<T>;
   }
 
   @override
-  void update(void Function(ExceptionDescriptionBuilder) updates) {
+  void update(void Function(ExceptionClassBuilder<T>) updates) {
     if (updates != null) updates(this);
   }
 
   @override
-  _$ExceptionDescription build() {
+  _$ExceptionClass<T> build() {
     final _$result = _$v ??
-        new _$ExceptionDescription._(
-            method: BuiltValueNullFieldError.checkNotNull(
-                method, 'ExceptionDescription', 'method'),
-            message: BuiltValueNullFieldError.checkNotNull(
-                message, 'ExceptionDescription', 'message'));
+        new _$ExceptionClass<T>._(
+            errors: errors,
+            type: BuiltValueNullFieldError.checkNotNull(
+                type, 'ExceptionClass', 'type'),
+            code: code,
+            message: message);
     replace(_$result);
     return _$result;
   }
 }
 
-class _$ValidationException extends ValidationException {
-  @override
-  final String method;
+class _$ValidationFieldError extends ValidationFieldError {
   @override
   final String message;
-  @override
-  final List<String> fields;
 
-  factory _$ValidationException(
-          [void Function(ValidationExceptionBuilder) updates]) =>
-      (new ValidationExceptionBuilder()..update(updates)).build();
+  factory _$ValidationFieldError(
+          [void Function(ValidationFieldErrorBuilder) updates]) =>
+      (new ValidationFieldErrorBuilder()..update(updates)).build();
 
-  _$ValidationException._({this.method, this.message, this.fields})
-      : super._() {
+  _$ValidationFieldError._({this.message}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        method, 'ValidationException', 'method');
-    BuiltValueNullFieldError.checkNotNull(
-        message, 'ValidationException', 'message');
-    BuiltValueNullFieldError.checkNotNull(
-        fields, 'ValidationException', 'fields');
+        message, 'ValidationFieldError', 'message');
   }
 
   @override
-  ValidationException rebuild(
-          void Function(ValidationExceptionBuilder) updates) =>
+  ValidationFieldError rebuild(
+          void Function(ValidationFieldErrorBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
-  ValidationExceptionBuilder toBuilder() =>
-      new ValidationExceptionBuilder()..replace(this);
+  ValidationFieldErrorBuilder toBuilder() =>
+      new ValidationFieldErrorBuilder()..replace(this);
 
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is ValidationException &&
-        method == other.method &&
-        message == other.message &&
-        fields == other.fields;
+    return other is ValidationFieldError && message == other.message;
   }
 
   @override
   int get hashCode {
-    return $jf(
-        $jc($jc($jc(0, method.hashCode), message.hashCode), fields.hashCode));
+    return $jf($jc(0, message.hashCode));
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('ValidationException')
-          ..add('method', method)
-          ..add('message', message)
-          ..add('fields', fields))
+    return (newBuiltValueToStringHelper('ValidationFieldError')
+          ..add('message', message))
         .toString();
   }
 }
 
-class ValidationExceptionBuilder
-    implements Builder<ValidationException, ValidationExceptionBuilder> {
-  _$ValidationException _$v;
-
-  String _method;
-
-  String get method => _$this._method;
-
-  set method(String method) => _$this._method = method;
+class ValidationFieldErrorBuilder
+    implements Builder<ValidationFieldError, ValidationFieldErrorBuilder> {
+  _$ValidationFieldError _$v;
 
   String _message;
 
@@ -427,46 +537,34 @@ class ValidationExceptionBuilder
 
   set message(String message) => _$this._message = message;
 
-  List<String> _fields;
+  ValidationFieldErrorBuilder();
 
-  List<String> get fields => _$this._fields;
-
-  set fields(List<String> fields) => _$this._fields = fields;
-
-  ValidationExceptionBuilder();
-
-  ValidationExceptionBuilder get _$this {
+  ValidationFieldErrorBuilder get _$this {
     final $v = _$v;
     if ($v != null) {
-      _method = $v.method;
       _message = $v.message;
-      _fields = $v.fields;
       _$v = null;
     }
     return this;
   }
 
   @override
-  void replace(ValidationException other) {
+  void replace(ValidationFieldError other) {
     ArgumentError.checkNotNull(other, 'other');
-    _$v = other as _$ValidationException;
+    _$v = other as _$ValidationFieldError;
   }
 
   @override
-  void update(void Function(ValidationExceptionBuilder) updates) {
+  void update(void Function(ValidationFieldErrorBuilder) updates) {
     if (updates != null) updates(this);
   }
 
   @override
-  _$ValidationException build() {
+  _$ValidationFieldError build() {
     final _$result = _$v ??
-        new _$ValidationException._(
-            method: BuiltValueNullFieldError.checkNotNull(
-                method, 'ValidationException', 'method'),
+        new _$ValidationFieldError._(
             message: BuiltValueNullFieldError.checkNotNull(
-                message, 'ValidationException', 'message'),
-            fields: BuiltValueNullFieldError.checkNotNull(
-                fields, 'ValidationException', 'fields'));
+                message, 'ValidationFieldError', 'message'));
     replace(_$result);
     return _$result;
   }

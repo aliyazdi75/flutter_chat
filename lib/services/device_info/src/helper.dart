@@ -64,7 +64,7 @@ class DeviceInfoHelper implements DeviceInfoBase {
     try {
       if (Platform.isAndroid) {
         final build = await deviceInfoPlugin.androidInfo;
-        return '${build.model} ${build.model}';
+        return '${build.model}';
       } else if (Platform.isIOS) {
         final data = await deviceInfoPlugin.iosInfo;
         return '${data.model} ${data.utsname.machine}';

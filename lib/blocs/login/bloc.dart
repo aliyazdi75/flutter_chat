@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_chat/data/models/response/index.dart';
 import 'package:flutter_chat/data/repositories/authentication/index.dart';
 import 'package:flutter_chat/services/http/index.dart';
 import 'package:meta/meta.dart';
@@ -24,7 +25,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   @override
   Stream<LoginState> mapEventToState(LoginEvent event) async* {
     if (event is LoginPasswordChanged) {
-      yield state.copyWith(password: event.password);
+      yield state.copyWith(
+        status: LoginStatus.initial,
+        password: event.password,
+        error: null,
+      );
     } else if (event is LoginSubmitted) {
       yield* _mapLoginSubmittedToState(state);
     }
@@ -43,11 +48,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         password: state.password,
       );
       yield state.copyWith(status: LoginStatus.success);
-    } on BadRequestException {
-      // final error = e.model as LoginBadRequest;
-      // print(
-      //     'kir to requestet ba ina ${error.email ?? error.password ?? error.nonFieldErrors}');
-      yield state.copyWith(status: LoginStatus.failure);
+    } on BadRequestException catch (e) {
+      final error = HttpExceptionModel.fromJson<LoginBadRequestCode>(e.model);
+      print('kir to requestet ba ina ${error.exceptions.first}');
+      yield state.copyWith(
+        status: LoginStatus.failure,
+        error: error.exceptions.first,
+      );
     } on SocketException {
       print('kir to netet');
       yield state.copyWith(status: LoginStatus.failure);

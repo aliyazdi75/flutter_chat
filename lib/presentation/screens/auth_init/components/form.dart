@@ -33,9 +33,15 @@ class AuthInitForm extends StatelessWidget {
             ),
           );
         } else if (state.status == AuthInitStatus.nonexistence) {
+          BlocProvider.of<AuthInitBloc>(context)
+              .add(const AuthInitInitialStateRequested());
           Navigator.of(context).push(
             MaterialPageRoute<void>(
-              builder: (context) => RegisterPage(email: state.email),
+              builder: (context) => RegisterPage(
+                email: state.email,
+                authenticationRepository: authenticationRepository,
+                authenticationBloc: authenticationBloc,
+              ),
             ),
           );
         } else if (state.status == AuthInitStatus.failure) {
@@ -61,7 +67,7 @@ class AuthInitForm extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  _EmailInput(onSubmit),
+                  _EmailInput(onSubmit, state),
                   const Padding(padding: EdgeInsets.all(12)),
                   _SubmitButton(state.status, onSubmit),
                 ],
@@ -75,9 +81,10 @@ class AuthInitForm extends StatelessWidget {
 }
 
 class _EmailInput extends StatelessWidget {
-  _EmailInput(this.onSubmit);
+  _EmailInput(this.onSubmit, this.state);
 
   final Function onSubmit;
+  final AuthInitState state;
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +94,16 @@ class _EmailInput extends StatelessWidget {
       onFieldSubmitted: (_) => onSubmit(),
       onChanged: (email) => BlocProvider.of<AuthInitBloc>(context)
           .add(AuthInitEmailChanged(email)),
-      validator: (email) => email.isEmpty ? 'Email must not empty' : null,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      validator: (email) {
+        if (email.isEmpty) {
+          return 'Email must not be empty';
+        }
+        if (state.status == AuthInitStatus.failure && state.error != null) {
+          return state.error.email.first.message;
+        }
+        return null;
+      },
       decoration: const InputDecoration(labelText: 'Email'),
     );
   }

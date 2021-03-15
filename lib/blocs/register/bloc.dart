@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_chat/data/models/response/index.dart';
 import 'package:flutter_chat/data/repositories/authentication/index.dart';
 import 'package:flutter_chat/services/http/index.dart';
 import 'package:meta/meta.dart';
@@ -23,7 +24,11 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   @override
   Stream<RegisterState> mapEventToState(RegisterEvent event) async* {
     if (event is RegisterPasswordChanged) {
-      yield state.copyWith(password: event.password);
+      yield state.copyWith(
+        status: RegisterStatus.initial,
+        password: event.password,
+        error: null,
+      );
     } else if (event is RegisterSubmitted) {
       yield* _mapLoginSubmittedToState(state);
     }
@@ -42,10 +47,14 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         password: state.password,
       );
       yield state.copyWith(status: RegisterStatus.success);
-    } on BadRequestException {
-      // final error = e.model as LoginBadRequest;
-      // print(
-      //     'kir to requestet ba ina ${error.email ?? error.password ?? error.nonFieldErrors}');
+    } on BadRequestException catch (e) {
+      final error =
+          HttpExceptionModel.fromJson<RegisterBadRequestCode>(e.model);
+      print('kir to requestet ba ina ${error.exceptions.first}');
+      yield state.copyWith(
+        status: RegisterStatus.failure,
+        error: error.exceptions.first,
+      );
       yield state.copyWith(status: RegisterStatus.failure);
     } on SocketException {
       print('kir to netet');

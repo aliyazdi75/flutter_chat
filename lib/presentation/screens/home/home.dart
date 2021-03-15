@@ -4,7 +4,6 @@ import 'package:flutter_chat/blocs/authentication/bloc.dart';
 import 'package:flutter_chat/blocs/call/bloc.dart';
 import 'package:flutter_chat/blocs/home/bloc.dart';
 import 'package:flutter_chat/blocs/socket/bloc.dart';
-import 'package:flutter_chat/data/models/web_rtc/index.dart';
 import 'package:flutter_chat/data/repositories/account/index.dart';
 import 'package:flutter_chat/data/repositories/authentication/index.dart';
 import 'package:flutter_chat/data/repositories/call/index.dart';

@@ -14,11 +14,11 @@ dependencies:
   cupertino_icons: any
   http: any
   built_collection: ^5.0.0
-  built_value: ^8.0.0
+  built_value: ^8.0.2
   equatable: ^2.0.0
   bloc: ^7.0.0-nullsafety.2
   flutter_bloc: ^7.0.0-nullsafety.2
-  shared_preferences: ^2.0.3
+  shared_preferences: ^2.0.4
   url_launcher: ^6.0.1
   signalr_core: ^1.0.8
   device_info: ^2.0.0

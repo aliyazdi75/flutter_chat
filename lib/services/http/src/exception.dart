@@ -88,7 +88,7 @@ class UnauthorisedException implements Exception {
 
 class BadRequestException implements Exception {
   final String url;
-  final dynamic model;
+  final Map<String, dynamic> model;
 
   BadRequestException(this.url, this.model);
 

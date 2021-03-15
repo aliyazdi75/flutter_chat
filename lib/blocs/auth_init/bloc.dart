@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_chat/data/models/response/index.dart';
 import 'package:flutter_chat/data/repositories/authentication/index.dart';
 import 'package:flutter_chat/services/http/index.dart';
 import 'package:meta/meta.dart';
@@ -21,7 +22,11 @@ class AuthInitBloc extends Bloc<AuthInitEvent, AuthInitState> {
   @override
   Stream<AuthInitState> mapEventToState(AuthInitEvent event) async* {
     if (event is AuthInitEmailChanged) {
-      yield state.copyWith(email: event.email);
+      yield state.copyWith(
+        status: AuthInitStatus.initial,
+        email: event.email,
+        error: null,
+      );
     } else if (event is AuthInitSubmitted) {
       yield* _mapLoginSubmittedToState(state);
     } else if (event is AuthInitInitialStateRequested) {
@@ -43,11 +48,13 @@ class AuthInitBloc extends Bloc<AuthInitEvent, AuthInitState> {
             ? AuthInitStatus.existence
             : AuthInitStatus.nonexistence,
       );
-    } on BadRequestException {
-      // final error = e.model as LoginBadRequest;
-      // print(
-      //     'kir to requestet ba ina ${error.email ?? error.password ?? error.nonFieldErrors}');
-      yield state.copyWith(status: AuthInitStatus.failure);
+    } on BadRequestException catch (e) {
+      final error = HttpExceptionModel.fromJson<AuthInitBadRequest>(e.model);
+      print('kir to requestet ba ina ${error.exceptions.first.errors.email}');
+      yield state.copyWith(
+        status: AuthInitStatus.failure,
+        error: error.exceptions.first.errors,
+      );
     } on SocketException {
       print('kir to netet');
       yield state.copyWith(status: AuthInitStatus.failure);
