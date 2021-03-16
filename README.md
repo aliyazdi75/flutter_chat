@@ -55,3 +55,4 @@ Got no time? If you found my project and articles helpful,
 [Share](https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Faliyazdi75%2Fflutter_chat)
 and Star.
 
+[![Stargazers over time](https://starchart.cc/aliyazdi75/flutter_chat.svg)](https://starchart.cc/aliyazdi75/flutter_chat)
