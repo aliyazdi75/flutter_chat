@@ -60,7 +60,7 @@ class AuthenticationBloc
   Stream<AuthenticationState>
       _mapAuthenticationLoggedOutRequestedToState() async* {
     try {
-      await AuthenticationRepository.logout();
+      await authenticationRepository.logout();
       yield const AuthenticationState.unauthenticated();
     } on Exception {
       yield const AuthenticationState.unauthenticated();

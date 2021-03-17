@@ -44,17 +44,7 @@ class SignalRHelper implements SignalRBase {
     final queryParams = {signalRAuthQuery: token};
     final hubConnection = HubConnectionBuilder()
         .withUrl(
-          usingSSL
-              ? Uri.https(
-                  serverUrl,
-                  '/hub/',
-                  queryParams,
-                ).toString()
-              : Uri.http(
-                  serverUrl,
-                  '/hub/',
-                  queryParams,
-                ).toString(),
+          Uri.https(serverUrl, '/hub/', queryParams).toString(),
           HttpConnectionOptions(
               // accessTokenFactory: () async => token,
               // logging: (level, message) => print(message),

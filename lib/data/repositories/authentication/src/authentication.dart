@@ -8,6 +8,8 @@ import 'package:flutter_chat/services/device_info/index.dart';
 import 'package:meta/meta.dart';
 
 class AuthenticationRepository {
+  Authentication _credit;
+
   Future<RegisterResponse> register({
     @required String email,
     @required String password,
@@ -77,10 +79,12 @@ class AuthenticationRepository {
   }
 
   Future<Authentication> getCredit() async {
-    return await AuthenticationStorage.getCredit();
+    _credit ??= await AuthenticationStorage.getCredit();
+    return _credit;
   }
 
-  static Future<void> logout() async {
+  Future<void> logout() async {
+    _credit = null;
     await AuthenticationApi.logout();
     await AuthenticationStorage.removeCredit();
   }

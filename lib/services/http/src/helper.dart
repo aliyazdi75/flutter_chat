@@ -104,17 +104,7 @@ class HttpHelper implements HttpClientBase {
     try {
       return _responseData(
         await _httpClient.get(
-          usingSSL
-              ? Uri.https(
-                  serverUrl,
-                  '/$apiKeyword/$path/',
-                  queryParams,
-                )
-              : Uri.http(
-                  serverUrl,
-                  '/$apiKeyword/$path/',
-                  queryParams,
-                ),
+          Uri.https(serverUrl, '/$apiKeyword/$path/', queryParams),
           headers: await HttpHeader.setHeader(headerType),
         ),
       );
@@ -132,17 +122,7 @@ class HttpHelper implements HttpClientBase {
     try {
       return _responseData(
         await _httpClient.post(
-          usingSSL
-              ? Uri.https(
-                  serverUrl,
-                  '/$apiKeyword/$path/',
-                  queryParams,
-                )
-              : Uri.http(
-                  serverUrl,
-                  '/$apiKeyword/$path/',
-                  queryParams,
-                ),
+          Uri.https(serverUrl, '/$apiKeyword/$path/', queryParams),
           headers: await HttpHeader.setHeader(headerType),
           body: json.encode(body),
         ),

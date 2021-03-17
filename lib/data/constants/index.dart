@@ -1,4 +1,3 @@
-export 'src/app.dart';
 export 'src/credits.dart';
 export 'src/hub.dart';
 export 'src/server.dart';
