@@ -7,30 +7,24 @@ import 'serializers.dart';
 part 'user.g.dart';
 
 abstract class User implements Built<User, UserBuilder> {
-  @nullable
-  String get firstName;
+  String? get firstName;
 
-  @nullable
-  String get lastName;
+  String? get lastName;
 
-  @nullable
-  String get fullName;
+  String? get fullName;
 
-  @nullable
-  int get cityId;
+  int? get cityId;
 
-  @nullable
-  Gender get gender;
+  Gender? get gender;
 
-  @nullable
-  DateTime get birthDate;
+  DateTime? get birthDate;
 
   User._();
 
   factory User([void Function(UserBuilder) updates]) = _$User;
 
   static User fromJson(Map<String, dynamic> json) {
-    return serializers.deserializeWith(User.serializer, json);
+    return serializers.deserializeWith(User.serializer, json)!;
   }
 
   static Serializer<User> get serializer => _$userSerializer;
@@ -50,7 +44,7 @@ class Gender extends EnumClass {
   static Gender valueOf(String name) => _$genderValueOf(name);
 
   static Gender deserialize(String string) {
-    return serializers.deserializeWith(Gender.serializer, string);
+    return serializers.deserializeWith(Gender.serializer, string)!;
   }
 
   static Serializer<Gender> get serializer => _$genderSerializer;

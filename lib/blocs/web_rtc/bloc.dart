@@ -15,17 +15,12 @@ part 'state.dart';
 
 class WebRTCBloc extends Bloc<WebRTCEvent, WebRTCState> {
   WebRTCBloc({
-    @required this.userId,
-    @required this.socketRepository,
-    @required this.callRepository,
-    @required this.webRTCRepository,
-    @required this.callBloc,
-  })  : assert(userId != null),
-        assert(socketRepository != null),
-        assert(callRepository != null),
-        assert(webRTCRepository != null),
-        assert(callBloc != null),
-        super(WebRTCState(userId: userId));
+    required this.userId,
+    required this.socketRepository,
+    required this.callRepository,
+    required this.webRTCRepository,
+    required this.callBloc,
+  }) : super(WebRTCState(userId: userId));
 
   final String userId;
   final SocketRepository socketRepository;
@@ -99,7 +94,7 @@ class WebRTCBloc extends Bloc<WebRTCEvent, WebRTCState> {
 
     await webRTCRepository.answerCall(
       hubConnection: socketRepository.hubConnection,
-      webRTCOffer: callRepository.webRTCOffer,
+      webRTCOffer: callRepository.webRTCOffer!,
       iceCandidates: callRepository.iceCandidates,
       onLocalVideoRenderActivated: (stream) =>
           add(LocalVideoRenderActivated(stream)),
@@ -133,7 +128,7 @@ class WebRTCBloc extends Bloc<WebRTCEvent, WebRTCState> {
     yield state.copyWith(
       hasTorch: hasTorch,
       localMediaStream: event.localStream,
-      localVideoRender: state.localVideoRender..srcObject = event.localStream,
+      localVideoRender: state.localVideoRender!..srcObject = event.localStream,
       localVideoRendererActivationStatus: true,
     );
   }
@@ -143,7 +138,7 @@ class WebRTCBloc extends Bloc<WebRTCEvent, WebRTCState> {
     assert(state.remoteVideoRender != null);
 
     yield state.copyWith(
-      remoteVideoRender: state.remoteVideoRender
+      remoteVideoRender: state.remoteVideoRender!
         ..srcObject = event.remoteStream,
       remoteVideoRendererActivationStatus: true,
     );
@@ -154,7 +149,8 @@ class WebRTCBloc extends Bloc<WebRTCEvent, WebRTCState> {
     assert(state.remoteVideoRendererActivationStatus);
 
     yield state.copyWith(
-      remoteVideoRender: state.remoteVideoRender..srcObject = event.mediaStream,
+      remoteVideoRender: state.remoteVideoRender!
+        ..srcObject = event.mediaStream,
       remoteVideoRendererActivationStatus: false,
     );
   }
@@ -204,15 +200,15 @@ class WebRTCBloc extends Bloc<WebRTCEvent, WebRTCState> {
     assert(state.hasTorch);
 
     final torchStatus = await webRTCRepository.toggleTorch(
-        mediaStream: state.localMediaStream, torchStatus: state.torchStatus);
+        mediaStream: state.localMediaStream!, torchStatus: state.torchStatus);
     yield state.copyWith(torchStatus: torchStatus);
   }
 
   Stream<WebRTCState> _mapSwitchCameraRequestedToState() async* {
     final cameraFrontSideStatus = await webRTCRepository.switchCamera(
-        mediaStream: state.localMediaStream);
+        mediaStream: state.localMediaStream!);
     final hasTorch =
-        await webRTCRepository.hasTorch(mediaStream: state.localMediaStream);
+        await webRTCRepository.hasTorch(mediaStream: state.localMediaStream!);
     yield state.copyWith(
       cameraFrontSideStatus: cameraFrontSideStatus,
       hasTorch: hasTorch,
@@ -223,7 +219,7 @@ class WebRTCBloc extends Bloc<WebRTCEvent, WebRTCState> {
   Stream<WebRTCState>
       _mapToggleLocalVideoRenderActivationRequestedToState() async* {
     final cameraActivationStatus = webRTCRepository.toggleCameraActivation(
-      mediaStream: state.localMediaStream,
+      mediaStream: state.localMediaStream!,
       cameraActivationStatus: state.localVideoRendererActivationStatus,
     );
     yield state.copyWith(
@@ -232,7 +228,7 @@ class WebRTCBloc extends Bloc<WebRTCEvent, WebRTCState> {
 
   Stream<WebRTCState> _mapToggleMicActivationRequestedToState() async* {
     final micActivationStatus = webRTCRepository.toggleMicActivation(
-      mediaStream: state.localMediaStream,
+      mediaStream: state.localMediaStream!,
       micActivationStatus: state.micMuteStatus,
     );
     yield state.copyWith(micMuteStatus: micActivationStatus);

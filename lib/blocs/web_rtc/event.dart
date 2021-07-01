@@ -5,7 +5,7 @@ abstract class WebRTCEvent extends Equatable {
   const WebRTCEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class WebRTCIceCandidateReceived extends WebRTCEvent {
@@ -14,7 +14,7 @@ class WebRTCIceCandidateReceived extends WebRTCEvent {
   final WebRTCIceCandidate webRTCIceCandidate;
 
   @override
-  List<Object> get props => [webRTCIceCandidate];
+  List<Object?> get props => [webRTCIceCandidate];
 }
 
 class RequestCall extends WebRTCEvent {
@@ -23,7 +23,7 @@ class RequestCall extends WebRTCEvent {
   final String userId;
 
   @override
-  List<Object> get props => [userId];
+  List<Object?> get props => [userId];
 }
 
 class AnswerCallRequested extends WebRTCEvent {
@@ -32,7 +32,7 @@ class AnswerCallRequested extends WebRTCEvent {
   final WebRTCOffer webRTCOffer;
 
   @override
-  List<Object> get props => [webRTCOffer];
+  List<Object?> get props => [webRTCOffer];
 }
 
 class LocalVideoRenderActivated extends WebRTCEvent {
@@ -41,7 +41,7 @@ class LocalVideoRenderActivated extends WebRTCEvent {
   final MediaStream localStream;
 
   @override
-  List<Object> get props => [localStream];
+  List<Object?> get props => [localStream];
 }
 
 class RemoteVideoRenderActivated extends WebRTCEvent {
@@ -50,7 +50,7 @@ class RemoteVideoRenderActivated extends WebRTCEvent {
   final MediaStream remoteStream;
 
   @override
-  List<Object> get props => [remoteStream];
+  List<Object?> get props => [remoteStream];
 }
 
 class RemoteVideoRenderDeactivated extends WebRTCEvent {
@@ -59,7 +59,7 @@ class RemoteVideoRenderDeactivated extends WebRTCEvent {
   final MediaStream mediaStream;
 
   @override
-  List<Object> get props => [mediaStream];
+  List<Object?> get props => [mediaStream];
 }
 
 class HangUpCallRequested extends WebRTCEvent {
@@ -68,7 +68,7 @@ class HangUpCallRequested extends WebRTCEvent {
   final WebRTCHangUp webRTCHangUp;
 
   @override
-  List<Object> get props => [webRTCHangUp];
+  List<Object?> get props => [webRTCHangUp];
 }
 
 class CallHungUp extends WebRTCEvent {
@@ -77,7 +77,7 @@ class CallHungUp extends WebRTCEvent {
   final WebRTCHangUp webRTCHangUp;
 
   @override
-  List<Object> get props => [webRTCHangUp];
+  List<Object?> get props => [webRTCHangUp];
 }
 
 class CallRejected extends WebRTCEvent {
@@ -86,7 +86,7 @@ class CallRejected extends WebRTCEvent {
   final WebRTCReject webRTCReject;
 
   @override
-  List<Object> get props => [webRTCReject];
+  List<Object?> get props => [webRTCReject];
 }
 
 class CallDeactivatedRequested extends WebRTCEvent {
@@ -95,7 +95,7 @@ class CallDeactivatedRequested extends WebRTCEvent {
   final String userId;
 
   @override
-  List<Object> get props => [userId];
+  List<Object?> get props => [userId];
 }
 
 class ToggleTorchRequested extends WebRTCEvent {

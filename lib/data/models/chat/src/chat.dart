@@ -19,7 +19,7 @@ abstract class Chat implements Built<Chat, ChatBuilder> {
   factory Chat([void Function(ChatBuilder) updates]) = _$Chat;
 
   static Chat fromJson(Map<String, dynamic> json) {
-    return serializers.deserializeWith(Chat.serializer, json);
+    return serializers.deserializeWith(Chat.serializer, json)!;
   }
 
   static Serializer<Chat> get serializer => _$chatSerializer;
@@ -27,11 +27,9 @@ abstract class Chat implements Built<Chat, ChatBuilder> {
 
 abstract class OpenChatInputBody
     implements Built<OpenChatInputBody, OpenChatInputBodyBuilder> {
-  @nullable
-  String get userId;
+  String? get userId;
 
-  @nullable
-  int get containerId;
+  int? get containerId;
 
   OpenChatInputBody._();
 
@@ -49,14 +47,11 @@ abstract class OpenChatInputBody
 
 abstract class GetMessagesInputQuery
     implements Built<GetMessagesInputQuery, GetMessagesInputQueryBuilder> {
-  @nullable
-  int get minId;
+  int? get minId;
 
-  @nullable
-  int get maxId;
+  int? get maxId;
 
-  @nullable
-  int get count;
+  int? get count;
 
   GetMessagesInputQuery._();
 
@@ -95,11 +90,9 @@ abstract class ChatReadInputBody
 
 abstract class CloseChatInputBody
     implements Built<CloseChatInputBody, CloseChatInputBodyBuilder> {
-  @nullable
-  String get userId;
+  String? get userId;
 
-  @nullable
-  int get containerId;
+  int? get containerId;
 
   CloseChatInputBody._();
 
@@ -127,7 +120,7 @@ abstract class GetMessageResponse
       _$GetMessageResponse;
 
   static GetMessageResponse fromJson(Map<String, dynamic> json) {
-    return serializers.deserializeWith(GetMessageResponse.serializer, json);
+    return serializers.deserializeWith(GetMessageResponse.serializer, json)!;
   }
 
   static Serializer<GetMessageResponse> get serializer =>
@@ -148,7 +141,7 @@ abstract class ChatStatusChange
       _$ChatStatusChange;
 
   static ChatStatusChange fromJson(Map<String, dynamic> json) {
-    return serializers.deserializeWith(ChatStatusChange.serializer, json);
+    return serializers.deserializeWith(ChatStatusChange.serializer, json)!;
   }
 
   static Serializer<ChatStatusChange> get serializer =>
@@ -175,7 +168,7 @@ abstract class ChatMessageReceive
       _$ChatMessageReceive;
 
   static ChatMessageReceive fromJson(Map<String, dynamic> json) {
-    return serializers.deserializeWith(ChatMessageReceive.serializer, json);
+    return serializers.deserializeWith(ChatMessageReceive.serializer, json)!;
   }
 
   static Serializer<ChatMessageReceive> get serializer =>
@@ -192,7 +185,7 @@ abstract class ChatSeen implements Built<ChatSeen, ChatSeenBuilder> {
   factory ChatSeen([void Function(ChatSeenBuilder) updates]) = _$ChatSeen;
 
   static ChatSeen fromJson(Map<String, dynamic> json) {
-    return serializers.deserializeWith(ChatSeen.serializer, json);
+    return serializers.deserializeWith(ChatSeen.serializer, json)!;
   }
 
   static Serializer<ChatSeen> get serializer => _$chatSeenSerializer;
@@ -210,7 +203,7 @@ abstract class ChatIsTyping
       _$ChatIsTyping;
 
   static ChatIsTyping fromJson(Map<String, dynamic> json) {
-    return serializers.deserializeWith(ChatIsTyping.serializer, json);
+    return serializers.deserializeWith(ChatIsTyping.serializer, json)!;
   }
 
   static Serializer<ChatIsTyping> get serializer => _$chatIsTypingSerializer;
@@ -231,7 +224,7 @@ abstract class SocketChatMessageReceive
 
   static SocketChatMessageReceive fromJson(Map<String, dynamic> json) {
     return serializers.deserializeWith(
-        SocketChatMessageReceive.serializer, json);
+        SocketChatMessageReceive.serializer, json)!;
   }
 
   static Serializer<SocketChatMessageReceive> get serializer =>

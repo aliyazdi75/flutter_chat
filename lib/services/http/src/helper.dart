@@ -9,14 +9,14 @@ import 'header.dart';
 
 abstract class HttpClientBase {
   Future<Map<String, dynamic>> httpGet({
-    Map<String, String> queryParams,
-    HttpHeaderType headerType,
+    Map<String, String>? queryParams,
+    HttpHeaderType? headerType,
   });
 
   Future<Map<String, dynamic>> httpPost({
-    Map<String, String> queryParams,
-    HttpHeaderType headerType,
-    Map<String, dynamic> body,
+    Map<String, String>? queryParams,
+    HttpHeaderType? headerType,
+    Map<String, dynamic>? body,
   });
 }
 
@@ -31,11 +31,6 @@ class HttpHelper implements HttpClientBase {
       switch (response.statusCode) {
         // 200
         case HttpStatus.ok:
-          final headers = response.headers;
-          if (!headers.containsKey(contentTypeKeyHeader) &&
-              headers[contentTypeKeyHeader] != contentTypeValueHeader) {
-            return null;
-          }
           return json.decode(utf8.decode(response.bodyBytes))
               as Map<String, dynamic>;
         // 201
@@ -45,51 +40,51 @@ class HttpHelper implements HttpClientBase {
         // 400
         case HttpStatus.badRequest:
           throw BadRequestException(
-            response.request.url.path,
+            response.request!.url.path,
             json.decode(utf8.decode(response.bodyBytes))
                 as Map<String, dynamic>,
           );
         // 401
         case HttpStatus.unauthorized:
-          throw UnauthorisedException(response.request.url.path);
+          throw UnauthorisedException(response.request!.url.path);
         // 403
         case HttpStatus.forbidden:
           throw ForbiddenException(
-            response.request.url.path,
+            response.request!.url.path,
             'Authorization Forbidden',
             response.statusCode.toString(),
           );
         // 404
         case HttpStatus.notFound:
           throw NotFoundException(
-            response.request.url.path,
+            response.request!.url.path,
             'This Uri Not Founded',
             response.statusCode.toString(),
           );
         // 500
         case HttpStatus.internalServerError:
           throw ServerException(
-            response.request.url.path,
+            response.request!.url.path,
             'Server Error Body',
             utf8.decode(response.bodyBytes),
           );
         // Others
         default:
           throw NotHandleException(
-            response.request.url.path,
+            response.request!.url.path,
             'This Status Code Not Handled',
             response.statusCode.toString(),
           );
       }
     } on JsonUnsupportedObjectError {
       throw ServerException(
-        response.request.url.path,
+        response.request!.url.path,
         'Server Unsupported Json Object',
         utf8.decode(response.bodyBytes),
       );
     } on FormatException {
       throw ServerException(
-        response.request.url.path,
+        response.request!.url.path,
         'Server Unsupported Json Format',
         utf8.decode(response.bodyBytes),
       );
@@ -98,8 +93,8 @@ class HttpHelper implements HttpClientBase {
 
   @override
   Future<Map<String, dynamic>> httpGet({
-    Map<String, String> queryParams,
-    HttpHeaderType headerType = HttpHeaderType.anonymous,
+    Map<String, String>? queryParams,
+    HttpHeaderType? headerType = HttpHeaderType.anonymous,
   }) async {
     try {
       return _responseData(
@@ -115,9 +110,9 @@ class HttpHelper implements HttpClientBase {
 
   @override
   Future<Map<String, dynamic>> httpPost({
-    Map<String, String> queryParams,
-    HttpHeaderType headerType = HttpHeaderType.anonymous,
-    Map<String, dynamic> body,
+    Map<String, String>? queryParams,
+    HttpHeaderType? headerType = HttpHeaderType.anonymous,
+    Map<String, dynamic>? body,
   }) async {
     try {
       return _responseData(

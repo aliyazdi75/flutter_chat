@@ -11,12 +11,12 @@ class RegisterState extends Equatable {
 
   final RegisterStatus status;
   final String password;
-  final ExceptionClass error;
+  final ExceptionClass? error;
 
   RegisterState copyWith({
-    RegisterStatus status,
-    String password,
-    ExceptionClass error,
+    RegisterStatus? status,
+    String? password,
+    ExceptionClass? error,
   }) {
     return RegisterState(
       status: status ?? this.status,
@@ -26,5 +26,5 @@ class RegisterState extends Equatable {
   }
 
   @override
-  List<Object> get props => [status, password];
+  List<Object?> get props => [status, password];
 }

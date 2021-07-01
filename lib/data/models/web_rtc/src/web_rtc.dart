@@ -19,7 +19,7 @@ abstract class WebRTCOffer implements Built<WebRTCOffer, WebRTCOfferBuilder> {
       _$WebRTCOffer;
 
   static WebRTCOffer fromJson(Map<String, dynamic> json) {
-    return serializers.deserializeWith(WebRTCOffer.serializer, json);
+    return serializers.deserializeWith(WebRTCOffer.serializer, json)!;
   }
 
   static Serializer<WebRTCOffer> get serializer => _$webRTCOfferSerializer;
@@ -39,7 +39,7 @@ abstract class WebRTCAnswer
       _$WebRTCAnswer;
 
   static WebRTCAnswer fromJson(Map<String, dynamic> json) {
-    return serializers.deserializeWith(WebRTCAnswer.serializer, json);
+    return serializers.deserializeWith(WebRTCAnswer.serializer, json)!;
   }
 
   static Serializer<WebRTCAnswer> get serializer => _$webRTCAnswerSerializer;
@@ -56,7 +56,7 @@ class WebRTCType extends EnumClass {
   static WebRTCType valueOf(String name) => _$webRTCTypeValueOf(name);
 
   static WebRTCType deserialize(String string) {
-    return serializers.deserializeWith(WebRTCType.serializer, string);
+    return serializers.deserializeWith(WebRTCType.serializer, string)!;
   }
 
   static Serializer<WebRTCType> get serializer => _$webRTCTypeSerializer;
@@ -72,7 +72,7 @@ abstract class WebRTCReject
       _$WebRTCReject;
 
   static WebRTCReject fromJson(Map<String, dynamic> json) {
-    return serializers.deserializeWith(WebRTCReject.serializer, json);
+    return serializers.deserializeWith(WebRTCReject.serializer, json)!;
   }
 
   static Serializer<WebRTCReject> get serializer => _$webRTCRejectSerializer;
@@ -95,7 +95,7 @@ abstract class WebRTCIceCandidate
       _$WebRTCIceCandidate;
 
   static WebRTCIceCandidate fromJson(Map<String, dynamic> json) {
-    return serializers.deserializeWith(WebRTCIceCandidate.serializer, json);
+    return serializers.deserializeWith(WebRTCIceCandidate.serializer, json)!;
   }
 
   static Serializer<WebRTCIceCandidate> get serializer =>
@@ -112,7 +112,7 @@ abstract class WebRTCHangUp
       _$WebRTCHangUp;
 
   static WebRTCHangUp fromJson(Map<String, dynamic> json) {
-    return serializers.deserializeWith(WebRTCHangUp.serializer, json);
+    return serializers.deserializeWith(WebRTCHangUp.serializer, json)!;
   }
 
   static Serializer<WebRTCHangUp> get serializer => _$webRTCHangUpSerializer;

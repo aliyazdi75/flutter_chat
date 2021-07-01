@@ -41,14 +41,12 @@ class WebRTCHelper {
 
   static Future<bool> hasTorch(MediaStream mediaStream) async {
     final videoTrack = mediaStream.getVideoTracks().first;
-    assert(videoTrack != null);
     return await videoTrack.hasTorch();
   }
 
   static Future<bool> toggleTorch(
       MediaStream mediaStream, bool torchStatus) async {
     final videoTrack = mediaStream.getVideoTracks().first;
-    assert(videoTrack != null);
     final hasTorch = await videoTrack.hasTorch();
     if (hasTorch) {
       await videoTrack.setTorch(!torchStatus);
@@ -60,7 +58,6 @@ class WebRTCHelper {
 
   static Future<bool> switchCamera(MediaStream mediaStream) async {
     final videoTrack = mediaStream.getVideoTracks().first;
-    assert(videoTrack != null);
     try {
       if (kIsWeb) {
         final cameraDevices = await Helper.cameras;
@@ -80,7 +77,6 @@ class WebRTCHelper {
   static bool toggleCameraActivation(
       MediaStream mediaStream, bool cameraActivationStatus) {
     final videoTrack = mediaStream.getVideoTracks().first;
-    assert(videoTrack != null);
     videoTrack.enabled = !cameraActivationStatus;
     return !cameraActivationStatus;
   }
@@ -88,17 +84,16 @@ class WebRTCHelper {
   static bool toggleMicActivation(
       MediaStream mediaStream, bool micActivationStatus) {
     final audioTrack = mediaStream.getAudioTracks().first;
-    assert(audioTrack != null);
     audioTrack.setMicrophoneMute(!micActivationStatus);
     return !micActivationStatus;
   }
 
   static Future<RTCPeerConnection> createPeerConnectionStream(
     MediaStream mediaStream, {
-    IceCandidateCallback onIceCandidate,
-    IceConnectionStateCallback onIceConnectionState,
-    AddStreamCallback onAddStream,
-    RemoveStreamCallback onRemoveStream,
+    IceCandidateCallback? onIceCandidate,
+    IceConnectionStateCallback? onIceConnectionState,
+    AddStreamCallback? onAddStream,
+    RemoveStreamCallback? onRemoveStream,
   }) async {
     final iceServers = {
       'iceServers': [

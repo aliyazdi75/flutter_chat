@@ -18,15 +18,15 @@ import 'components/index.dart';
 
 class ChatPage extends StatelessWidget {
   ChatPage({
-    @required this.chatInfo,
-    @required this.authenticationRepository,
-    @required this.accountRepository,
-    @required this.socketRepository,
-    @required this.callRepository,
-    @required this.authenticationBloc,
-    @required this.socketBloc,
-    @required this.homeBloc,
-    @required this.callBloc,
+    required this.chatInfo,
+    required this.authenticationRepository,
+    required this.accountRepository,
+    required this.socketRepository,
+    required this.callRepository,
+    required this.authenticationBloc,
+    required this.socketBloc,
+    required this.homeBloc,
+    required this.callBloc,
   });
 
   final ChatInfo chatInfo;
@@ -137,15 +137,15 @@ class ChatPage extends StatelessWidget {
                   title: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(state.chatInfo.firstName),
+                      Text(state.chatInfo!.firstName),
                       Text(
                         state.status == ChatStatus.openChatLoading
                             ? 'Getting Messages...'
                             : state.status == ChatStatus.failure
                                 ? 'Getting Messages Failed'
-                                : state.isTyping
+                                : state.isTyping!
                                     ? 'Typing...'
-                                    : state.isOnline
+                                    : state.isOnline!
                                         ? 'Online'
                                         : '${state.lastSeen?.toLocal() ?? 'Last Seen Recently'}',
                       ),
@@ -155,19 +155,19 @@ class ChatPage extends StatelessWidget {
                 body: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    state.messages.isEmpty
+                    state.messages!.isEmpty
                         ? const Center(
                             child: Text(
                                 'You don\'t have any messages with your friend here :('))
                         : Expanded(
                             child: ListView(
                               reverse: true,
-                              children: state.messages
+                              children: state.messages!
                                   .map(
                                     (message) => MessageWidget(
-                                      message: message,
-                                      chatInfo: state.chatInfo,
-                                      account: accountRepository.account,
+                                      message: message!,
+                                      chatInfo: state.chatInfo!,
+                                      account: accountRepository.account!,
                                     ),
                                   )
                                   .toList(),

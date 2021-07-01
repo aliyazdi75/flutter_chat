@@ -5,7 +5,7 @@ abstract class AuthInitEvent extends Equatable {
   const AuthInitEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class AuthInitEmailChanged extends AuthInitEvent {
@@ -14,7 +14,7 @@ class AuthInitEmailChanged extends AuthInitEvent {
   final String email;
 
   @override
-  List<Object> get props => [email];
+  List<Object?> get props => [email];
 }
 
 class AuthInitSubmitted extends AuthInitEvent {

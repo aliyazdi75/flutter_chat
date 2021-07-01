@@ -9,13 +9,13 @@ class CallState extends Equatable {
   });
 
   final CallStatus status;
-  final WebRTCOffer webRTCOffer;
+  final WebRTCOffer? webRTCOffer;
 
   const CallState.readyForCall() : this(status: CallStatus.readyForCall);
 
   CallState copyWith({
-    CallStatus status,
-    WebRTCOffer webRTCOffer,
+    CallStatus? status,
+    WebRTCOffer? webRTCOffer,
   }) {
     return CallState(
       status: status ?? this.status,
@@ -24,5 +24,5 @@ class CallState extends Equatable {
   }
 
   @override
-  List<Object> get props => [status];
+  List<Object?> get props => [status];
 }

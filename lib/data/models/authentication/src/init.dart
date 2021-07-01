@@ -33,7 +33,7 @@ abstract class AuthInitResponse
       _$AuthInitResponse;
 
   static AuthInitResponse fromJson(Map<String, dynamic> json) {
-    return serializers.deserializeWith(AuthInitResponse.serializer, json);
+    return serializers.deserializeWith(AuthInitResponse.serializer, json)!;
   }
 
   static Serializer<AuthInitResponse> get serializer =>

@@ -35,7 +35,7 @@ abstract class RegisterResponse
       _$RegisterResponse;
 
   static RegisterResponse fromJson(Map<String, dynamic> json) {
-    return serializers.deserializeWith(RegisterResponse.serializer, json);
+    return serializers.deserializeWith(RegisterResponse.serializer, json)!;
   }
 
   static Serializer<RegisterResponse> get serializer =>

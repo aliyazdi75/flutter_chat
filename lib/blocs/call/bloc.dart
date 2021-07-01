@@ -12,11 +12,9 @@ part 'state.dart';
 
 class CallBloc extends Bloc<CallEvent, CallState> {
   CallBloc({
-    @required this.socketRepository,
-    @required this.callRepository,
-  })  : assert(socketRepository != null),
-        assert(callRepository != null),
-        super(const CallState());
+    required this.socketRepository,
+    required this.callRepository,
+  }) : super(const CallState());
 
   final SocketRepository socketRepository;
   final CallRepository callRepository;

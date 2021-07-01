@@ -12,11 +12,9 @@ part 'state.dart';
 
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   RegisterBloc({
-    @required this.email,
-    @required this.authenticationRepository,
-  })  : assert(email != null),
-        assert(authenticationRepository != null),
-        super(const RegisterState());
+    required this.email,
+    required this.authenticationRepository,
+  }) : super(const RegisterState());
 
   final String email;
   final AuthenticationRepository authenticationRepository;

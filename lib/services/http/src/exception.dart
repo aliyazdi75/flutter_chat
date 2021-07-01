@@ -2,8 +2,8 @@ import 'package:flutter/foundation.dart';
 
 class HttpException implements Exception {
   final Object type;
-  final String key;
-  final String value;
+  final String? key;
+  final String? value;
 
   HttpException(this.type, [this.key, this.value]) {
     debugPrintStack(label: toString());
@@ -20,7 +20,7 @@ class HttpException implements Exception {
 class ForbiddenException extends HttpException {
   final String url;
 
-  ForbiddenException(this.url, [String key, String value])
+  ForbiddenException(this.url, [String? key, String? value])
       : super(UnauthorisedException, key, value);
 
   @override
@@ -30,7 +30,7 @@ class ForbiddenException extends HttpException {
 class InvalidInputException extends HttpException {
   final String url;
 
-  InvalidInputException(this.url, [String key, String value])
+  InvalidInputException(this.url, [String? key, String? value])
       : super(InvalidInputException, key, value);
 
   @override
@@ -40,7 +40,7 @@ class InvalidInputException extends HttpException {
 class SocketException extends HttpException {
   final String url;
 
-  SocketException(this.url, [String key, String value])
+  SocketException(this.url, [String? key, String? value])
       : super(SocketException, key, value);
 
   @override
@@ -50,7 +50,7 @@ class SocketException extends HttpException {
 class NotFoundException extends HttpException {
   final String url;
 
-  NotFoundException(this.url, [String key, String value])
+  NotFoundException(this.url, [String? key, String? value])
       : super(NotFoundException, key, value);
 
   @override
@@ -60,7 +60,7 @@ class NotFoundException extends HttpException {
 class ServerException extends HttpException {
   final String url;
 
-  ServerException(this.url, [String key, String value])
+  ServerException(this.url, [String? key, String? value])
       : super(ServerException, key, value);
 
   @override
@@ -70,7 +70,7 @@ class ServerException extends HttpException {
 class NotHandleException extends HttpException {
   final String url;
 
-  NotHandleException(this.url, [String key, String value])
+  NotHandleException(this.url, [String? key, String? value])
       : super(NotHandleException, key, value);
 
   @override

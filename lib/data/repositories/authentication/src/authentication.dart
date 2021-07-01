@@ -5,18 +5,14 @@ import 'package:flutter_chat/data/models/authentication/index.dart';
 import 'package:flutter_chat/data/providers/api/authentication/index.dart';
 import 'package:flutter_chat/data/providers/storage/authentication/index.dart';
 import 'package:flutter_chat/services/device_info/index.dart';
-import 'package:meta/meta.dart';
 
 class AuthenticationRepository {
-  Authentication _credit;
+  Authentication? _credit;
 
   Future<RegisterResponse> register({
-    @required String email,
-    @required String password,
+    required String email,
+    required String password,
   }) async {
-    assert(email != null);
-    assert(password != null);
-
     final registerRequest = RegisterRequest(
       (b) => b
         ..email = email
@@ -27,12 +23,9 @@ class AuthenticationRepository {
   }
 
   Future<void> login({
-    @required String email,
-    @required String password,
+    required String email,
+    required String password,
   }) async {
-    assert(email != null);
-    assert(password != null);
-
     final deviceInfoHelper = DeviceInfoHelper();
     final deviceId = await deviceInfoHelper.getPlatformId();
     final deviceName = await deviceInfoHelper.getPlatformName();
@@ -60,12 +53,9 @@ class AuthenticationRepository {
 
     final authenticated = await AuthenticationApi.login(loginRequest);
     await AuthenticationStorage.saveCredit(authenticated);
-    return authenticated;
   }
 
-  Future<AuthInitResponse> init({@required String email}) async {
-    assert(email != null);
-
+  Future<AuthInitResponse> init({required String email}) async {
     final authInitRequest = AuthInitRequest(
       (b) => b
         ..email = email == '1'
@@ -80,7 +70,7 @@ class AuthenticationRepository {
 
   Future<Authentication> getCredit() async {
     _credit ??= await AuthenticationStorage.getCredit();
-    return _credit;
+    return _credit!;
   }
 
   Future<void> logout() async {

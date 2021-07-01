@@ -7,7 +7,6 @@ import 'serializers.dart';
 part 'message.g.dart';
 
 abstract class Message implements Built<Message, MessageBuilder> {
-  @nullable
   int get id;
 
   bool get seen;
@@ -30,7 +29,7 @@ abstract class Message implements Built<Message, MessageBuilder> {
       builder..isSent = true;
 
   static Message fromJson(Map<String, dynamic> json) {
-    return serializers.deserializeWith(Message.serializer, json);
+    return serializers.deserializeWith(Message.serializer, json)!;
   }
 
   static Serializer<Message> get serializer => _$messageSerializer;
@@ -53,7 +52,7 @@ class MessageType extends EnumClass {
   static MessageType valueOf(String name) => _$messageTypeValueOf(name);
 
   static MessageType deserialize(String string) {
-    return serializers.deserializeWith(MessageType.serializer, string);
+    return serializers.deserializeWith(MessageType.serializer, string)!;
   }
 
   static Serializer<MessageType> get serializer => _$messageTypeSerializer;

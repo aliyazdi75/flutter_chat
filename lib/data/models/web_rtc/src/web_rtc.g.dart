@@ -44,9 +44,9 @@ class _$WebRTCOfferSerializer implements StructuredSerializer<WebRTCOffer> {
   final String wireName = 'WebRTCOffer';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, WebRTCOffer object,
+  Iterable<Object?> serialize(Serializers serializers, WebRTCOffer object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'userId',
       serializers.serialize(object.userId,
           specifiedType: const FullType(String)),
@@ -61,7 +61,7 @@ class _$WebRTCOfferSerializer implements StructuredSerializer<WebRTCOffer> {
   }
 
   @override
-  WebRTCOffer deserialize(Serializers serializers, Iterable<Object> serialized,
+  WebRTCOffer deserialize(Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new WebRTCOfferBuilder();
 
@@ -69,7 +69,7 @@ class _$WebRTCOfferSerializer implements StructuredSerializer<WebRTCOffer> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'userId':
           result.userId = serializers.deserialize(value,
@@ -97,9 +97,9 @@ class _$WebRTCAnswerSerializer implements StructuredSerializer<WebRTCAnswer> {
   final String wireName = 'WebRTCAnswer';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, WebRTCAnswer object,
+  Iterable<Object?> serialize(Serializers serializers, WebRTCAnswer object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'userId',
       serializers.serialize(object.userId,
           specifiedType: const FullType(String)),
@@ -114,7 +114,8 @@ class _$WebRTCAnswerSerializer implements StructuredSerializer<WebRTCAnswer> {
   }
 
   @override
-  WebRTCAnswer deserialize(Serializers serializers, Iterable<Object> serialized,
+  WebRTCAnswer deserialize(
+      Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new WebRTCAnswerBuilder();
 
@@ -122,7 +123,7 @@ class _$WebRTCAnswerSerializer implements StructuredSerializer<WebRTCAnswer> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'userId':
           result.userId = serializers.deserialize(value,
@@ -167,9 +168,9 @@ class _$WebRTCRejectSerializer implements StructuredSerializer<WebRTCReject> {
   final String wireName = 'WebRTCReject';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, WebRTCReject object,
+  Iterable<Object?> serialize(Serializers serializers, WebRTCReject object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'userId',
       serializers.serialize(object.userId,
           specifiedType: const FullType(String)),
@@ -179,7 +180,8 @@ class _$WebRTCRejectSerializer implements StructuredSerializer<WebRTCReject> {
   }
 
   @override
-  WebRTCReject deserialize(Serializers serializers, Iterable<Object> serialized,
+  WebRTCReject deserialize(
+      Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new WebRTCRejectBuilder();
 
@@ -187,7 +189,7 @@ class _$WebRTCRejectSerializer implements StructuredSerializer<WebRTCReject> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'userId':
           result.userId = serializers.deserialize(value,
@@ -208,9 +210,10 @@ class _$WebRTCIceCandidateSerializer
   final String wireName = 'WebRTCIceCandidate';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, WebRTCIceCandidate object,
+  Iterable<Object?> serialize(
+      Serializers serializers, WebRTCIceCandidate object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'userId',
       serializers.serialize(object.userId,
           specifiedType: const FullType(String)),
@@ -230,7 +233,7 @@ class _$WebRTCIceCandidateSerializer
 
   @override
   WebRTCIceCandidate deserialize(
-      Serializers serializers, Iterable<Object> serialized,
+      Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new WebRTCIceCandidateBuilder();
 
@@ -238,7 +241,7 @@ class _$WebRTCIceCandidateSerializer
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'userId':
           result.userId = serializers.deserialize(value,
@@ -270,9 +273,9 @@ class _$WebRTCHangUpSerializer implements StructuredSerializer<WebRTCHangUp> {
   final String wireName = 'WebRTCHangUp';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, WebRTCHangUp object,
+  Iterable<Object?> serialize(Serializers serializers, WebRTCHangUp object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'userId',
       serializers.serialize(object.userId,
           specifiedType: const FullType(String)),
@@ -282,7 +285,8 @@ class _$WebRTCHangUpSerializer implements StructuredSerializer<WebRTCHangUp> {
   }
 
   @override
-  WebRTCHangUp deserialize(Serializers serializers, Iterable<Object> serialized,
+  WebRTCHangUp deserialize(
+      Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new WebRTCHangUpBuilder();
 
@@ -290,7 +294,7 @@ class _$WebRTCHangUpSerializer implements StructuredSerializer<WebRTCHangUp> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'userId':
           result.userId = serializers.deserialize(value,
@@ -311,10 +315,11 @@ class _$WebRTCOffer extends WebRTCOffer {
   @override
   final WebRTCType type;
 
-  factory _$WebRTCOffer([void Function(WebRTCOfferBuilder) updates]) =>
+  factory _$WebRTCOffer([void Function(WebRTCOfferBuilder)? updates]) =>
       (new WebRTCOfferBuilder()..update(updates)).build();
 
-  _$WebRTCOffer._({this.userId, this.sdp, this.type}) : super._() {
+  _$WebRTCOffer._({required this.userId, required this.sdp, required this.type})
+      : super._() {
     BuiltValueNullFieldError.checkNotNull(userId, 'WebRTCOffer', 'userId');
     BuiltValueNullFieldError.checkNotNull(sdp, 'WebRTCOffer', 'sdp');
     BuiltValueNullFieldError.checkNotNull(type, 'WebRTCOffer', 'type');
@@ -352,25 +357,25 @@ class _$WebRTCOffer extends WebRTCOffer {
 }
 
 class WebRTCOfferBuilder implements Builder<WebRTCOffer, WebRTCOfferBuilder> {
-  _$WebRTCOffer _$v;
+  _$WebRTCOffer? _$v;
 
-  String _userId;
+  String? _userId;
 
-  String get userId => _$this._userId;
+  String? get userId => _$this._userId;
 
-  set userId(String userId) => _$this._userId = userId;
+  set userId(String? userId) => _$this._userId = userId;
 
-  String _sdp;
+  String? _sdp;
 
-  String get sdp => _$this._sdp;
+  String? get sdp => _$this._sdp;
 
-  set sdp(String sdp) => _$this._sdp = sdp;
+  set sdp(String? sdp) => _$this._sdp = sdp;
 
-  WebRTCType _type;
+  WebRTCType? _type;
 
-  WebRTCType get type => _$this._type;
+  WebRTCType? get type => _$this._type;
 
-  set type(WebRTCType type) => _$this._type = type;
+  set type(WebRTCType? type) => _$this._type = type;
 
   WebRTCOfferBuilder();
 
@@ -392,7 +397,7 @@ class WebRTCOfferBuilder implements Builder<WebRTCOffer, WebRTCOfferBuilder> {
   }
 
   @override
-  void update(void Function(WebRTCOfferBuilder) updates) {
+  void update(void Function(WebRTCOfferBuilder)? updates) {
     if (updates != null) updates(this);
   }
 
@@ -419,10 +424,12 @@ class _$WebRTCAnswer extends WebRTCAnswer {
   @override
   final WebRTCType type;
 
-  factory _$WebRTCAnswer([void Function(WebRTCAnswerBuilder) updates]) =>
+  factory _$WebRTCAnswer([void Function(WebRTCAnswerBuilder)? updates]) =>
       (new WebRTCAnswerBuilder()..update(updates)).build();
 
-  _$WebRTCAnswer._({this.userId, this.sdp, this.type}) : super._() {
+  _$WebRTCAnswer._(
+      {required this.userId, required this.sdp, required this.type})
+      : super._() {
     BuiltValueNullFieldError.checkNotNull(userId, 'WebRTCAnswer', 'userId');
     BuiltValueNullFieldError.checkNotNull(sdp, 'WebRTCAnswer', 'sdp');
     BuiltValueNullFieldError.checkNotNull(type, 'WebRTCAnswer', 'type');
@@ -461,25 +468,25 @@ class _$WebRTCAnswer extends WebRTCAnswer {
 
 class WebRTCAnswerBuilder
     implements Builder<WebRTCAnswer, WebRTCAnswerBuilder> {
-  _$WebRTCAnswer _$v;
+  _$WebRTCAnswer? _$v;
 
-  String _userId;
+  String? _userId;
 
-  String get userId => _$this._userId;
+  String? get userId => _$this._userId;
 
-  set userId(String userId) => _$this._userId = userId;
+  set userId(String? userId) => _$this._userId = userId;
 
-  String _sdp;
+  String? _sdp;
 
-  String get sdp => _$this._sdp;
+  String? get sdp => _$this._sdp;
 
-  set sdp(String sdp) => _$this._sdp = sdp;
+  set sdp(String? sdp) => _$this._sdp = sdp;
 
-  WebRTCType _type;
+  WebRTCType? _type;
 
-  WebRTCType get type => _$this._type;
+  WebRTCType? get type => _$this._type;
 
-  set type(WebRTCType type) => _$this._type = type;
+  set type(WebRTCType? type) => _$this._type = type;
 
   WebRTCAnswerBuilder();
 
@@ -501,7 +508,7 @@ class WebRTCAnswerBuilder
   }
 
   @override
-  void update(void Function(WebRTCAnswerBuilder) updates) {
+  void update(void Function(WebRTCAnswerBuilder)? updates) {
     if (updates != null) updates(this);
   }
 
@@ -524,10 +531,10 @@ class _$WebRTCReject extends WebRTCReject {
   @override
   final String userId;
 
-  factory _$WebRTCReject([void Function(WebRTCRejectBuilder) updates]) =>
+  factory _$WebRTCReject([void Function(WebRTCRejectBuilder)? updates]) =>
       (new WebRTCRejectBuilder()..update(updates)).build();
 
-  _$WebRTCReject._({this.userId}) : super._() {
+  _$WebRTCReject._({required this.userId}) : super._() {
     BuiltValueNullFieldError.checkNotNull(userId, 'WebRTCReject', 'userId');
   }
 
@@ -558,13 +565,13 @@ class _$WebRTCReject extends WebRTCReject {
 
 class WebRTCRejectBuilder
     implements Builder<WebRTCReject, WebRTCRejectBuilder> {
-  _$WebRTCReject _$v;
+  _$WebRTCReject? _$v;
 
-  String _userId;
+  String? _userId;
 
-  String get userId => _$this._userId;
+  String? get userId => _$this._userId;
 
-  set userId(String userId) => _$this._userId = userId;
+  set userId(String? userId) => _$this._userId = userId;
 
   WebRTCRejectBuilder();
 
@@ -584,7 +591,7 @@ class WebRTCRejectBuilder
   }
 
   @override
-  void update(void Function(WebRTCRejectBuilder) updates) {
+  void update(void Function(WebRTCRejectBuilder)? updates) {
     if (updates != null) updates(this);
   }
 
@@ -610,11 +617,14 @@ class _$WebRTCIceCandidate extends WebRTCIceCandidate {
   final String candidate;
 
   factory _$WebRTCIceCandidate(
-          [void Function(WebRTCIceCandidateBuilder) updates]) =>
+          [void Function(WebRTCIceCandidateBuilder)? updates]) =>
       (new WebRTCIceCandidateBuilder()..update(updates)).build();
 
   _$WebRTCIceCandidate._(
-      {this.userId, this.sdpMLineIndex, this.sdpMid, this.candidate})
+      {required this.userId,
+      required this.sdpMLineIndex,
+      required this.sdpMid,
+      required this.candidate})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
         userId, 'WebRTCIceCandidate', 'userId');
@@ -666,31 +676,32 @@ class _$WebRTCIceCandidate extends WebRTCIceCandidate {
 
 class WebRTCIceCandidateBuilder
     implements Builder<WebRTCIceCandidate, WebRTCIceCandidateBuilder> {
-  _$WebRTCIceCandidate _$v;
+  _$WebRTCIceCandidate? _$v;
 
-  String _userId;
+  String? _userId;
 
-  String get userId => _$this._userId;
+  String? get userId => _$this._userId;
 
-  set userId(String userId) => _$this._userId = userId;
+  set userId(String? userId) => _$this._userId = userId;
 
-  int _sdpMLineIndex;
+  int? _sdpMLineIndex;
 
-  int get sdpMLineIndex => _$this._sdpMLineIndex;
+  int? get sdpMLineIndex => _$this._sdpMLineIndex;
 
-  set sdpMLineIndex(int sdpMLineIndex) => _$this._sdpMLineIndex = sdpMLineIndex;
+  set sdpMLineIndex(int? sdpMLineIndex) =>
+      _$this._sdpMLineIndex = sdpMLineIndex;
 
-  String _sdpMid;
+  String? _sdpMid;
 
-  String get sdpMid => _$this._sdpMid;
+  String? get sdpMid => _$this._sdpMid;
 
-  set sdpMid(String sdpMid) => _$this._sdpMid = sdpMid;
+  set sdpMid(String? sdpMid) => _$this._sdpMid = sdpMid;
 
-  String _candidate;
+  String? _candidate;
 
-  String get candidate => _$this._candidate;
+  String? get candidate => _$this._candidate;
 
-  set candidate(String candidate) => _$this._candidate = candidate;
+  set candidate(String? candidate) => _$this._candidate = candidate;
 
   WebRTCIceCandidateBuilder();
 
@@ -713,7 +724,7 @@ class WebRTCIceCandidateBuilder
   }
 
   @override
-  void update(void Function(WebRTCIceCandidateBuilder) updates) {
+  void update(void Function(WebRTCIceCandidateBuilder)? updates) {
     if (updates != null) updates(this);
   }
 
@@ -738,10 +749,10 @@ class _$WebRTCHangUp extends WebRTCHangUp {
   @override
   final String userId;
 
-  factory _$WebRTCHangUp([void Function(WebRTCHangUpBuilder) updates]) =>
+  factory _$WebRTCHangUp([void Function(WebRTCHangUpBuilder)? updates]) =>
       (new WebRTCHangUpBuilder()..update(updates)).build();
 
-  _$WebRTCHangUp._({this.userId}) : super._() {
+  _$WebRTCHangUp._({required this.userId}) : super._() {
     BuiltValueNullFieldError.checkNotNull(userId, 'WebRTCHangUp', 'userId');
   }
 
@@ -772,13 +783,13 @@ class _$WebRTCHangUp extends WebRTCHangUp {
 
 class WebRTCHangUpBuilder
     implements Builder<WebRTCHangUp, WebRTCHangUpBuilder> {
-  _$WebRTCHangUp _$v;
+  _$WebRTCHangUp? _$v;
 
-  String _userId;
+  String? _userId;
 
-  String get userId => _$this._userId;
+  String? get userId => _$this._userId;
 
-  set userId(String userId) => _$this._userId = userId;
+  set userId(String? userId) => _$this._userId = userId;
 
   WebRTCHangUpBuilder();
 
@@ -798,7 +809,7 @@ class WebRTCHangUpBuilder
   }
 
   @override
-  void update(void Function(WebRTCHangUpBuilder) updates) {
+  void update(void Function(WebRTCHangUpBuilder)? updates) {
     if (updates != null) updates(this);
   }
 

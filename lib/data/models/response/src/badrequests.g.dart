@@ -80,10 +80,11 @@ class _$AuthInitBadRequestSerializer
   final String wireName = 'AuthInitBadRequest';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, AuthInitBadRequest object,
+  Iterable<Object?> serialize(
+      Serializers serializers, AuthInitBadRequest object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[];
-    Object value;
+    final result = <Object?>[];
+    Object? value;
     value = object.email;
     if (value != null) {
       result
@@ -97,7 +98,7 @@ class _$AuthInitBadRequestSerializer
 
   @override
   AuthInitBadRequest deserialize(
-      Serializers serializers, Iterable<Object> serialized,
+      Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new AuthInitBadRequestBuilder();
 
@@ -105,13 +106,13 @@ class _$AuthInitBadRequestSerializer
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'email':
           result.email.replace(serializers.deserialize(value,
                   specifiedType: const FullType(
-                      BuiltList, const [const FullType(ValidationFieldError)]))
-              as BuiltList<Object>);
+                      BuiltList, const [const FullType(ValidationFieldError)]))!
+              as BuiltList<Object?>);
           break;
       }
     }
@@ -147,7 +148,7 @@ class _$LoginBadRequestCodeSerializer
   LoginBadRequestCode deserialize(Serializers serializers, Object serialized,
           {FullType specifiedType = FullType.unspecified}) =>
       LoginBadRequestCode.valueOf(
-          _fromWire[serialized] ?? serialized as String);
+          _fromWire[serialized] ?? (serialized is String ? serialized : ''));
 }
 
 class _$RegisterBadRequestCodeSerializer
@@ -179,15 +180,15 @@ class _$RegisterBadRequestCodeSerializer
   RegisterBadRequestCode deserialize(Serializers serializers, Object serialized,
           {FullType specifiedType = FullType.unspecified}) =>
       RegisterBadRequestCode.valueOf(
-          _fromWire[serialized] ?? serialized as String);
+          _fromWire[serialized] ?? (serialized is String ? serialized : ''));
 }
 
 class _$AuthInitBadRequest extends AuthInitBadRequest {
   @override
-  final BuiltList<ValidationFieldError> email;
+  final BuiltList<ValidationFieldError>? email;
 
   factory _$AuthInitBadRequest(
-          [void Function(AuthInitBadRequestBuilder) updates]) =>
+          [void Function(AuthInitBadRequestBuilder)? updates]) =>
       (new AuthInitBadRequestBuilder()..update(updates)).build();
 
   _$AuthInitBadRequest._({this.email}) : super._();
@@ -222,14 +223,14 @@ class _$AuthInitBadRequest extends AuthInitBadRequest {
 
 class AuthInitBadRequestBuilder
     implements Builder<AuthInitBadRequest, AuthInitBadRequestBuilder> {
-  _$AuthInitBadRequest _$v;
+  _$AuthInitBadRequest? _$v;
 
-  ListBuilder<ValidationFieldError> _email;
+  ListBuilder<ValidationFieldError>? _email;
 
   ListBuilder<ValidationFieldError> get email =>
       _$this._email ??= new ListBuilder<ValidationFieldError>();
 
-  set email(ListBuilder<ValidationFieldError> email) => _$this._email = email;
+  set email(ListBuilder<ValidationFieldError>? email) => _$this._email = email;
 
   AuthInitBadRequestBuilder();
 
@@ -249,7 +250,7 @@ class AuthInitBadRequestBuilder
   }
 
   @override
-  void update(void Function(AuthInitBadRequestBuilder) updates) {
+  void update(void Function(AuthInitBadRequestBuilder)? updates) {
     if (updates != null) updates(this);
   }
 
@@ -259,7 +260,7 @@ class AuthInitBadRequestBuilder
     try {
       _$result = _$v ?? new _$AuthInitBadRequest._(email: _email?.build());
     } catch (_) {
-      String _$failedField;
+      late String _$failedField;
       try {
         _$failedField = 'email';
         _email?.build();

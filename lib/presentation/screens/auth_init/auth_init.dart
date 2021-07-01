@@ -8,8 +8,8 @@ import 'components/form.dart';
 
 class AuthInitPage extends StatelessWidget {
   const AuthInitPage({
-    @required this.authenticationRepository,
-    @required this.authenticationBloc,
+    required this.authenticationRepository,
+    required this.authenticationBloc,
   });
 
   final AuthenticationRepository authenticationRepository;

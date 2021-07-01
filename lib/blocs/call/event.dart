@@ -5,7 +5,7 @@ abstract class CallEvent extends Equatable {
   const CallEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class ReadyForCallRequested extends CallEvent {
@@ -18,7 +18,7 @@ class WebRTCOfferReceived extends CallEvent {
   final WebRTCOffer webRTCOffer;
 
   @override
-  List<Object> get props => [webRTCOffer];
+  List<Object?> get props => [webRTCOffer];
 }
 
 class CallAcceptRequested extends CallEvent {
@@ -31,7 +31,7 @@ class RejectCallRequested extends CallEvent {
   final WebRTCReject webRTCReject;
 
   @override
-  List<Object> get props => [webRTCReject];
+  List<Object?> get props => [webRTCReject];
 }
 
 class EndCallRequested extends CallEvent {
@@ -40,7 +40,7 @@ class EndCallRequested extends CallEvent {
   final WebRTCHangUp webRTCHangUp;
 
   @override
-  List<Object> get props => [webRTCHangUp];
+  List<Object?> get props => [webRTCHangUp];
 }
 
 class CallEnded extends CallEvent {
@@ -49,5 +49,5 @@ class CallEnded extends CallEvent {
   final WebRTCHangUp webRTCHangUp;
 
   @override
-  List<Object> get props => [webRTCHangUp];
+  List<Object?> get props => [webRTCHangUp];
 }

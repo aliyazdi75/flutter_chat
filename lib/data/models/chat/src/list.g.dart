@@ -16,9 +16,9 @@ class _$ChatListSerializer implements StructuredSerializer<ChatList> {
   final String wireName = 'ChatList';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, ChatList object,
+  Iterable<Object?> serialize(Serializers serializers, ChatList object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'directs',
       serializers.serialize(object.chats,
           specifiedType:
@@ -29,7 +29,7 @@ class _$ChatListSerializer implements StructuredSerializer<ChatList> {
   }
 
   @override
-  ChatList deserialize(Serializers serializers, Iterable<Object> serialized,
+  ChatList deserialize(Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new ChatListBuilder();
 
@@ -37,13 +37,13 @@ class _$ChatListSerializer implements StructuredSerializer<ChatList> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'directs':
           result.chats.replace(serializers.deserialize(value,
                   specifiedType: const FullType(
-                      BuiltList, const [const FullType(ChatInfo)]))
-              as BuiltList<Object>);
+                      BuiltList, const [const FullType(ChatInfo)]))!
+              as BuiltList<Object?>);
           break;
       }
     }
@@ -59,9 +59,9 @@ class _$ChatInfoSerializer implements StructuredSerializer<ChatInfo> {
   final String wireName = 'ChatInfo';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, ChatInfo object,
+  Iterable<Object?> serialize(Serializers serializers, ChatInfo object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'containerId',
       serializers.serialize(object.containerId,
           specifiedType: const FullType(int)),
@@ -84,7 +84,7 @@ class _$ChatInfoSerializer implements StructuredSerializer<ChatInfo> {
       serializers.serialize(object.isTyping,
           specifiedType: const FullType(bool)),
     ];
-    Object value;
+    Object? value;
     value = object.lastSeen;
     if (value != null) {
       result
@@ -103,7 +103,7 @@ class _$ChatInfoSerializer implements StructuredSerializer<ChatInfo> {
   }
 
   @override
-  ChatInfo deserialize(Serializers serializers, Iterable<Object> serialized,
+  ChatInfo deserialize(Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new ChatInfoBuilder();
 
@@ -111,7 +111,7 @@ class _$ChatInfoSerializer implements StructuredSerializer<ChatInfo> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'containerId':
           result.containerId = serializers.deserialize(value,
@@ -143,11 +143,11 @@ class _$ChatInfoSerializer implements StructuredSerializer<ChatInfo> {
           break;
         case 'lastSeen':
           result.lastSeen = serializers.deserialize(value,
-              specifiedType: const FullType(DateTime)) as DateTime;
+              specifiedType: const FullType(DateTime)) as DateTime?;
           break;
         case 'lastMessage':
           result.lastMessage.replace(serializers.deserialize(value,
-              specifiedType: const FullType(Message)) as Message);
+              specifiedType: const FullType(Message))! as Message);
           break;
       }
     }
@@ -160,10 +160,10 @@ class _$ChatList extends ChatList {
   @override
   final BuiltList<ChatInfo> chats;
 
-  factory _$ChatList([void Function(ChatListBuilder) updates]) =>
+  factory _$ChatList([void Function(ChatListBuilder)? updates]) =>
       (new ChatListBuilder()..update(updates)).build();
 
-  _$ChatList._({this.chats}) : super._() {
+  _$ChatList._({required this.chats}) : super._() {
     BuiltValueNullFieldError.checkNotNull(chats, 'ChatList', 'chats');
   }
 
@@ -193,14 +193,14 @@ class _$ChatList extends ChatList {
 }
 
 class ChatListBuilder implements Builder<ChatList, ChatListBuilder> {
-  _$ChatList _$v;
+  _$ChatList? _$v;
 
-  ListBuilder<ChatInfo> _chats;
+  ListBuilder<ChatInfo>? _chats;
 
   ListBuilder<ChatInfo> get chats =>
       _$this._chats ??= new ListBuilder<ChatInfo>();
 
-  set chats(ListBuilder<ChatInfo> chats) => _$this._chats = chats;
+  set chats(ListBuilder<ChatInfo>? chats) => _$this._chats = chats;
 
   ChatListBuilder();
 
@@ -220,7 +220,7 @@ class ChatListBuilder implements Builder<ChatList, ChatListBuilder> {
   }
 
   @override
-  void update(void Function(ChatListBuilder) updates) {
+  void update(void Function(ChatListBuilder)? updates) {
     if (updates != null) updates(this);
   }
 
@@ -230,7 +230,7 @@ class ChatListBuilder implements Builder<ChatList, ChatListBuilder> {
     try {
       _$result = _$v ?? new _$ChatList._(chats: chats.build());
     } catch (_) {
-      String _$failedField;
+      late String _$failedField;
       try {
         _$failedField = 'chats';
         chats.build();
@@ -261,21 +261,21 @@ class _$ChatInfo extends ChatInfo {
   @override
   final bool isTyping;
   @override
-  final DateTime lastSeen;
+  final DateTime? lastSeen;
   @override
-  final Message lastMessage;
+  final Message? lastMessage;
 
-  factory _$ChatInfo([void Function(ChatInfoBuilder) updates]) =>
+  factory _$ChatInfo([void Function(ChatInfoBuilder)? updates]) =>
       (new ChatInfoBuilder()..update(updates)).build();
 
   _$ChatInfo._(
-      {this.containerId,
-      this.firstName,
-      this.userId,
-      this.newMessagesCount,
-      this.isUnread,
-      this.isOnline,
-      this.isTyping,
+      {required this.containerId,
+      required this.firstName,
+      required this.userId,
+      required this.newMessagesCount,
+      required this.isUnread,
+      required this.isOnline,
+      required this.isTyping,
       this.lastSeen,
       this.lastMessage})
       : super._() {
@@ -349,63 +349,63 @@ class _$ChatInfo extends ChatInfo {
 }
 
 class ChatInfoBuilder implements Builder<ChatInfo, ChatInfoBuilder> {
-  _$ChatInfo _$v;
+  _$ChatInfo? _$v;
 
-  int _containerId;
+  int? _containerId;
 
-  int get containerId => _$this._containerId;
+  int? get containerId => _$this._containerId;
 
-  set containerId(int containerId) => _$this._containerId = containerId;
+  set containerId(int? containerId) => _$this._containerId = containerId;
 
-  String _firstName;
+  String? _firstName;
 
-  String get firstName => _$this._firstName;
+  String? get firstName => _$this._firstName;
 
-  set firstName(String firstName) => _$this._firstName = firstName;
+  set firstName(String? firstName) => _$this._firstName = firstName;
 
-  String _userId;
+  String? _userId;
 
-  String get userId => _$this._userId;
+  String? get userId => _$this._userId;
 
-  set userId(String userId) => _$this._userId = userId;
+  set userId(String? userId) => _$this._userId = userId;
 
-  int _newMessagesCount;
+  int? _newMessagesCount;
 
-  int get newMessagesCount => _$this._newMessagesCount;
+  int? get newMessagesCount => _$this._newMessagesCount;
 
-  set newMessagesCount(int newMessagesCount) =>
+  set newMessagesCount(int? newMessagesCount) =>
       _$this._newMessagesCount = newMessagesCount;
 
-  bool _isUnread;
+  bool? _isUnread;
 
-  bool get isUnread => _$this._isUnread;
+  bool? get isUnread => _$this._isUnread;
 
-  set isUnread(bool isUnread) => _$this._isUnread = isUnread;
+  set isUnread(bool? isUnread) => _$this._isUnread = isUnread;
 
-  bool _isOnline;
+  bool? _isOnline;
 
-  bool get isOnline => _$this._isOnline;
+  bool? get isOnline => _$this._isOnline;
 
-  set isOnline(bool isOnline) => _$this._isOnline = isOnline;
+  set isOnline(bool? isOnline) => _$this._isOnline = isOnline;
 
-  bool _isTyping;
+  bool? _isTyping;
 
-  bool get isTyping => _$this._isTyping;
+  bool? get isTyping => _$this._isTyping;
 
-  set isTyping(bool isTyping) => _$this._isTyping = isTyping;
+  set isTyping(bool? isTyping) => _$this._isTyping = isTyping;
 
-  DateTime _lastSeen;
+  DateTime? _lastSeen;
 
-  DateTime get lastSeen => _$this._lastSeen;
+  DateTime? get lastSeen => _$this._lastSeen;
 
-  set lastSeen(DateTime lastSeen) => _$this._lastSeen = lastSeen;
+  set lastSeen(DateTime? lastSeen) => _$this._lastSeen = lastSeen;
 
-  MessageBuilder _lastMessage;
+  MessageBuilder? _lastMessage;
 
   MessageBuilder get lastMessage =>
       _$this._lastMessage ??= new MessageBuilder();
 
-  set lastMessage(MessageBuilder lastMessage) =>
+  set lastMessage(MessageBuilder? lastMessage) =>
       _$this._lastMessage = lastMessage;
 
   ChatInfoBuilder() {
@@ -436,7 +436,7 @@ class ChatInfoBuilder implements Builder<ChatInfo, ChatInfoBuilder> {
   }
 
   @override
-  void update(void Function(ChatInfoBuilder) updates) {
+  void update(void Function(ChatInfoBuilder)? updates) {
     if (updates != null) updates(this);
   }
 
@@ -463,7 +463,7 @@ class ChatInfoBuilder implements Builder<ChatInfo, ChatInfoBuilder> {
               lastSeen: lastSeen,
               lastMessage: _lastMessage?.build());
     } catch (_) {
-      String _$failedField;
+      late String _$failedField;
       try {
         _$failedField = 'lastMessage';
         _lastMessage?.build();

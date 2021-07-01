@@ -15,9 +15,9 @@ class _$AccountSerializer implements StructuredSerializer<Account> {
   final String wireName = 'Account';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, Account object,
+  Iterable<Object?> serialize(Serializers serializers, Account object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'user',
       serializers.serialize(object.user, specifiedType: const FullType(User)),
     ];
@@ -26,7 +26,7 @@ class _$AccountSerializer implements StructuredSerializer<Account> {
   }
 
   @override
-  Account deserialize(Serializers serializers, Iterable<Object> serialized,
+  Account deserialize(Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new AccountBuilder();
 
@@ -34,11 +34,11 @@ class _$AccountSerializer implements StructuredSerializer<Account> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'user':
           result.user.replace(serializers.deserialize(value,
-              specifiedType: const FullType(User)) as User);
+              specifiedType: const FullType(User))! as User);
           break;
       }
     }
@@ -51,10 +51,10 @@ class _$Account extends Account {
   @override
   final User user;
 
-  factory _$Account([void Function(AccountBuilder) updates]) =>
+  factory _$Account([void Function(AccountBuilder)? updates]) =>
       (new AccountBuilder()..update(updates)).build();
 
-  _$Account._({this.user}) : super._() {
+  _$Account._({required this.user}) : super._() {
     BuiltValueNullFieldError.checkNotNull(user, 'Account', 'user');
   }
 
@@ -84,13 +84,13 @@ class _$Account extends Account {
 }
 
 class AccountBuilder implements Builder<Account, AccountBuilder> {
-  _$Account _$v;
+  _$Account? _$v;
 
-  UserBuilder _user;
+  UserBuilder? _user;
 
   UserBuilder get user => _$this._user ??= new UserBuilder();
 
-  set user(UserBuilder user) => _$this._user = user;
+  set user(UserBuilder? user) => _$this._user = user;
 
   AccountBuilder();
 
@@ -110,7 +110,7 @@ class AccountBuilder implements Builder<Account, AccountBuilder> {
   }
 
   @override
-  void update(void Function(AccountBuilder) updates) {
+  void update(void Function(AccountBuilder)? updates) {
     if (updates != null) updates(this);
   }
 
@@ -120,7 +120,7 @@ class AccountBuilder implements Builder<Account, AccountBuilder> {
     try {
       _$result = _$v ?? new _$Account._(user: user.build());
     } catch (_) {
-      String _$failedField;
+      late String _$failedField;
       try {
         _$failedField = 'user';
         user.build();

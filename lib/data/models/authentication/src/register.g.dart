@@ -19,9 +19,9 @@ class _$RegisterRequestSerializer
   final String wireName = 'RegisterRequest';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, RegisterRequest object,
+  Iterable<Object?> serialize(Serializers serializers, RegisterRequest object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'email',
       serializers.serialize(object.email,
           specifiedType: const FullType(String)),
@@ -35,7 +35,7 @@ class _$RegisterRequestSerializer
 
   @override
   RegisterRequest deserialize(
-      Serializers serializers, Iterable<Object> serialized,
+      Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new RegisterRequestBuilder();
 
@@ -43,7 +43,7 @@ class _$RegisterRequestSerializer
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'email':
           result.email = serializers.deserialize(value,
@@ -68,9 +68,9 @@ class _$RegisterResponseSerializer
   final String wireName = 'RegisterResponse';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, RegisterResponse object,
+  Iterable<Object?> serialize(Serializers serializers, RegisterResponse object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'success',
       serializers.serialize(object.success,
           specifiedType: const FullType(bool)),
@@ -81,7 +81,7 @@ class _$RegisterResponseSerializer
 
   @override
   RegisterResponse deserialize(
-      Serializers serializers, Iterable<Object> serialized,
+      Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new RegisterResponseBuilder();
 
@@ -89,7 +89,7 @@ class _$RegisterResponseSerializer
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'success':
           result.success = serializers.deserialize(value,
@@ -108,10 +108,11 @@ class _$RegisterRequest extends RegisterRequest {
   @override
   final String password;
 
-  factory _$RegisterRequest([void Function(RegisterRequestBuilder) updates]) =>
+  factory _$RegisterRequest([void Function(RegisterRequestBuilder)? updates]) =>
       (new RegisterRequestBuilder()..update(updates)).build();
 
-  _$RegisterRequest._({this.email, this.password}) : super._() {
+  _$RegisterRequest._({required this.email, required this.password})
+      : super._() {
     BuiltValueNullFieldError.checkNotNull(email, 'RegisterRequest', 'email');
     BuiltValueNullFieldError.checkNotNull(
         password, 'RegisterRequest', 'password');
@@ -149,19 +150,19 @@ class _$RegisterRequest extends RegisterRequest {
 
 class RegisterRequestBuilder
     implements Builder<RegisterRequest, RegisterRequestBuilder> {
-  _$RegisterRequest _$v;
+  _$RegisterRequest? _$v;
 
-  String _email;
+  String? _email;
 
-  String get email => _$this._email;
+  String? get email => _$this._email;
 
-  set email(String email) => _$this._email = email;
+  set email(String? email) => _$this._email = email;
 
-  String _password;
+  String? _password;
 
-  String get password => _$this._password;
+  String? get password => _$this._password;
 
-  set password(String password) => _$this._password = password;
+  set password(String? password) => _$this._password = password;
 
   RegisterRequestBuilder();
 
@@ -182,7 +183,7 @@ class RegisterRequestBuilder
   }
 
   @override
-  void update(void Function(RegisterRequestBuilder) updates) {
+  void update(void Function(RegisterRequestBuilder)? updates) {
     if (updates != null) updates(this);
   }
 
@@ -204,10 +205,10 @@ class _$RegisterResponse extends RegisterResponse {
   final bool success;
 
   factory _$RegisterResponse(
-          [void Function(RegisterResponseBuilder) updates]) =>
+          [void Function(RegisterResponseBuilder)? updates]) =>
       (new RegisterResponseBuilder()..update(updates)).build();
 
-  _$RegisterResponse._({this.success}) : super._() {
+  _$RegisterResponse._({required this.success}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
         success, 'RegisterResponse', 'success');
   }
@@ -241,13 +242,13 @@ class _$RegisterResponse extends RegisterResponse {
 
 class RegisterResponseBuilder
     implements Builder<RegisterResponse, RegisterResponseBuilder> {
-  _$RegisterResponse _$v;
+  _$RegisterResponse? _$v;
 
-  bool _success;
+  bool? _success;
 
-  bool get success => _$this._success;
+  bool? get success => _$this._success;
 
-  set success(bool success) => _$this._success = success;
+  set success(bool? success) => _$this._success = success;
 
   RegisterResponseBuilder();
 
@@ -267,7 +268,7 @@ class RegisterResponseBuilder
   }
 
   @override
-  void update(void Function(RegisterResponseBuilder) updates) {
+  void update(void Function(RegisterResponseBuilder)? updates) {
     if (updates != null) updates(this);
   }
 

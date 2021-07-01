@@ -17,9 +17,9 @@ import 'components/index.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({
-    @required this.authenticationRepository,
-    @required this.accountRepository,
-    @required this.authenticationBloc,
+    required this.authenticationRepository,
+    required this.accountRepository,
+    required this.authenticationBloc,
   });
 
   final AuthenticationRepository authenticationRepository;
@@ -129,7 +129,7 @@ class HomePage extends StatelessWidget {
                       context: context,
                       barrierDismissible: false,
                       builder: (_) => RingingDialogPage(
-                        webRTCOffer: state.webRTCOffer,
+                        webRTCOffer: state.webRTCOffer!,
                         callBloc: BlocProvider.of<CallBloc>(context),
                       ),
                     );
@@ -139,7 +139,7 @@ class HomePage extends StatelessWidget {
                       await Navigator.of(context).push<void>(
                         MaterialPageRoute(
                           builder: (_) => WebRTCPage(
-                            userId: state.webRTCOffer.userId,
+                            userId: state.webRTCOffer!.userId,
                             socketRepository: socketRepository,
                             callRepository: callRepository,
                             callBloc: BlocProvider.of<CallBloc>(context),
@@ -177,7 +177,7 @@ class HomePage extends StatelessWidget {
                         ),
                       ],
                       title: Text(
-                        'Welcome to Flutter Chat ${accountRepository.account?.user?.firstName ?? 'Anonymous!'}',
+                        'Welcome to Flutter Chat ${accountRepository.account?.user.firstName ?? 'Anonymous!'}',
                       ),
                     ),
                     body: Builder(builder: (context) {

@@ -8,8 +8,8 @@ import 'package:flutter_chat/presentation/screens/register/register.dart';
 
 class AuthInitForm extends StatelessWidget {
   AuthInitForm({
-    @required this.authenticationRepository,
-    @required this.authenticationBloc,
+    required this.authenticationRepository,
+    required this.authenticationBloc,
   });
 
   final AuthenticationRepository authenticationRepository;
@@ -55,7 +55,7 @@ class AuthInitForm extends StatelessWidget {
       child: BlocBuilder<AuthInitBloc, AuthInitState>(
         builder: (context, state) {
           final onSubmit = () {
-            if (formKey.currentState.validate()) {
+            if (formKey.currentState!.validate()) {
               BlocProvider.of<AuthInitBloc>(context)
                   .add(const AuthInitSubmitted());
             }
@@ -96,11 +96,11 @@ class _EmailInput extends StatelessWidget {
           .add(AuthInitEmailChanged(email)),
       autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: (email) {
-        if (email.isEmpty) {
+        if (email!.isEmpty) {
           return 'Email must not be empty';
         }
         if (state.status == AuthInitStatus.failure && state.error != null) {
-          return state.error.email.first.message;
+          return state.error!.email!.first.message;
         }
         return null;
       },
@@ -120,8 +120,8 @@ class _SubmitButton extends StatelessWidget {
     return authInitStatus == AuthInitStatus.loading
         ? const CircularProgressIndicator()
         : ElevatedButton(
-            child: const Text('Submit'),
             onPressed: () => onSubmit(),
+            child: const Text('Submit'),
           );
   }
 }

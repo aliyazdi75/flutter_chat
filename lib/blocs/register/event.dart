@@ -5,7 +5,7 @@ abstract class RegisterEvent extends Equatable {
   const RegisterEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class RegisterPasswordChanged extends RegisterEvent {
@@ -14,7 +14,7 @@ class RegisterPasswordChanged extends RegisterEvent {
   final String password;
 
   @override
-  List<Object> get props => [password];
+  List<Object?> get props => [password];
 }
 
 class RegisterSubmitted extends RegisterEvent {

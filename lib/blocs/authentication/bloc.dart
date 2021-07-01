@@ -15,8 +15,8 @@ part 'state.dart';
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   AuthenticationBloc({
-    @required this.authenticationRepository,
-    @required this.accountRepository,
+    required this.authenticationRepository,
+    required this.accountRepository,
   }) : super(const AuthenticationState.unknown());
 
   final AuthenticationRepository authenticationRepository;
@@ -36,8 +36,6 @@ class AuthenticationBloc
 
   Stream<AuthenticationState>
       _mapAuthenticationStatusCheckRequestedToState() async* {
-    assert(accountRepository != null);
-
     yield const AuthenticationState.loading();
 
     try {

@@ -13,9 +13,8 @@ part 'state.dart';
 
 class AuthInitBloc extends Bloc<AuthInitEvent, AuthInitState> {
   AuthInitBloc({
-    @required this.authenticationRepository,
-  })  : assert(authenticationRepository != null),
-        super(const AuthInitState());
+    required this.authenticationRepository,
+  }) : super(const AuthInitState());
 
   final AuthenticationRepository authenticationRepository;
 
@@ -50,7 +49,7 @@ class AuthInitBloc extends Bloc<AuthInitEvent, AuthInitState> {
       );
     } on BadRequestException catch (e) {
       final error = HttpExceptionModel.fromJson<AuthInitBadRequest>(e.model);
-      print('kir to requestet ba ina ${error.exceptions.first.errors.email}');
+      print('kir to requestet ba ina ${error.exceptions.first.errors!.email}');
       yield state.copyWith(
         status: AuthInitStatus.failure,
         error: error.exceptions.first.errors,

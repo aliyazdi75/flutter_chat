@@ -19,7 +19,7 @@ abstract class Account implements Built<Account, AccountBuilder> {
   }
 
   static Account fromJson(Map<String, dynamic> json) {
-    return serializers.deserializeWith(Account.serializer, json);
+    return serializers.deserializeWith(Account.serializer, json)!;
   }
 
   static Serializer<Account> get serializer => _$accountSerializer;

@@ -11,35 +11,35 @@ class HubMethod {
   HubMethod(this.methodName, this.methodFunction);
 
   final String methodName;
-  final MethodInvacationFunc methodFunction;
+  final MethodInvocationFunc methodFunction;
 }
 
 abstract class SignalRBase {
   Future<HubConnection> startConnection(
     String token, {
-    Function onReconnecting,
-    Function onReconnected,
+    Function? onReconnecting,
+    Function? onReconnected,
   });
 
   Future<void> stopConnection();
 
-  void on(String methodName, MethodInvacationFunc responseCallBack);
+  void on(String methodName, MethodInvocationFunc responseCallBack);
 
-  void off(String methodName, {MethodInvacationFunc responseCallBack});
+  void off(String methodName, {MethodInvocationFunc? responseCallBack});
 
-  Future<Map<String, dynamic>> invoke(String methodName, {List<dynamic> args});
+  Future<Map<String, dynamic>> invoke(String methodName, {List<dynamic>? args});
 }
 
 class SignalRHelper implements SignalRBase {
   SignalRHelper({this.hubConnection});
 
-  final HubConnection hubConnection;
+  final HubConnection? hubConnection;
 
   @override
   Future<HubConnection> startConnection(
     String token, {
-    Function onReconnecting,
-    Function onReconnected,
+    Function? onReconnecting,
+    Function? onReconnected,
   }) async {
     final queryParams = {signalRAuthQuery: token};
     final hubConnection = HubConnectionBuilder()
@@ -52,8 +52,10 @@ class SignalRHelper implements SignalRBase {
         )
         .withAutomaticReconnect()
         .build()
-          ..onreconnecting((exception) => onReconnecting())
-          ..onreconnected((connectionId) => onReconnected());
+          ..onreconnecting(
+              (exception) => onReconnecting == null ? null : onReconnecting())
+          ..onreconnected(
+              (connectionId) => onReconnected == null ? null : onReconnected());
 
     await hubConnection.start();
     return hubConnection;
@@ -62,44 +64,44 @@ class SignalRHelper implements SignalRBase {
   @override
   Future<void> stopConnection() async {
     assert(hubConnection != null);
-    await hubConnection.stop();
+    await hubConnection!.stop();
   }
 
   @override
   void on(
     String methodName,
-    MethodInvacationFunc responseCallBack,
+    MethodInvocationFunc responseCallBack,
   ) {
     assert(hubConnection != null);
-    hubConnection.on(methodName, responseCallBack);
+    hubConnection!.on(methodName, responseCallBack);
   }
 
   @override
   void off(
     String methodName, {
-    MethodInvacationFunc responseCallBack,
+    MethodInvocationFunc? responseCallBack,
   }) {
     assert(hubConnection != null);
-    hubConnection.off(methodName, method: responseCallBack);
+    hubConnection!.off(methodName, method: responseCallBack);
   }
 
   @override
   Future<Map<String, dynamic>> invoke(String methodName,
-      {List<dynamic> args}) async {
+      {List<dynamic>? args}) async {
     assert(hubConnection != null);
     try {
-      return await hubConnection.invoke(methodName, args: args)
+      return await hubConnection!.invoke(methodName, args: args)
           as Map<String, dynamic>;
     } on FormatException {
       throw SocketResponseException(methodName);
     }
   }
 
-  static MethodInvacationFunc toSocketFunction(
+  static MethodInvocationFunc toSocketFunction(
       String methodName, SocketResponseCallBack responseCallBack) {
     return (arguments) {
       try {
-        if (arguments.isEmpty) {
+        if (arguments!.isEmpty) {
           throw SocketEmptyResponseException(methodName);
         }
         final response = arguments.first as Map<String, dynamic>;

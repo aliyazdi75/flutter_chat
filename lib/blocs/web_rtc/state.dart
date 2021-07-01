@@ -28,11 +28,11 @@ class WebRTCState extends Equatable {
   });
 
   final WebRTCStatus status;
-  final String userId;
+  final String? userId;
   final List<RTCIceCandidate> iceCandidates;
-  final MediaStream localMediaStream;
-  final RTCVideoRenderer localVideoRender;
-  final RTCVideoRenderer remoteVideoRender;
+  final MediaStream? localMediaStream;
+  final RTCVideoRenderer? localVideoRender;
+  final RTCVideoRenderer? remoteVideoRender;
   final bool hasTorch;
   final bool localVideoRendererActivationStatus;
   final bool remoteVideoRendererActivationStatus;
@@ -41,18 +41,18 @@ class WebRTCState extends Equatable {
   final bool micMuteStatus;
 
   WebRTCState copyWith({
-    WebRTCStatus status,
-    String userId,
-    List<RTCIceCandidate> iceCandidates,
-    MediaStream localMediaStream,
-    RTCVideoRenderer localVideoRender,
-    RTCVideoRenderer remoteVideoRender,
-    bool hasTorch,
-    bool localVideoRendererActivationStatus,
-    bool remoteVideoRendererActivationStatus,
-    bool torchStatus,
-    bool cameraFrontSideStatus,
-    bool micMuteStatus,
+    WebRTCStatus? status,
+    String? userId,
+    List<RTCIceCandidate>? iceCandidates,
+    MediaStream? localMediaStream,
+    RTCVideoRenderer? localVideoRender,
+    RTCVideoRenderer? remoteVideoRender,
+    bool? hasTorch,
+    bool? localVideoRendererActivationStatus,
+    bool? remoteVideoRendererActivationStatus,
+    bool? torchStatus,
+    bool? cameraFrontSideStatus,
+    bool? micMuteStatus,
   }) {
     return WebRTCState(
       status: status ?? this.status,
@@ -75,7 +75,7 @@ class WebRTCState extends Equatable {
   }
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         status,
         localVideoRendererActivationStatus,
         remoteVideoRendererActivationStatus,

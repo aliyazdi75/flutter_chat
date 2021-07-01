@@ -7,9 +7,9 @@ enum RingingResponse { accept }
 
 class RingingDialogPage extends StatelessWidget {
   RingingDialogPage({
-    @required this.webRTCOffer,
-    @required this.callBloc,
-  }) : assert(webRTCOffer != null);
+    required this.webRTCOffer,
+    required this.callBloc,
+  });
 
   final WebRTCOffer webRTCOffer;
   final CallBloc callBloc;

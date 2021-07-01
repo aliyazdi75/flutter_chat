@@ -35,10 +35,10 @@ class _$UserSerializer implements StructuredSerializer<User> {
   final String wireName = 'User';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, User object,
+  Iterable<Object?> serialize(Serializers serializers, User object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[];
-    Object value;
+    final result = <Object?>[];
+    Object? value;
     value = object.firstName;
     if (value != null) {
       result
@@ -84,7 +84,7 @@ class _$UserSerializer implements StructuredSerializer<User> {
   }
 
   @override
-  User deserialize(Serializers serializers, Iterable<Object> serialized,
+  User deserialize(Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new UserBuilder();
 
@@ -92,31 +92,31 @@ class _$UserSerializer implements StructuredSerializer<User> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'firstName':
           result.firstName = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String)) as String?;
           break;
         case 'lastName':
           result.lastName = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String)) as String?;
           break;
         case 'fullName':
           result.fullName = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String)) as String?;
           break;
         case 'cityId':
           result.cityId = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int)) as int?;
           break;
         case 'gender':
           result.gender = serializers.deserialize(value,
-              specifiedType: const FullType(Gender)) as Gender;
+              specifiedType: const FullType(Gender)) as Gender?;
           break;
         case 'birthDate':
           result.birthDate = serializers.deserialize(value,
-              specifiedType: const FullType(DateTime)) as DateTime;
+              specifiedType: const FullType(DateTime)) as DateTime?;
           break;
       }
     }
@@ -148,24 +148,25 @@ class _$GenderSerializer implements PrimitiveSerializer<Gender> {
   @override
   Gender deserialize(Serializers serializers, Object serialized,
           {FullType specifiedType = FullType.unspecified}) =>
-      Gender.valueOf(_fromWire[serialized] ?? serialized as String);
+      Gender.valueOf(
+          _fromWire[serialized] ?? (serialized is String ? serialized : ''));
 }
 
 class _$User extends User {
   @override
-  final String firstName;
+  final String? firstName;
   @override
-  final String lastName;
+  final String? lastName;
   @override
-  final String fullName;
+  final String? fullName;
   @override
-  final int cityId;
+  final int? cityId;
   @override
-  final Gender gender;
+  final Gender? gender;
   @override
-  final DateTime birthDate;
+  final DateTime? birthDate;
 
-  factory _$User([void Function(UserBuilder) updates]) =>
+  factory _$User([void Function(UserBuilder)? updates]) =>
       (new UserBuilder()..update(updates)).build();
 
   _$User._(
@@ -222,43 +223,43 @@ class _$User extends User {
 }
 
 class UserBuilder implements Builder<User, UserBuilder> {
-  _$User _$v;
+  _$User? _$v;
 
-  String _firstName;
+  String? _firstName;
 
-  String get firstName => _$this._firstName;
+  String? get firstName => _$this._firstName;
 
-  set firstName(String firstName) => _$this._firstName = firstName;
+  set firstName(String? firstName) => _$this._firstName = firstName;
 
-  String _lastName;
+  String? _lastName;
 
-  String get lastName => _$this._lastName;
+  String? get lastName => _$this._lastName;
 
-  set lastName(String lastName) => _$this._lastName = lastName;
+  set lastName(String? lastName) => _$this._lastName = lastName;
 
-  String _fullName;
+  String? _fullName;
 
-  String get fullName => _$this._fullName;
+  String? get fullName => _$this._fullName;
 
-  set fullName(String fullName) => _$this._fullName = fullName;
+  set fullName(String? fullName) => _$this._fullName = fullName;
 
-  int _cityId;
+  int? _cityId;
 
-  int get cityId => _$this._cityId;
+  int? get cityId => _$this._cityId;
 
-  set cityId(int cityId) => _$this._cityId = cityId;
+  set cityId(int? cityId) => _$this._cityId = cityId;
 
-  Gender _gender;
+  Gender? _gender;
 
-  Gender get gender => _$this._gender;
+  Gender? get gender => _$this._gender;
 
-  set gender(Gender gender) => _$this._gender = gender;
+  set gender(Gender? gender) => _$this._gender = gender;
 
-  DateTime _birthDate;
+  DateTime? _birthDate;
 
-  DateTime get birthDate => _$this._birthDate;
+  DateTime? get birthDate => _$this._birthDate;
 
-  set birthDate(DateTime birthDate) => _$this._birthDate = birthDate;
+  set birthDate(DateTime? birthDate) => _$this._birthDate = birthDate;
 
   UserBuilder();
 
@@ -283,7 +284,7 @@ class UserBuilder implements Builder<User, UserBuilder> {
   }
 
   @override
-  void update(void Function(UserBuilder) updates) {
+  void update(void Function(UserBuilder)? updates) {
     if (updates != null) updates(this);
   }
 

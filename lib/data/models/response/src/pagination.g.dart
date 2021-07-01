@@ -6,18 +6,19 @@ part of 'pagination.dart';
 // BuiltValueGenerator
 // **************************************************************************
 
-Serializer<Pagination<Object>> _$paginationSerializer =
+Serializer<Pagination<Object?>> _$paginationSerializer =
     new _$PaginationSerializer();
 
 class _$PaginationSerializer
-    implements StructuredSerializer<Pagination<Object>> {
+    implements StructuredSerializer<Pagination<Object?>> {
   @override
   final Iterable<Type> types = const [Pagination, _$Pagination];
   @override
   final String wireName = 'Pagination';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, Pagination<Object> object,
+  Iterable<Object?> serialize(
+      Serializers serializers, Pagination<Object?> object,
       {FullType specifiedType = FullType.unspecified}) {
     final isUnderspecified =
         specifiedType.isUnspecified || specifiedType.parameters.isEmpty;
@@ -25,8 +26,8 @@ class _$PaginationSerializer
     final parameterT =
         isUnderspecified ? FullType.object : specifiedType.parameters[0];
 
-    final result = <Object>[];
-    Object value;
+    final result = <Object?>[];
+    Object? value;
     value = object.count;
     if (value != null) {
       result
@@ -58,8 +59,8 @@ class _$PaginationSerializer
   }
 
   @override
-  Pagination<Object> deserialize(
-      Serializers serializers, Iterable<Object> serialized,
+  Pagination<Object?> deserialize(
+      Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final isUnderspecified =
         specifiedType.isUnspecified || specifiedType.parameters.isEmpty;
@@ -68,31 +69,31 @@ class _$PaginationSerializer
         isUnderspecified ? FullType.object : specifiedType.parameters[0];
 
     final result = isUnderspecified
-        ? new PaginationBuilder<Object>()
-        : serializers.newBuilder(specifiedType) as PaginationBuilder<Object>;
+        ? new PaginationBuilder<Object?>()
+        : serializers.newBuilder(specifiedType) as PaginationBuilder<Object?>;
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'count':
           result.count = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int)) as int?;
           break;
         case 'next':
           result.next = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String)) as String?;
           break;
         case 'previous':
           result.previous = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String)) as String?;
           break;
         case 'results':
           result.results.replace(serializers.deserialize(value,
-                  specifiedType: new FullType(BuiltList, [parameterT]))
-              as BuiltList<Object>);
+                  specifiedType: new FullType(BuiltList, [parameterT]))!
+              as BuiltList<Object?>);
           break;
       }
     }
@@ -103,15 +104,15 @@ class _$PaginationSerializer
 
 class _$Pagination<T> extends Pagination<T> {
   @override
-  final int count;
+  final int? count;
   @override
-  final String next;
+  final String? next;
   @override
-  final String previous;
+  final String? previous;
   @override
-  final BuiltList<T> results;
+  final BuiltList<T>? results;
 
-  factory _$Pagination([void Function(PaginationBuilder<T>) updates]) =>
+  factory _$Pagination([void Function(PaginationBuilder<T>)? updates]) =>
       (new PaginationBuilder<T>()..update(updates)).build();
 
   _$Pagination._({this.count, this.next, this.previous, this.results})
@@ -158,31 +159,31 @@ class _$Pagination<T> extends Pagination<T> {
 
 class PaginationBuilder<T>
     implements Builder<Pagination<T>, PaginationBuilder<T>> {
-  _$Pagination<T> _$v;
+  _$Pagination<T>? _$v;
 
-  int _count;
+  int? _count;
 
-  int get count => _$this._count;
+  int? get count => _$this._count;
 
-  set count(int count) => _$this._count = count;
+  set count(int? count) => _$this._count = count;
 
-  String _next;
+  String? _next;
 
-  String get next => _$this._next;
+  String? get next => _$this._next;
 
-  set next(String next) => _$this._next = next;
+  set next(String? next) => _$this._next = next;
 
-  String _previous;
+  String? _previous;
 
-  String get previous => _$this._previous;
+  String? get previous => _$this._previous;
 
-  set previous(String previous) => _$this._previous = previous;
+  set previous(String? previous) => _$this._previous = previous;
 
-  ListBuilder<T> _results;
+  ListBuilder<T>? _results;
 
   ListBuilder<T> get results => _$this._results ??= new ListBuilder<T>();
 
-  set results(ListBuilder<T> results) => _$this._results = results;
+  set results(ListBuilder<T>? results) => _$this._results = results;
 
   PaginationBuilder();
 
@@ -205,7 +206,7 @@ class PaginationBuilder<T>
   }
 
   @override
-  void update(void Function(PaginationBuilder<T>) updates) {
+  void update(void Function(PaginationBuilder<T>)? updates) {
     if (updates != null) updates(this);
   }
 
@@ -220,7 +221,7 @@ class PaginationBuilder<T>
               previous: previous,
               results: _results?.build());
     } catch (_) {
-      String _$failedField;
+      late String _$failedField;
       try {
         _$failedField = 'results';
         _results?.build();

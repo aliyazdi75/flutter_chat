@@ -44,17 +44,14 @@ abstract class HttpExceptionModel<T>
 
 abstract class ExceptionClass<T>
     implements Built<ExceptionClass<T>, ExceptionClassBuilder<T>> {
-  @nullable
-  T get errors;
+  T? get errors;
 
   @BuiltValueField(wireName: 'class')
   ExceptionClassType get type;
 
-  @nullable
-  T get code;
+  T? get code;
 
-  @nullable
-  String get message;
+  String? get message;
 
   ExceptionClass._();
 

@@ -5,7 +5,7 @@ abstract class HomeEvent extends Equatable {
   const HomeEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class LoggedOutRequested extends HomeEvent {
@@ -22,7 +22,7 @@ class StatusChanged extends HomeEvent {
   final ChatStatusChange onStatusChanged;
 
   @override
-  List<Object> get props => [onStatusChanged];
+  List<Object?> get props => [onStatusChanged];
 }
 
 class MessageReceived extends HomeEvent {
@@ -31,7 +31,7 @@ class MessageReceived extends HomeEvent {
   final ChatMessageReceive onChatMessageReceived;
 
   @override
-  List<Object> get props => [onChatMessageReceived];
+  List<Object?> get props => [onChatMessageReceived];
 }
 
 class ChatSeenReceived extends HomeEvent {
@@ -40,7 +40,7 @@ class ChatSeenReceived extends HomeEvent {
   final ChatSeen onMessageSeen;
 
   @override
-  List<Object> get props => [onMessageSeen];
+  List<Object?> get props => [onMessageSeen];
 }
 
 class IsTypingReceived extends HomeEvent {
@@ -49,7 +49,7 @@ class IsTypingReceived extends HomeEvent {
   final ChatIsTyping onChatIsTyping;
 
   @override
-  List<Object> get props => [onChatIsTyping];
+  List<Object?> get props => [onChatIsTyping];
 }
 
 class UpdateChatInfoRequested extends HomeEvent {
@@ -58,7 +58,7 @@ class UpdateChatInfoRequested extends HomeEvent {
   final ChatInfo chatInfo;
 
   @override
-  List<Object> get props => [chatInfo];
+  List<Object?> get props => [chatInfo];
 }
 
 class UpdateNewMessageCountRequested extends HomeEvent {
@@ -67,5 +67,5 @@ class UpdateNewMessageCountRequested extends HomeEvent {
   final ChatInfo chatInfo;
 
   @override
-  List<Object> get props => [chatInfo];
+  List<Object?> get props => [chatInfo];
 }

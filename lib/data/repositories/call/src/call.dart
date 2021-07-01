@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_chat/data/models/web_rtc/index.dart';
 import 'package:flutter_chat/data/providers/hub/web_rtc/index.dart';
 import 'package:flutter_chat/services/signalR/index.dart';
@@ -9,14 +8,13 @@ class CallRepository {
 
   final WebRTCHub webRTCHub;
 
-  String userId;
-  WebRTCOffer webRTCOffer;
+  String? userId;
+  WebRTCOffer? webRTCOffer;
   List<RTCIceCandidate> iceCandidates = [];
 
   void listenOnWebRTCIceCandidateReceived({
-    @required HubConnection hubConnection,
+    required HubConnection hubConnection,
   }) {
-    assert(hubConnection != null);
     webRTCHub.listenOnWebRTCIceCandidateReceived(hubConnection, _addCandidate);
   }
 
@@ -33,10 +31,9 @@ class CallRepository {
   }
 
   void listenOnWebRTCOfferReceived({
-    @required HubConnection hubConnection,
-    @required Function(WebRTCOffer webRTCOffer) onWebRTCOfferReceived,
+    required HubConnection hubConnection,
+    required Function(WebRTCOffer webRTCOffer) onWebRTCOfferReceived,
   }) {
-    assert(hubConnection != null);
     final Function(WebRTCOffer webRTCOffer) onWebRTCOffer = (webRTCOffer) {
       userId ??= webRTCOffer.userId;
       onWebRTCOfferReceived(webRTCOffer);
@@ -45,19 +42,17 @@ class CallRepository {
   }
 
   void listenOnWebRTCHangUpReceived({
-    @required HubConnection hubConnection,
-    @required Function(WebRTCHangUp webRTCHangUp) onWebRTCHangUpReceived,
+    required HubConnection hubConnection,
+    required Function(WebRTCHangUp webRTCHangUp) onWebRTCHangUpReceived,
   }) {
-    assert(hubConnection != null);
     webRTCHub.listenOnWebRTCHangUpReceived(
         hubConnection, onWebRTCHangUpReceived);
   }
 
   Future<void> hangUp({
-    @required HubConnection hubConnection,
-    @required WebRTCHangUp webRTCHangUp,
+    required HubConnection hubConnection,
+    required WebRTCHangUp webRTCHangUp,
   }) async {
-    assert(hubConnection != null);
     await _sendWebRTCHangUp(hubConnection, webRTCHangUp.userId);
   }
 
@@ -68,21 +63,18 @@ class CallRepository {
   }
 
   Future<void> reject({
-    @required HubConnection hubConnection,
-    @required WebRTCReject webRTCReject,
+    required HubConnection hubConnection,
+    required WebRTCReject webRTCReject,
   }) async {
-    assert(hubConnection != null);
     await WebRTCHub.sendWebRTCReject(hubConnection, webRTCReject.userId);
   }
 
   Future<void> _sendWebRTCHangUp(
       HubConnection hubConnection, String userId) async {
-    assert(hubConnection != null);
     await WebRTCHub.sendWebRTCHangUp(hubConnection, userId);
   }
 
-  void listenOff({@required HubConnection hubConnection}) {
-    assert(hubConnection != null);
+  void listenOff({required HubConnection hubConnection}) {
     webRTCHub.listenOff(hubConnection);
   }
 }

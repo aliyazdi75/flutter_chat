@@ -16,7 +16,7 @@ abstract class ChatList implements Built<ChatList, ChatListBuilder> {
   factory ChatList([void Function(ChatListBuilder) updates]) = _$ChatList;
 
   static ChatList fromJson(Map<String, dynamic> json) {
-    return serializers.deserializeWith(ChatList.serializer, json);
+    return serializers.deserializeWith(ChatList.serializer, json)!;
   }
 
   static Serializer<ChatList> get serializer => _$chatListSerializer;
@@ -37,11 +37,9 @@ abstract class ChatInfo implements Built<ChatInfo, ChatInfoBuilder> {
 
   bool get isTyping;
 
-  @nullable
-  DateTime get lastSeen;
+  DateTime? get lastSeen;
 
-  @nullable
-  Message get lastMessage;
+  Message? get lastMessage;
 
   ChatInfo._();
 
@@ -52,7 +50,7 @@ abstract class ChatInfo implements Built<ChatInfo, ChatInfoBuilder> {
     ..isOnline = false;
 
   static ChatInfo fromJson(Map<String, dynamic> json) {
-    return serializers.deserializeWith(ChatInfo.serializer, json);
+    return serializers.deserializeWith(ChatInfo.serializer, json)!;
   }
 
   static Serializer<ChatInfo> get serializer => _$chatInfoSerializer;

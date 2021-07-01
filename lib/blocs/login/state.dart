@@ -11,12 +11,12 @@ class LoginState extends Equatable {
 
   final LoginStatus status;
   final String password;
-  final ExceptionClass error;
+  final ExceptionClass? error;
 
   LoginState copyWith({
-    LoginStatus status,
-    String password,
-    ExceptionClass error,
+    LoginStatus? status,
+    String? password,
+    ExceptionClass? error,
   }) {
     return LoginState(
       status: status ?? this.status,
@@ -26,5 +26,5 @@ class LoginState extends Equatable {
   }
 
   @override
-  List<Object> get props => [status, password];
+  List<Object?> get props => [status, password];
 }

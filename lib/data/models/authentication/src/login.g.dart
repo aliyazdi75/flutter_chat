@@ -16,9 +16,9 @@ class _$LoginRequestSerializer implements StructuredSerializer<LoginRequest> {
   final String wireName = 'LoginRequest';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, LoginRequest object,
+  Iterable<Object?> serialize(Serializers serializers, LoginRequest object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'email',
       serializers.serialize(object.email,
           specifiedType: const FullType(String)),
@@ -46,7 +46,8 @@ class _$LoginRequestSerializer implements StructuredSerializer<LoginRequest> {
   }
 
   @override
-  LoginRequest deserialize(Serializers serializers, Iterable<Object> serialized,
+  LoginRequest deserialize(
+      Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new LoginRequestBuilder();
 
@@ -54,7 +55,7 @@ class _$LoginRequestSerializer implements StructuredSerializer<LoginRequest> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'email':
           result.email = serializers.deserialize(value,
@@ -107,17 +108,17 @@ class _$LoginRequest extends LoginRequest {
   @override
   final String deviceOS;
 
-  factory _$LoginRequest([void Function(LoginRequestBuilder) updates]) =>
+  factory _$LoginRequest([void Function(LoginRequestBuilder)? updates]) =>
       (new LoginRequestBuilder()..update(updates)).build();
 
   _$LoginRequest._(
-      {this.email,
-      this.password,
-      this.deviceId,
-      this.deviceName,
-      this.deviceFriendlyName,
-      this.deviceVersion,
-      this.deviceOS})
+      {required this.email,
+      required this.password,
+      required this.deviceId,
+      required this.deviceName,
+      required this.deviceFriendlyName,
+      required this.deviceVersion,
+      required this.deviceOS})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(email, 'LoginRequest', 'email');
     BuiltValueNullFieldError.checkNotNull(password, 'LoginRequest', 'password');
@@ -181,51 +182,51 @@ class _$LoginRequest extends LoginRequest {
 
 class LoginRequestBuilder
     implements Builder<LoginRequest, LoginRequestBuilder> {
-  _$LoginRequest _$v;
+  _$LoginRequest? _$v;
 
-  String _email;
+  String? _email;
 
-  String get email => _$this._email;
+  String? get email => _$this._email;
 
-  set email(String email) => _$this._email = email;
+  set email(String? email) => _$this._email = email;
 
-  String _password;
+  String? _password;
 
-  String get password => _$this._password;
+  String? get password => _$this._password;
 
-  set password(String password) => _$this._password = password;
+  set password(String? password) => _$this._password = password;
 
-  String _deviceId;
+  String? _deviceId;
 
-  String get deviceId => _$this._deviceId;
+  String? get deviceId => _$this._deviceId;
 
-  set deviceId(String deviceId) => _$this._deviceId = deviceId;
+  set deviceId(String? deviceId) => _$this._deviceId = deviceId;
 
-  String _deviceName;
+  String? _deviceName;
 
-  String get deviceName => _$this._deviceName;
+  String? get deviceName => _$this._deviceName;
 
-  set deviceName(String deviceName) => _$this._deviceName = deviceName;
+  set deviceName(String? deviceName) => _$this._deviceName = deviceName;
 
-  String _deviceFriendlyName;
+  String? _deviceFriendlyName;
 
-  String get deviceFriendlyName => _$this._deviceFriendlyName;
+  String? get deviceFriendlyName => _$this._deviceFriendlyName;
 
-  set deviceFriendlyName(String deviceFriendlyName) =>
+  set deviceFriendlyName(String? deviceFriendlyName) =>
       _$this._deviceFriendlyName = deviceFriendlyName;
 
-  String _deviceVersion;
+  String? _deviceVersion;
 
-  String get deviceVersion => _$this._deviceVersion;
+  String? get deviceVersion => _$this._deviceVersion;
 
-  set deviceVersion(String deviceVersion) =>
+  set deviceVersion(String? deviceVersion) =>
       _$this._deviceVersion = deviceVersion;
 
-  String _deviceOS;
+  String? _deviceOS;
 
-  String get deviceOS => _$this._deviceOS;
+  String? get deviceOS => _$this._deviceOS;
 
-  set deviceOS(String deviceOS) => _$this._deviceOS = deviceOS;
+  set deviceOS(String? deviceOS) => _$this._deviceOS = deviceOS;
 
   LoginRequestBuilder();
 
@@ -251,7 +252,7 @@ class LoginRequestBuilder
   }
 
   @override
-  void update(void Function(LoginRequestBuilder) updates) {
+  void update(void Function(LoginRequestBuilder)? updates) {
     if (updates != null) updates(this);
   }
 

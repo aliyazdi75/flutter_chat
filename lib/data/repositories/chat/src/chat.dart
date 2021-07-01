@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_chat/data/models/chat/index.dart';
 import 'package:flutter_chat/data/providers/api/chat/index.dart';
 import 'package:flutter_chat/data/providers/hub/chat/index.dart';
@@ -9,7 +8,7 @@ class ChatRepository {
 
   final ChatHub chatHub;
 
-  Future<Chat> openChat({String userId, int containerId}) async {
+  Future<Chat> openChat({String? userId, int? containerId}) async {
     assert(userId != null || containerId != null);
     final body = OpenChatInputBody(
       (b) => b
@@ -20,12 +19,11 @@ class ChatRepository {
   }
 
   Future<GetMessageResponse> getMessages({
-    @required String userId,
-    int minId,
-    int maxId,
-    int count,
+    required String userId,
+    int? minId,
+    int? maxId,
+    int? count,
   }) async {
-    assert(userId != null);
     final query = GetMessagesInputQuery(
       (b) => b
         ..minId = minId
@@ -35,8 +33,7 @@ class ChatRepository {
     return await ChatApi.getMessages(userId, query);
   }
 
-  Future<void> readChat({@required int containerId, bool read = true}) async {
-    assert(containerId != null);
+  Future<void> readChat({required int containerId, bool read = true}) async {
     final body = ChatReadInputBody(
       (b) => b
         ..containerId = containerId
@@ -45,7 +42,7 @@ class ChatRepository {
     return await ChatApi.readChat(body);
   }
 
-  Future<void> closeChat({String userId, int containerId}) async {
+  Future<void> closeChat({String? userId, int? containerId}) async {
     assert(userId != null || containerId != null);
     final body = CloseChatInputBody(
       (b) => b
@@ -56,65 +53,57 @@ class ChatRepository {
   }
 
   void listenOnStatusChanged({
-    @required HubConnection hubConnection,
-    @required Function(ChatStatusChange chatStatusChange) onStatusChanged,
+    required HubConnection hubConnection,
+    required Function(ChatStatusChange chatStatusChange) onStatusChanged,
   }) {
-    assert(hubConnection != null);
     chatHub.listenOnStatusChanged(hubConnection, onStatusChanged);
   }
 
   void listenOnMessageReceived({
-    @required HubConnection hubConnection,
-    @required Function(ChatMessageReceive chatMessageReceive) onMessageReceived,
+    required HubConnection hubConnection,
+    required Function(ChatMessageReceive chatMessageReceive) onMessageReceived,
   }) {
-    assert(hubConnection != null);
     chatHub.listenOnMessageReceived(hubConnection, onMessageReceived);
   }
 
   void listenOnChatSeen({
-    @required HubConnection hubConnection,
-    @required Function(ChatSeen chatSeen) onChatSeen,
+    required HubConnection hubConnection,
+    required Function(ChatSeen chatSeen) onChatSeen,
   }) {
-    assert(hubConnection != null);
     chatHub.listenOnChatSeen(hubConnection, onChatSeen);
   }
 
   void listenOnChatIsTyping({
-    @required HubConnection hubConnection,
-    @required Function(ChatIsTyping chatIsTyping) onChatIsTyping,
+    required HubConnection hubConnection,
+    required Function(ChatIsTyping chatIsTyping) onChatIsTyping,
   }) {
-    assert(hubConnection != null);
     chatHub.listenOnChatIsTyping(hubConnection, onChatIsTyping);
   }
 
-  void listenOff({@required HubConnection hubConnection}) {
-    assert(hubConnection != null);
+  void listenOff({required HubConnection hubConnection}) {
     chatHub.listenOff(hubConnection);
   }
 
   Future<SocketChatMessageReceive> sendChatMessage({
-    @required HubConnection hubConnection,
-    @required String userId,
-    @required String message,
+    required HubConnection hubConnection,
+    required String userId,
+    required String message,
   }) async {
-    assert(hubConnection != null);
     return await ChatHub.sendChatMessage(hubConnection, userId, message);
   }
 
   Future<void> sendUserIsTyping({
-    @required HubConnection hubConnection,
-    @required String userId,
+    required HubConnection hubConnection,
+    required String userId,
   }) async {
-    assert(hubConnection != null);
     await ChatHub.sendUserIsTyping(hubConnection, userId);
   }
 
   Future<void> sendUserChatSeen({
-    @required HubConnection hubConnection,
-    @required String userId,
-    @required int lastMessageId,
+    required HubConnection hubConnection,
+    required String userId,
+    required int lastMessageId,
   }) async {
-    assert(hubConnection != null);
     await ChatHub.sendUserChatSeen(hubConnection, userId, lastMessageId);
   }
 }

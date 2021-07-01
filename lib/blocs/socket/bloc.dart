@@ -13,12 +13,10 @@ part 'state.dart';
 
 class SocketBloc extends Bloc<SocketEvent, SocketState> {
   SocketBloc({
-    @required this.socketRepository,
-    @required this.authenticationRepository,
-    @required this.authenticationBloc,
-  })  : assert(socketRepository != null),
-        assert(authenticationRepository != null),
-        super(const SocketState.initial());
+    required this.socketRepository,
+    required this.authenticationRepository,
+    required this.authenticationBloc,
+  }) : super(const SocketState.initial());
 
   final SocketRepository socketRepository;
   final AuthenticationRepository authenticationRepository;

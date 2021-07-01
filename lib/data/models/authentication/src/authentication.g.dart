@@ -17,9 +17,9 @@ class _$AuthenticationSerializer
   final String wireName = 'Authentication';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, Authentication object,
+  Iterable<Object?> serialize(Serializers serializers, Authentication object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'token',
       serializers.serialize(object.token,
           specifiedType: const FullType(String)),
@@ -32,7 +32,7 @@ class _$AuthenticationSerializer
 
   @override
   Authentication deserialize(
-      Serializers serializers, Iterable<Object> serialized,
+      Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new AuthenticationBuilder();
 
@@ -40,7 +40,7 @@ class _$AuthenticationSerializer
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'token':
           result.token = serializers.deserialize(value,
@@ -48,7 +48,7 @@ class _$AuthenticationSerializer
           break;
         case 'user':
           result.user.replace(serializers.deserialize(value,
-              specifiedType: const FullType(User)) as User);
+              specifiedType: const FullType(User))! as User);
           break;
       }
     }
@@ -63,10 +63,10 @@ class _$Authentication extends Authentication {
   @override
   final User user;
 
-  factory _$Authentication([void Function(AuthenticationBuilder) updates]) =>
+  factory _$Authentication([void Function(AuthenticationBuilder)? updates]) =>
       (new AuthenticationBuilder()..update(updates)).build();
 
-  _$Authentication._({this.token, this.user}) : super._() {
+  _$Authentication._({required this.token, required this.user}) : super._() {
     BuiltValueNullFieldError.checkNotNull(token, 'Authentication', 'token');
     BuiltValueNullFieldError.checkNotNull(user, 'Authentication', 'user');
   }
@@ -103,19 +103,19 @@ class _$Authentication extends Authentication {
 
 class AuthenticationBuilder
     implements Builder<Authentication, AuthenticationBuilder> {
-  _$Authentication _$v;
+  _$Authentication? _$v;
 
-  String _token;
+  String? _token;
 
-  String get token => _$this._token;
+  String? get token => _$this._token;
 
-  set token(String token) => _$this._token = token;
+  set token(String? token) => _$this._token = token;
 
-  UserBuilder _user;
+  UserBuilder? _user;
 
   UserBuilder get user => _$this._user ??= new UserBuilder();
 
-  set user(UserBuilder user) => _$this._user = user;
+  set user(UserBuilder? user) => _$this._user = user;
 
   AuthenticationBuilder();
 
@@ -136,7 +136,7 @@ class AuthenticationBuilder
   }
 
   @override
-  void update(void Function(AuthenticationBuilder) updates) {
+  void update(void Function(AuthenticationBuilder)? updates) {
     if (updates != null) updates(this);
   }
 
@@ -150,7 +150,7 @@ class AuthenticationBuilder
                   token, 'Authentication', 'token'),
               user: user.build());
     } catch (_) {
-      String _$failedField;
+      late String _$failedField;
       try {
         _$failedField = 'user';
         user.build();

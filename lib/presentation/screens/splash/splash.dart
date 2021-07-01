@@ -8,8 +8,8 @@ import 'package:flutter_chat/presentation/screens/auth_init/auth_init.dart';
 
 class SplashPage extends StatelessWidget {
   const SplashPage({
-    @required this.authenticationRepository,
-    @required this.accountRepository,
+    required this.authenticationRepository,
+    required this.accountRepository,
   });
 
   final AuthenticationRepository authenticationRepository;
@@ -28,7 +28,6 @@ class SplashPage extends StatelessWidget {
             child: state.status == AuthenticationStatus.loading
                 ? const CircularProgressIndicator()
                 : ElevatedButton(
-                    child: const Text('Authentication Init'),
                     onPressed: () {
                       Navigator.of(context).push<void>(
                         MaterialPageRoute(
@@ -40,6 +39,7 @@ class SplashPage extends StatelessWidget {
                         ),
                       );
                     },
+                    child: const Text('Authentication Init'),
                   ),
           ),
         );

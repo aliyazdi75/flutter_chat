@@ -4,8 +4,8 @@ import 'package:signalr_core/signalr_core.dart';
 class SocketHub {
   static Future<HubConnection> connect(
     String token, {
-    Function onReconnecting,
-    Function onReconnected,
+    Function? onReconnecting,
+    Function? onReconnected,
   }) async {
     return await SignalRHelper().startConnection(
       token,

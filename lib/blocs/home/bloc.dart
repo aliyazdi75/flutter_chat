@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:equatable/equatable.dart';
 import 'package:flutter_chat/blocs/authentication/bloc.dart';
 import 'package:flutter_chat/data/models/chat/index.dart';
@@ -14,12 +15,10 @@ part 'state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc({
-    @required this.homeRepository,
-    @required this.socketRepository,
-    @required this.authenticationBloc,
-  })  : assert(homeRepository != null),
-        assert(socketRepository != null),
-        super(const HomeState());
+    required this.homeRepository,
+    required this.socketRepository,
+    required this.authenticationBloc,
+  }) : super(const HomeState());
 
   final HomeRepository homeRepository;
   final SocketRepository socketRepository;
@@ -104,9 +103,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   Stream<HomeState> _mapStatusChangedToState(StatusChanged event) async* {
-    final chat = state.chats.singleWhere(
+    final chat = state.chats.singleWhereOrNull(
       (chat) => event.onStatusChanged.userId == chat.userId,
-      orElse: () => null,
     );
     if (chat != null) {
       yield state.copyWith(
@@ -122,9 +120,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   Stream<HomeState> _mapMessageReceivedToState(MessageReceived event) async* {
-    final chat = state.chats.singleWhere(
+    final chat = state.chats.singleWhereOrNull(
       (chat) => event.onChatMessageReceived.senderId == chat.userId,
-      orElse: () => null,
     );
     if (chat != null) {
       final message = Message(
@@ -142,7 +139,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         chats: List.of(state.chats)
           ..[state.chats.indexOf(chat)] = chat.rebuild(
             (b) => b
-              ..newMessagesCount += 1
+              ..newMessagesCount = chat.newMessagesCount + 1
               ..lastMessage = message.toBuilder(),
           ),
       );
@@ -150,9 +147,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   Stream<HomeState> _mapChatSeenReceivedToState(ChatSeenReceived event) async* {
-    final chat = state.chats.firstWhere(
+    final chat = state.chats.firstWhereOrNull(
       (chat) => event.onMessageSeen.userId == chat.userId,
-      orElse: () => null,
     );
     if (chat != null) {
       yield state.copyWith(
@@ -165,9 +161,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   Stream<HomeState> _mapIsTypingReceivedToState(IsTypingReceived event) async* {
-    final chat = state.chats.firstWhere(
+    final chat = state.chats.firstWhereOrNull(
       (chat) => event.onChatIsTyping.userId == chat.userId,
-      orElse: () => null,
     );
     if (chat != null) {
       yield state.copyWith(chats: List.of(state.chats));
@@ -182,9 +177,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   Stream<HomeState> _mapUpdateChatInfoRequestedToState(
       UpdateChatInfoRequested event) async* {
-    final chat = state.chats.firstWhere(
+    final chat = state.chats.firstWhereOrNull(
       (chat) => event.chatInfo.userId == chat.userId,
-      orElse: () => null,
     );
     if (chat != null) {
       chat.rebuild((b) => b..newMessagesCount = 0);
@@ -197,9 +191,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   Stream<HomeState> _mapUpdateNewMessageCountRequestedToState(
       UpdateNewMessageCountRequested event) async* {
-    final chat = state.chats.firstWhere(
+    final chat = state.chats.firstWhereOrNull(
       (chat) => event.chatInfo.userId == chat.userId,
-      orElse: () => null,
     );
     if (chat != null) {
       chat.rebuild((b) => b..newMessagesCount = 0);

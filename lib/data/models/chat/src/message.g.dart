@@ -40,9 +40,11 @@ class _$MessageSerializer implements StructuredSerializer<Message> {
   final String wireName = 'Message';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, Message object,
+  Iterable<Object?> serialize(Serializers serializers, Message object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
+      'id',
+      serializers.serialize(object.id, specifiedType: const FullType(int)),
       'seen',
       serializers.serialize(object.seen, specifiedType: const FullType(bool)),
       'sentByMe',
@@ -59,18 +61,12 @@ class _$MessageSerializer implements StructuredSerializer<Message> {
       'text',
       serializers.serialize(object.text, specifiedType: const FullType(String)),
     ];
-    Object value;
-    value = object.id;
-    if (value != null) {
-      result
-        ..add('id')
-        ..add(serializers.serialize(value, specifiedType: const FullType(int)));
-    }
+
     return result;
   }
 
   @override
-  Message deserialize(Serializers serializers, Iterable<Object> serialized,
+  Message deserialize(Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new MessageBuilder();
 
@@ -78,7 +74,7 @@ class _$MessageSerializer implements StructuredSerializer<Message> {
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'id':
           result.id = serializers.deserialize(value,
@@ -140,7 +136,8 @@ class _$MessageTypeSerializer implements PrimitiveSerializer<MessageType> {
   @override
   MessageType deserialize(Serializers serializers, Object serialized,
           {FullType specifiedType = FullType.unspecified}) =>
-      MessageType.valueOf(_fromWire[serialized] ?? serialized as String);
+      MessageType.valueOf(
+          _fromWire[serialized] ?? (serialized is String ? serialized : ''));
 }
 
 class _$Message extends Message {
@@ -159,18 +156,19 @@ class _$Message extends Message {
   @override
   final String text;
 
-  factory _$Message([void Function(MessageBuilder) updates]) =>
+  factory _$Message([void Function(MessageBuilder)? updates]) =>
       (new MessageBuilder()..update(updates)).build();
 
   _$Message._(
-      {this.id,
-      this.seen,
-      this.sentByMe,
-      this.isSent,
-      this.sentAt,
-      this.type,
-      this.text})
+      {required this.id,
+      required this.seen,
+      required this.sentByMe,
+      required this.isSent,
+      required this.sentAt,
+      required this.type,
+      required this.text})
       : super._() {
+    BuiltValueNullFieldError.checkNotNull(id, 'Message', 'id');
     BuiltValueNullFieldError.checkNotNull(seen, 'Message', 'seen');
     BuiltValueNullFieldError.checkNotNull(sentByMe, 'Message', 'sentByMe');
     BuiltValueNullFieldError.checkNotNull(isSent, 'Message', 'isSent');
@@ -228,49 +226,49 @@ class _$Message extends Message {
 }
 
 class MessageBuilder implements Builder<Message, MessageBuilder> {
-  _$Message _$v;
+  _$Message? _$v;
 
-  int _id;
+  int? _id;
 
-  int get id => _$this._id;
+  int? get id => _$this._id;
 
-  set id(int id) => _$this._id = id;
+  set id(int? id) => _$this._id = id;
 
-  bool _seen;
+  bool? _seen;
 
-  bool get seen => _$this._seen;
+  bool? get seen => _$this._seen;
 
-  set seen(bool seen) => _$this._seen = seen;
+  set seen(bool? seen) => _$this._seen = seen;
 
-  bool _sentByMe;
+  bool? _sentByMe;
 
-  bool get sentByMe => _$this._sentByMe;
+  bool? get sentByMe => _$this._sentByMe;
 
-  set sentByMe(bool sentByMe) => _$this._sentByMe = sentByMe;
+  set sentByMe(bool? sentByMe) => _$this._sentByMe = sentByMe;
 
-  bool _isSent;
+  bool? _isSent;
 
-  bool get isSent => _$this._isSent;
+  bool? get isSent => _$this._isSent;
 
-  set isSent(bool isSent) => _$this._isSent = isSent;
+  set isSent(bool? isSent) => _$this._isSent = isSent;
 
-  DateTime _sentAt;
+  DateTime? _sentAt;
 
-  DateTime get sentAt => _$this._sentAt;
+  DateTime? get sentAt => _$this._sentAt;
 
-  set sentAt(DateTime sentAt) => _$this._sentAt = sentAt;
+  set sentAt(DateTime? sentAt) => _$this._sentAt = sentAt;
 
-  MessageType _type;
+  MessageType? _type;
 
-  MessageType get type => _$this._type;
+  MessageType? get type => _$this._type;
 
-  set type(MessageType type) => _$this._type = type;
+  set type(MessageType? type) => _$this._type = type;
 
-  String _text;
+  String? _text;
 
-  String get text => _$this._text;
+  String? get text => _$this._text;
 
-  set text(String text) => _$this._text = text;
+  set text(String? text) => _$this._text = text;
 
   MessageBuilder() {
     Message._initializeBuilder(this);
@@ -298,7 +296,7 @@ class MessageBuilder implements Builder<Message, MessageBuilder> {
   }
 
   @override
-  void update(void Function(MessageBuilder) updates) {
+  void update(void Function(MessageBuilder)? updates) {
     if (updates != null) updates(this);
   }
 
@@ -306,7 +304,7 @@ class MessageBuilder implements Builder<Message, MessageBuilder> {
   _$Message build() {
     final _$result = _$v ??
         new _$Message._(
-            id: id,
+            id: BuiltValueNullFieldError.checkNotNull(id, 'Message', 'id'),
             seen:
                 BuiltValueNullFieldError.checkNotNull(seen, 'Message', 'seen'),
             sentByMe: BuiltValueNullFieldError.checkNotNull(

@@ -4,7 +4,7 @@ import 'package:flutter_chat/blocs/authentication/bloc.dart';
 import 'package:flutter_chat/blocs/register/bloc.dart';
 
 class RegisterForm extends StatelessWidget {
-  RegisterForm({@required this.authenticationBloc});
+  RegisterForm({required this.authenticationBloc});
 
   final AuthenticationBloc authenticationBloc;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -26,7 +26,7 @@ class RegisterForm extends StatelessWidget {
       child: BlocBuilder<RegisterBloc, RegisterState>(
         builder: (context, state) {
           final onSubmit = () {
-            if (formKey.currentState.validate()) {
+            if (formKey.currentState!.validate()) {
               BlocProvider.of<RegisterBloc>(context)
                   .add(const RegisterSubmitted());
             }
@@ -70,11 +70,11 @@ class _PasswordInput extends StatelessWidget {
           onChanged: (password) => BlocProvider.of<RegisterBloc>(context)
               .add(RegisterPasswordChanged(password)),
           validator: (password) {
-            if (password.isEmpty) {
+            if (password!.isEmpty) {
               return 'Password must not be empty';
             }
             if (state.status == RegisterStatus.failure && state.error != null) {
-              return state.error.message;
+              return state.error!.message;
             }
             return null;
           },
@@ -98,8 +98,8 @@ class _RegisterButton extends StatelessWidget {
                 state.status == RegisterStatus.success
             ? const CircularProgressIndicator()
             : ElevatedButton(
-                child: const Text('Register'),
                 onPressed: () => onSubmit(),
+                child: const Text('Register'),
               );
       },
     );

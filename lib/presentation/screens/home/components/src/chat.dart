@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chat/data/models/chat/index.dart';
 
 class ChatInfoWidget extends StatelessWidget {
-  ChatInfoWidget({@required this.chatInfo, @required this.onTap});
+  ChatInfoWidget({required this.chatInfo, required this.onTap});
 
   final ChatInfo chatInfo;
   final Function onTap;
@@ -22,10 +22,10 @@ class ChatInfoWidget extends StatelessWidget {
       ),
       trailing: chatInfo.lastMessage == null
           ? null
-          : chatInfo.lastMessage.sentByMe
+          : chatInfo.lastMessage!.sentByMe
               ? Icon(
-                  chatInfo.lastMessage.isSent
-                      ? chatInfo.lastMessage.seen
+                  chatInfo.lastMessage!.isSent
+                      ? chatInfo.lastMessage!.seen
                           ? Icons.done_all
                           : Icons.done
                       : Icons.query_builder,

@@ -37,10 +37,10 @@ class WebRTCProvider {
 
   static Future<RTCPeerConnection> createPeerConnectionStream(
     MediaStream mediaStream, {
-    IceCandidateCallback onIceCandidate,
-    IceConnectionStateCallback onIceConnectionState,
-    AddStreamCallback onAddStream,
-    RemoveStreamCallback onRemoveStream,
+    IceCandidateCallback? onIceCandidate,
+    IceConnectionStateCallback? onIceConnectionState,
+    AddStreamCallback? onAddStream,
+    RemoveStreamCallback? onRemoveStream,
   }) async {
     return await WebRTCHelper.createPeerConnectionStream(
       mediaStream,

@@ -5,7 +5,7 @@ abstract class ChatEvent extends Equatable {
   const ChatEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class OpenChatRequested extends ChatEvent {
@@ -19,7 +19,7 @@ class GetMessagesRequested extends ChatEvent {
   final int maxId;
 
   @override
-  List<Object> get props => [userId, maxId];
+  List<Object?> get props => [userId, maxId];
 }
 
 class StatusChanged extends ChatEvent {
@@ -28,7 +28,7 @@ class StatusChanged extends ChatEvent {
   final ChatStatusChange onStatusChanged;
 
   @override
-  List<Object> get props => [onStatusChanged];
+  List<Object?> get props => [onStatusChanged];
 }
 
 class MessageReceived extends ChatEvent {
@@ -37,7 +37,7 @@ class MessageReceived extends ChatEvent {
   final ChatMessageReceive onChatMessageReceived;
 
   @override
-  List<Object> get props => [onChatMessageReceived];
+  List<Object?> get props => [onChatMessageReceived];
 }
 
 class ChatSeenReceived extends ChatEvent {
@@ -46,7 +46,7 @@ class ChatSeenReceived extends ChatEvent {
   final ChatSeen onMessageSeen;
 
   @override
-  List<Object> get props => [onMessageSeen];
+  List<Object?> get props => [onMessageSeen];
 }
 
 class IsTypingReceived extends ChatEvent {
@@ -55,7 +55,7 @@ class IsTypingReceived extends ChatEvent {
   final ChatIsTyping onChatIsTyping;
 
   @override
-  List<Object> get props => [onChatIsTyping];
+  List<Object?> get props => [onChatIsTyping];
 }
 
 class ReadChatRequested extends ChatEvent {
@@ -81,5 +81,5 @@ class TextMessageChanged extends ChatEvent {
   final String textMessage;
 
   @override
-  List<Object> get props => [textMessage];
+  List<Object?> get props => [textMessage];
 }

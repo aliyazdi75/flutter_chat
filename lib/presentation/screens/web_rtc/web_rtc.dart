@@ -10,11 +10,11 @@ import 'package:flutter_chat/services/web_rtc/index.dart';
 
 class WebRTCPage extends StatelessWidget {
   WebRTCPage({
-    @required this.userId,
-    @required this.socketRepository,
-    @required this.callRepository,
-    @required this.callBloc,
-  }) : assert(userId != null);
+    required this.userId,
+    required this.socketRepository,
+    required this.callRepository,
+    required this.callBloc,
+  });
 
   final String userId;
   final SocketRepository socketRepository;
@@ -67,7 +67,7 @@ class WebRTCPage extends StatelessWidget {
               if (state.status == WebRTCStatus.initial) {
                 if (callRepository.webRTCOffer != null) {
                   BlocProvider.of<WebRTCBloc>(context)
-                      .add(AnswerCallRequested(callRepository.webRTCOffer));
+                      .add(AnswerCallRequested(callRepository.webRTCOffer!));
                 } else {
                   BlocProvider.of<WebRTCBloc>(context).add(RequestCall(userId));
                 }
@@ -83,14 +83,14 @@ class WebRTCPage extends StatelessWidget {
                           const Text('Remote'),
                           Expanded(
                             child: state.remoteVideoRendererActivationStatus
-                                ? RTCVideoView(state.remoteVideoRender)
+                                ? RTCVideoView(state.remoteVideoRender!)
                                 : const Center(
                                     child: CircularProgressIndicator()),
                           ),
                           const Text('Local'),
                           Expanded(
                             child: state.localVideoRendererActivationStatus
-                                ? RTCVideoView(state.localVideoRender)
+                                ? RTCVideoView(state.localVideoRender!)
                                 : const Center(
                                     child: CircularProgressIndicator()),
                           ),

@@ -11,12 +11,12 @@ class AuthInitState extends Equatable {
 
   final AuthInitStatus status;
   final String email;
-  final AuthInitBadRequest error;
+  final AuthInitBadRequest? error;
 
   AuthInitState copyWith({
-    AuthInitStatus status,
-    String email,
-    AuthInitBadRequest error,
+    AuthInitStatus? status,
+    String? email,
+    AuthInitBadRequest? error,
   }) {
     return AuthInitState(
       status: status ?? this.status,
@@ -26,5 +26,5 @@ class AuthInitState extends Equatable {
   }
 
   @override
-  List<Object> get props => [status, email];
+  List<Object?> get props => [status, email];
 }

@@ -8,7 +8,7 @@ enum HttpHeaderType {
 
 abstract class HttpHeader {
   static Future<Map<String, String>> setHeader(
-    HttpHeaderType headerType,
+    HttpHeaderType? headerType,
   ) async {
     switch (headerType) {
       case HttpHeaderType.authenticated:

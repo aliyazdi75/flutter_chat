@@ -23,7 +23,7 @@ abstract class Authentication
   }
 
   static Authentication fromJson(Map<String, dynamic> json) {
-    return serializers.deserializeWith(Authentication.serializer, json);
+    return serializers.deserializeWith(Authentication.serializer, json)!;
   }
 
   static Serializer<Authentication> get serializer =>

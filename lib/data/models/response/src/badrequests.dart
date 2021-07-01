@@ -9,8 +9,7 @@ part 'badrequests.g.dart';
 
 abstract class AuthInitBadRequest
     implements Built<AuthInitBadRequest, AuthInitBadRequestBuilder> {
-  @nullable
-  BuiltList<ValidationFieldError> get email;
+  BuiltList<ValidationFieldError>? get email;
 
   AuthInitBadRequest._();
 
@@ -19,7 +18,7 @@ abstract class AuthInitBadRequest
       _$AuthInitBadRequest;
 
   static AuthInitBadRequest fromJson(Map<String, dynamic> json) {
-    return serializers.deserializeWith(AuthInitBadRequest.serializer, json);
+    return serializers.deserializeWith(AuthInitBadRequest.serializer, json)!;
   }
 
   static Serializer<AuthInitBadRequest> get serializer =>

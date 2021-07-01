@@ -19,9 +19,9 @@ class _$AuthInitRequestSerializer
   final String wireName = 'AuthInitRequest';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, AuthInitRequest object,
+  Iterable<Object?> serialize(Serializers serializers, AuthInitRequest object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'email',
       serializers.serialize(object.email,
           specifiedType: const FullType(String)),
@@ -32,7 +32,7 @@ class _$AuthInitRequestSerializer
 
   @override
   AuthInitRequest deserialize(
-      Serializers serializers, Iterable<Object> serialized,
+      Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new AuthInitRequestBuilder();
 
@@ -40,7 +40,7 @@ class _$AuthInitRequestSerializer
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'email':
           result.email = serializers.deserialize(value,
@@ -61,9 +61,9 @@ class _$AuthInitResponseSerializer
   final String wireName = 'AuthInitResponse';
 
   @override
-  Iterable<Object> serialize(Serializers serializers, AuthInitResponse object,
+  Iterable<Object?> serialize(Serializers serializers, AuthInitResponse object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
+    final result = <Object?>[
       'exists',
       serializers.serialize(object.exists, specifiedType: const FullType(bool)),
     ];
@@ -73,7 +73,7 @@ class _$AuthInitResponseSerializer
 
   @override
   AuthInitResponse deserialize(
-      Serializers serializers, Iterable<Object> serialized,
+      Serializers serializers, Iterable<Object?> serialized,
       {FullType specifiedType = FullType.unspecified}) {
     final result = new AuthInitResponseBuilder();
 
@@ -81,7 +81,7 @@ class _$AuthInitResponseSerializer
     while (iterator.moveNext()) {
       final key = iterator.current as String;
       iterator.moveNext();
-      final Object value = iterator.current;
+      final Object? value = iterator.current;
       switch (key) {
         case 'exists':
           result.exists = serializers.deserialize(value,
@@ -98,10 +98,10 @@ class _$AuthInitRequest extends AuthInitRequest {
   @override
   final String email;
 
-  factory _$AuthInitRequest([void Function(AuthInitRequestBuilder) updates]) =>
+  factory _$AuthInitRequest([void Function(AuthInitRequestBuilder)? updates]) =>
       (new AuthInitRequestBuilder()..update(updates)).build();
 
-  _$AuthInitRequest._({this.email}) : super._() {
+  _$AuthInitRequest._({required this.email}) : super._() {
     BuiltValueNullFieldError.checkNotNull(email, 'AuthInitRequest', 'email');
   }
 
@@ -133,13 +133,13 @@ class _$AuthInitRequest extends AuthInitRequest {
 
 class AuthInitRequestBuilder
     implements Builder<AuthInitRequest, AuthInitRequestBuilder> {
-  _$AuthInitRequest _$v;
+  _$AuthInitRequest? _$v;
 
-  String _email;
+  String? _email;
 
-  String get email => _$this._email;
+  String? get email => _$this._email;
 
-  set email(String email) => _$this._email = email;
+  set email(String? email) => _$this._email = email;
 
   AuthInitRequestBuilder();
 
@@ -159,7 +159,7 @@ class AuthInitRequestBuilder
   }
 
   @override
-  void update(void Function(AuthInitRequestBuilder) updates) {
+  void update(void Function(AuthInitRequestBuilder)? updates) {
     if (updates != null) updates(this);
   }
 
@@ -179,10 +179,10 @@ class _$AuthInitResponse extends AuthInitResponse {
   final bool exists;
 
   factory _$AuthInitResponse(
-          [void Function(AuthInitResponseBuilder) updates]) =>
+          [void Function(AuthInitResponseBuilder)? updates]) =>
       (new AuthInitResponseBuilder()..update(updates)).build();
 
-  _$AuthInitResponse._({this.exists}) : super._() {
+  _$AuthInitResponse._({required this.exists}) : super._() {
     BuiltValueNullFieldError.checkNotNull(exists, 'AuthInitResponse', 'exists');
   }
 
@@ -215,13 +215,13 @@ class _$AuthInitResponse extends AuthInitResponse {
 
 class AuthInitResponseBuilder
     implements Builder<AuthInitResponse, AuthInitResponseBuilder> {
-  _$AuthInitResponse _$v;
+  _$AuthInitResponse? _$v;
 
-  bool _exists;
+  bool? _exists;
 
-  bool get exists => _$this._exists;
+  bool? get exists => _$this._exists;
 
-  set exists(bool exists) => _$this._exists = exists;
+  set exists(bool? exists) => _$this._exists = exists;
 
   AuthInitResponseBuilder();
 
@@ -241,7 +241,7 @@ class AuthInitResponseBuilder
   }
 
   @override
-  void update(void Function(AuthInitResponseBuilder) updates) {
+  void update(void Function(AuthInitResponseBuilder)? updates) {
     if (updates != null) updates(this);
   }
 

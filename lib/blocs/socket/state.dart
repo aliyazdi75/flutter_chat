@@ -27,5 +27,5 @@ class SocketState extends Equatable {
   const SocketState.failure() : this._(status: SocketStatus.failure);
 
   @override
-  List<Object> get props => [status];
+  List<Object?> get props => [status];
 }

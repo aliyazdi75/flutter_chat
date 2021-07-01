@@ -8,10 +8,10 @@ import 'components/form.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({
-    @required this.email,
-    @required this.authenticationRepository,
-    @required this.authenticationBloc,
-  }) : assert(email != null);
+    required this.email,
+    required this.authenticationRepository,
+    required this.authenticationBloc,
+  });
 
   final String email;
   final AuthenticationRepository authenticationRepository;

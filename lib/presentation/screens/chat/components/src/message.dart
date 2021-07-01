@@ -4,9 +4,9 @@ import 'package:flutter_chat/data/models/chat/index.dart';
 
 class MessageWidget extends StatelessWidget {
   MessageWidget({
-    @required this.message,
-    @required this.chatInfo,
-    @required this.account,
+    required this.message,
+    required this.chatInfo,
+    required this.account,
   });
 
   final Message message;
@@ -17,7 +17,7 @@ class MessageWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       leading: Text(
-        (message.sentByMe ? account.user.firstName : chatInfo.firstName) + ':',
+        (message.sentByMe ? account.user.firstName : chatInfo.firstName)! + ':',
       ),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,

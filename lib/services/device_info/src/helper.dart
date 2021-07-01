@@ -18,7 +18,7 @@ abstract class DeviceInfoBase {
 }
 
 class DeviceInfoHelper implements DeviceInfoBase {
-  DeviceInfoPlugin deviceInfoPlugin;
+  late DeviceInfoPlugin deviceInfoPlugin;
 
   DeviceInfoHelper() {
     deviceInfoPlugin = DeviceInfoPlugin();

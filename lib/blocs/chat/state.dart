@@ -20,21 +20,21 @@ class ChatState extends Equatable {
   });
 
   final ChatStatus status;
-  final ChatInfo chatInfo;
-  final DateTime lastSeen;
-  final bool isOnline;
-  final bool isTyping;
-  final List<Message> messages;
+  final ChatInfo? chatInfo;
+  final DateTime? lastSeen;
+  final bool? isOnline;
+  final bool? isTyping;
+  final List<Message?>? messages;
   final String textMessage;
 
   ChatState copyWith({
-    ChatStatus status,
-    List<Message> messages,
-    ChatInfo chatInfo,
-    DateTime lastSeen,
-    bool isOnline,
-    bool isTyping,
-    String textMessage,
+    ChatStatus? status,
+    List<Message?>? messages,
+    ChatInfo? chatInfo,
+    DateTime? lastSeen,
+    bool? isOnline,
+    bool? isTyping,
+    String? textMessage,
   }) {
     return ChatState(
       status: status ?? this.status,
@@ -48,7 +48,7 @@ class ChatState extends Equatable {
   }
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         status,
         messages,
         lastSeen,

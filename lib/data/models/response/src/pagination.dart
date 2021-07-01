@@ -8,17 +8,13 @@ part 'pagination.g.dart';
 
 abstract class Pagination<T>
     implements Built<Pagination<T>, PaginationBuilder<T>> {
-  @nullable
-  int get count;
+  int? get count;
 
-  @nullable
-  String get next;
+  String? get next;
 
-  @nullable
-  String get previous;
+  String? get previous;
 
-  @nullable
-  BuiltList<T> get results;
+  BuiltList<T>? get results;
 
   Pagination._();
 
